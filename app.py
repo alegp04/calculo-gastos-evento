@@ -25,25 +25,21 @@ st.set_page_config(
     initial_sidebar_state="collapsed",
 )
 
-# --- ESTILOS CSS CON LOGOS OFICIALES ORIGINALES ---
+# --- ESTILOS CSS LIMPIOS Y SEGUROS ---
 st.markdown(
     """
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap');
     
-    *, *:before, *:after {
-        box-sizing: border-box !important;
-    }
-
     html, body, .stApp {
         font-family: 'Inter', sans-serif;
         background-color: #F8FAFC !important;
         color: #0F172A !important;
     }
 
-    /* Margen superior para despejar el banner */
+    /* Margen superior contenido */
     .block-container {
-        padding-top: 4.2rem !important;
+        padding-top: 1.8rem !important;
         padding-bottom: 2rem !important;
         padding-left: 0.8rem !important;
         padding-right: 0.8rem !important;
@@ -62,27 +58,13 @@ st.markdown(
         border-radius: 10px;
         color: #FFFFFF !important;
         text-align: center;
-        margin-bottom: 12px;
+        margin-bottom: 10px;
     }
     .hero-title {
         font-size: 17px !important;
         font-weight: 800 !important;
         margin: 0;
         color: #FFFFFF !important;
-    }
-
-    /* FORZAR FILAS HORIZONTALES EN CELULAR */
-    div[data-testid="stHorizontalBlock"] {
-        display: flex !important;
-        flex-direction: row !important;
-        flex-wrap: nowrap !important;
-        align-items: center !important;
-        gap: 8px !important;
-        width: 100% !important;
-    }
-
-    div[data-testid="column"] {
-        min-width: 0 !important;
     }
 
     /* Formulario compacto */
@@ -96,7 +78,6 @@ st.markdown(
     /* Botón Cargar Datos */
     div[data-testid="stForm"] button {
         background-color: #2563EB !important;
-        color: #FFFFFF !important;
         border: none !important;
         border-radius: 8px !important;
         height: 42px !important;
@@ -113,33 +94,33 @@ st.markdown(
         font-size: 14px !important;
     }
 
-    /* --- BOTONES CUADRADOS LADO A LADO CON LOGOS OFICIALES ORIGINALES --- */
-    
-    div[data-testid="stHorizontalBlock"]:has(div[data-testid="stLinkButton"]) {
-        display: flex !important;
-        flex-direction: row !important;
-        justify-content: center !important;
-        align-items: center !important;
-        gap: 20px !important;
-        width: 100% !important;
-        margin-top: 10px !important;
+    /* --- BOTONES INFERIORES CUADRADOS LADO A LADO --- */
+
+    .action-buttons-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 20px;
+        margin-top: 15px;
+        width: 100%;
     }
 
-    div[data-testid="stHorizontalBlock"]:has(div[data-testid="stLinkButton"]) > div[data-testid="column"] {
-        flex: 0 0 auto !important;
-        width: auto !important;
-        display: flex !important;
-        justify-content: center !important;
+    /* Ocultar texto nativo de botones inferiores */
+    div[data-testid="stLinkButton"] a p,
+    div[data-testid="stLinkButton"] a span,
+    .stDownloadButton button p,
+    .stDownloadButton button span {
+        display: none !important;
     }
 
-    /* Botón Cuadrado WhatsApp - Logo Oficial */
+    /* Botón Cuadrado WhatsApp */
     div[data-testid="stLinkButton"] a {
         width: 65px !important;
         height: 65px !important;
         min-width: 65px !important;
         min-height: 65px !important;
         background-color: #FFFFFF !important;
-        border: 1.5px solid #E2E8F0 !important;
+        border: 1.5px solid #CBD5E1 !important;
         border-radius: 16px !important;
         display: flex !important;
         justify-content: center !important;
@@ -147,25 +128,11 @@ st.markdown(
         box-shadow: 0 3px 8px rgba(0,0,0,0.06) !important;
         padding: 0 !important;
         text-decoration: none !important;
-        overflow: hidden !important;
         cursor: pointer !important;
-    }
-
-    div[data-testid="stLinkButton"] a *,
-    div[data-testid="stLinkButton"] a p,
-    div[data-testid="stLinkButton"] a span {
-        display: none !important;
-    }
-
-    div[data-testid="stLinkButton"] a::before {
-        content: "" !important;
-        display: block !important;
-        width: 38px !important;
-        height: 38px !important;
-        background-image: url("https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg") !important;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 448 512'%3E%3Cpath fill='%2325D366' d='M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 480l117.7-30.9c32.4 17.7 68.9 27 106.1 27h.1c122.3 0 224.1-99.6 224.1-222 0-59.3-25.2-115-67.1-157zm-157 341.6c-33.2 0-65.7-8.9-94-25.7l-6.7-4-69.8 18.3 18.6-68.1-4.4-7C50 322 40.7 287.6 40.7 254c0-101 82.2-183.2 183.2-183.2 48.9 0 94.9 19.1 129.5 53.7 34.6 34.6 53.7 80.6 53.7 129.5 0 101-82.2 183.2-183.2 183.2z'/%3E%3C/svg%3E") !important;
         background-repeat: no-repeat !important;
         background-position: center !important;
-        background-size: contain !important;
+        background-size: 36px !important;
     }
 
     div[data-testid="stLinkButton"] a:hover {
@@ -173,43 +140,29 @@ st.markdown(
         background-color: #F0FDF4 !important;
     }
 
-    /* Botón Cuadrado PDF Adobe Acrobat - Logo Oficial Original */
+    /* Botón Cuadrado PDF Adobe Acrobat */
     .stDownloadButton button {
         width: 65px !important;
         height: 65px !important;
         min-width: 65px !important;
         min-height: 65px !important;
         background-color: #FFFFFF !important;
-        border: 1.5px solid #E2E8F0 !important;
+        border: 1.5px solid #CBD5E1 !important;
         border-radius: 16px !important;
         display: flex !important;
         justify-content: center !important;
         align-items: center !important;
         box-shadow: 0 3px 8px rgba(0,0,0,0.06) !important;
         padding: 0 !important;
-        overflow: hidden !important;
         cursor: pointer !important;
-    }
-
-    .stDownloadButton button *,
-    .stDownloadButton button p,
-    .stDownloadButton button span {
-        display: none !important;
-    }
-
-    .stDownloadButton button::before {
-        content: "" !important;
-        display: block !important;
-        width: 38px !important;
-        height: 38px !important;
-        background-image: url("https://upload.wikimedia.org/wikipedia/commons/1/1a/Adobe_Acrobat_DC_logo.svg") !important;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath fill='%23DC2626' d='M0 64C0 28.7 28.7 0 64 0L224 0l128 128 0 64-224 0c-35.3 0-64 28.7-64 64l0 192-32 0c-17.7 0-32-14.3-32-32L0 64zM384 192l-96 0 0-96 96 96zM200 320l128 0c17.7 0 32 14.3 32 32l0 128c0 17.7-14.3 32-32 32l-128 0c-17.7 0-32-14.3-32-32l0-128c0-17.7 14.3-32 32-32z'/%3E%3C/svg%3E") !important;
         background-repeat: no-repeat !important;
         background-position: center !important;
-        background-size: contain !important;
+        background-size: 34px !important;
     }
 
     .stDownloadButton button:hover {
-        border-color: #FA0F00 !important;
+        border-color: #DC2626 !important;
         background-color: #FEF2F2 !important;
     }
 
@@ -233,8 +186,7 @@ st.markdown(
         font-size: 12px !important;
         font-weight: 600 !important;
         border-radius: 8px !important;
-        height: 34px !important;
-        min-height: 34px !important;
+        height: 36px !important;
         width: 100% !important;
         box-shadow: none !important;
         margin-top: 6px !important;
@@ -248,22 +200,13 @@ st.markdown(
     }
 
     /* Cruz eliminar en la lista */
-    div[class*="st-key-del_p_"] {
-        display: flex !important;
-        justify-content: flex-end !important;
-        align-items: center !important;
-    }
-
     div[class*="st-key-del_p_"] button,
     div[class*="st-key-del_p_"] button * {
         background: transparent !important;
         border: none !important;
         color: #94A3B8 !important;
         padding: 0px !important;
-        margin: 0px !important;
-        width: 24px !important;
-        height: 24px !important;
-        font-size: 14px !important;
+        font-size: 16px !important;
         font-weight: 800 !important;
         box-shadow: none !important;
     }
@@ -658,8 +601,8 @@ components.html(
     height=34,
 )
 
-# Fecha y Evento LADO A LADO EN CELULAR
-col_date, col_name = st.columns([1, 1.2], vertical_alignment="center")
+# Fecha y Evento LADO A LADO EN NATIVO
+col_date, col_name = st.columns([1, 1])
 with col_date:
     event_date = st.date_input("📅 Fecha:", datetime.now())
 with col_name:
@@ -908,30 +851,29 @@ if st.session_state.participants and st.session_state.expenses:
     wa_text += "\n📲 *Armá y calculá los gastos de tu evento acá:*\n"
     wa_text += "https://cuentas-evento.streamlit.app"
 
-    # BOTONES CUADRADOS LADO A LADO CON LOGOS VECTORIALES OFICIALES
+    # BOTONES INFERIORES CUADRADOS LADO A LADO
+    encoded_wa = urllib.parse.quote(wa_text)
+    wa_url = f"https://wa.me/?text={encoded_wa}"
+    pdf_bytes = generate_pdf(
+        event_name,
+        date_str,
+        total_spent,
+        per_person,
+        st.session_state.expenses,
+        balances,
+        settlements,
+    )
+
+    st.markdown('<div class="action-buttons-container">', unsafe_allow_html=True)
     col_wa, col_pdf = st.columns(2)
-
     with col_wa:
-        encoded_wa = urllib.parse.quote(wa_text)
-        wa_url = f"https://wa.me/?text={encoded_wa}"
-        st.link_button(
-            "WA", wa_url, use_container_width=False
-        )
-
+        st.link_button("WA", wa_url, use_container_width=True)
     with col_pdf:
-        pdf_bytes = generate_pdf(
-            event_name,
-            date_str,
-            total_spent,
-            per_person,
-            st.session_state.expenses,
-            balances,
-            settlements,
-        )
         st.download_button(
             label="PDF",
             data=pdf_bytes,
             file_name=f"gastos_{event_name.lower().replace(' ', '_')}.pdf",
             mime="application/pdf",
-            use_container_width=False,
+            use_container_width=True,
         )
+    st.markdown('</div>', unsafe_allow_html=True)
