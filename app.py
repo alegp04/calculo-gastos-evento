@@ -25,7 +25,11 @@ st.set_page_config(
     initial_sidebar_state="collapsed",
 )
 
-# --- ESTILOS CSS MÍNIMOS Y SEGUROS ---
+# --- LOGOS VECTORIALES EMBEBIDOS (DATA URI - 100% GARANTIZADOS) ---
+WA_SVG_URI = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 448 512'%3E%3Cpath fill='%2325D366' d='M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 480l117.7-30.9c32.4 17.7 68.9 27 106.1 27h.1c122.3 0 224.1-99.6 224.1-222 0-59.3-25.2-115-67.1-157zm-157 341.6c-33.2 0-65.7-8.9-94-25.7l-6.7-4-69.8 18.3 18.6-68.1-4.4-7C50 322 40.7 287.6 40.7 254c0-101 82.2-183.2 183.2-183.2 48.9 0 94.9 19.1 129.5 53.7 34.6 34.6 53.7 80.6 53.7 129.5 0 101-82.2 183.2-183.2 183.2z'/%3E%3C/svg%3E"
+ACROBAT_SVG_URI = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath fill='%23EC1C24' d='M304.2 270.3c-14.8 13.3-32.9 24.6-53 32.8-11.4 25.8-23.7 48.7-36.8 65.2-11 13.9-21.5 20.8-31.8 20.8-12.7 0-21.5-9.3-21.5-22.3 0-21.9 22.9-49.3 58-63.5 14.1-5.7 28.5-9.5 42.4-11.5-10.4-20.6-18.7-42.5-24.4-63.8-12.7 26.6-28.8 48.4-46.7 61.8-10.4 7.8-21.1 12-30.8 12-13 0-21.3-9.1-21.3-21.3 0-17.6 18-40.4 46.4-58.8 22.2-14.4 48.4-24.4 74.8-29 6.2-20.8 10.4-41.6 10.4-58.8 0-19.1 8-30.1 22.1-30.1 10.4 0 18.7 7.3 18.7 18 0 18.9-7.3 41.6-17.6 64.9 31.7 13.3 67 21.1 98.4 21.1 24.4 0 39.2-9.5 39.2-25.2 0-12.5-9.1-20.1-20.8-20.1-13 0-29.1 6.8-44.2 17.4 23.2 19.4 44.4 41.8 60.5 65.5 8.5 12.3 13 24.2 13 34.6 0 17.1-13.5 27.2-31.5 27.2-22.9 0-49.3-17.4-74.1-46.3z'/%3E%3C/svg%3E"
+
+# --- ESTILOS CSS REFINADOS ---
 st.markdown(
     """
     <style>
@@ -66,6 +70,16 @@ st.markdown(
         margin: 0;
     }
 
+    /* MANTENER COLUMNAS EN UNA SOLA LÍNEA (EVITAR COLAPSO VERTICAL) */
+    div[data-testid="stHorizontalBlock"] {
+        display: flex !important;
+        flex-direction: row !important;
+        flex-wrap: nowrap !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+        width: 100% !important;
+    }
+
     /* Formulario */
     div[data-testid="stForm"] {
         padding: 10px !important;
@@ -90,7 +104,12 @@ st.markdown(
         font-size: 14px !important;
     }
 
-    /* Cruz Eliminar Participante */
+    /* Cruz Eliminar Participante en la misma fila */
+    div[class*="st-key-del_p_"] {
+        display: flex !important;
+        justify-content: flex-end !important;
+        align-items: center !important;
+    }
     div[class*="st-key-del_p_"] button {
         background: transparent !important;
         border: none !important;
@@ -98,7 +117,9 @@ st.markdown(
         font-size: 16px !important;
         font-weight: 800 !important;
         padding: 0 !important;
+        margin: 0 !important;
         box-shadow: none !important;
+        cursor: pointer !important;
     }
     div[class*="st-key-del_p_"] button:hover {
         color: #EF4444 !important;
@@ -733,7 +754,7 @@ if st.session_state.participants and st.session_state.expenses:
     wa_text += "\n📲 *Armá y calculá los gastos de tu evento acá:*\n"
     wa_text += "https://cuentas-evento.streamlit.app"
 
-    # PREPARACIÓN DE ENLACES PARA BOTONES INFERIORES
+    # PREPARACIÓN DE ENLACES CON LOGOS DATA URI EMBEBIDOS
     encoded_wa = urllib.parse.quote(wa_text)
     wa_url = f"https://wa.me/?text={encoded_wa}"
 
@@ -750,15 +771,15 @@ if st.session_state.participants and st.session_state.expenses:
     pdf_href = f"data:application/pdf;base64,{pdf_b64}"
     clean_filename = f"gastos_{event_name.lower().replace(' ', '_')}.pdf"
 
-    # AMBOS BOTONES EN UN SOLO BLOQUE FLEX NATIVO (100% PERFECTOS Y CENTRADOS LADO A LADO)
+    # BOTONES FINALES CENTRADOS Y LADO A LADO
     st.markdown(
         f"""
         <div class="action-row-container">
             <a href="{wa_url}" target="_blank" class="btn-action-square" title="Compartir por WhatsApp">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" width="38" height="38" alt="WhatsApp">
+                <img src="{WA_SVG_URI}" width="36" height="36" alt="WhatsApp">
             </a>
             <a href="{pdf_href}" download="{clean_filename}" class="btn-action-square" title="Descargar Reporte PDF">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/1/1a/Adobe_Acrobat_DC_logo.svg" width="38" height="38" alt="Adobe Acrobat PDF">
+                <img src="{ACROBAT_SVG_URI}" width="36" height="36" alt="Adobe Acrobat PDF">
             </a>
         </div>
         """,
