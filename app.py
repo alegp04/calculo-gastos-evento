@@ -149,16 +149,6 @@ st.markdown(
         font-weight: 600;
         font-size: 11px;
     }
-    
-    /* Botón Principal */
-    div[class*="st-key-btn_calc"] button, .stButton > button {
-        border-radius: 8px !important;
-        font-weight: 600 !important;
-        background-color: #0284C7 !important;
-        color: #FFFFFF !important;
-        border: none !important;
-        padding: 8px 12px !important;
-    }
     </style>
 """,
     unsafe_allow_html=True,
@@ -169,8 +159,6 @@ if "participants" not in st.session_state:
     st.session_state.participants = []
 if "expenses" not in st.session_state:
     st.session_state.expenses = []
-if "show_results" not in st.session_state:
-    st.session_state.show_results = False
 
 
 # --- ALGORITMO DE LIQUIDACIÓN DE DEUDAS ---
@@ -547,7 +535,6 @@ with st.form("smart_input_form", clear_on_submit=True):
                     {"payer": name, "amount": amount, "concept": concept}
                 )
                 st.toast(f"¡Registrado! {name}: ${amount:,.2f} ({concept})")
-                st.session_state.show_results = True
                 st.rerun()
             else:
                 st.error("El monto debe ser mayor a 0.")
@@ -569,7 +556,7 @@ with st.expander("❓ ¿Cómo cargar datos?"):
     """
     )
 
-# LISTAS INLINE DE BAJO PERFIL Y ALINEACIÓN EXACTA
+# LISTAS INLINE DE BAJO PERFIL
 col_p, col_g = st.columns(2)
 
 with col_p:
@@ -620,168 +607,159 @@ if st.session_state.participants or st.session_state.expenses:
     if st.button("🗑️ Limpiar Todo", key="clean_all_btn"):
         st.session_state.participants = []
         st.session_state.expenses = []
-        st.session_state.show_results = False
         st.rerun()
 
-st.write("---")
+# RESULTADOS AUTOMÁTICOS Y REACTIVOS
+if st.session_state.participants and st.session_state.expenses:
+    st.write("---")
+    date_str = event_date.strftime("%d/%m/%Y")
+    st.markdown(
+        f"<b>📊 Balances: {event_name}</b> <small>({date_str})</small>",
+        unsafe_allow_html=True,
+    )
 
-# BOTÓN PRINCIPAL
-if st.button("🚀 Calcular Cuentas / Ver Resultados", key="btn_calc", use_container_width=True):
-    st.session_state.show_results = True
+    num_people = len(st.session_state.participants)
+    total_spent = sum(e["amount"] for e in st.session_state.expenses)
+    per_person = total_spent / num_people
 
-# RESULTADOS
-if st.session_state.show_results:
-    if not st.session_state.participants or not st.session_state.expenses:
-        st.warning("⚠️ Cargá al menos una persona y un gasto para ver el cálculo.")
-    else:
-        date_str = event_date.strftime("%d/%m/%Y")
+    balances = {p: 0.0 for p in st.session_state.participants}
+    for e in st.session_state.expenses:
+        balances[e["payer"]] += e["amount"]
+    for p in balances:
+        balances[p] -= per_person
+
+    settlements = calculate_settlements(balances)
+
+    m1, m2 = st.columns(2)
+    m1.metric("Gasto Total", f"${total_spent:,.2f}")
+    m2.metric("Por Persona", f"${per_person:,.2f}")
+
+    if HAS_MATPLOTLIB:
+        payer_totals = {}
+        for exp in st.session_state.expenses:
+            p = exp["payer"]
+            payer_totals[p] = payer_totals.get(p, 0.0) + exp["amount"]
+
+        if payer_totals and sum(payer_totals.values()) > 0:
+            fig, ax = plt.subplots(figsize=(4.2, 1.8))
+            fig.patch.set_facecolor("#FFFFFF")
+            ax.set_facecolor("#FFFFFF")
+            labels = list(payer_totals.keys())
+            sizes = list(payer_totals.values())
+            colors = [
+                "#0284C7",
+                "#10B981",
+                "#F59E0B",
+                "#EF4444",
+                "#8B5CF6",
+                "#EC4899",
+                "#14B8A6",
+                "#F97316",
+            ]
+
+            wedges, texts, autotexts = ax.pie(
+                sizes,
+                labels=labels,
+                autopct="%1.1f%%",
+                startangle=140,
+                colors=colors[: len(labels)],
+                textprops=dict(color="#334155", fontsize=8),
+            )
+            for autotext in autotexts:
+                autotext.set_color("white")
+                autotext.set_weight("bold")
+
+            ax.axis("equal")
+            st.pyplot(fig)
+            plt.close(fig)
+
+    st.markdown("<b>👤 Estado por Persona:</b>", unsafe_allow_html=True)
+    for p in st.session_state.participants:
+        bal = balances[p]
+        paid = sum(
+            e["amount"]
+            for e in st.session_state.expenses
+            if e["payer"] == p
+        )
+
+        if bal > 0.01:
+            badge = f'<span class="badge-creditor">+${bal:,.2f}</span>'
+        elif bal < -0.01:
+            badge = f'<span class="badge-debtor">-${abs(bal):,.2f}</span>'
+        else:
+            badge = '<span class="badge-neutral">$0.00</span>'
+
         st.markdown(
-            f"<b>📊 Balances: {event_name}</b> <small>({date_str})</small>",
+            f"""
+            <div class="flat-card" style="display:flex; justify-content:space-between; align-items:center;">
+                <div>
+                    <b>{p}</b> <small style="color:#64748B;">(puso ${paid:,.0f})</small>
+                </div>
+                <div>{badge}</div>
+            </div>
+        """,
             unsafe_allow_html=True,
         )
 
-        num_people = len(st.session_state.participants)
-        total_spent = sum(e["amount"] for e in st.session_state.expenses)
-        per_person = total_spent / num_people
+    st.markdown(
+        "<b>🔄 ¿Quién le transfiere a quién?</b>", unsafe_allow_html=True
+    )
 
-        balances = {p: 0.0 for p in st.session_state.participants}
-        for e in st.session_state.expenses:
-            balances[e["payer"]] += e["amount"]
-        for p in balances:
-            balances[p] -= per_person
+    wa_text = f"🎉 *EVENTO: {event_name.upper()}*\n"
+    wa_text += f"📅 *Fecha:* {date_str}\n\n"
+    wa_text += f"💰 *Gasto Total:* ${total_spent:,.2f}\n"
+    wa_text += f"👤 *Por Persona:* ${per_person:,.2f}\n\n"
+    wa_text += "📝 *DETALLE DE COMPRAS:*\n"
 
-        settlements = calculate_settlements(balances)
+    for exp in st.session_state.expenses:
+        wa_text += (
+            f"• {exp['payer']}: {exp['concept']} (${exp['amount']:,.2f})\n"
+        )
 
-        m1, m2 = st.columns(2)
-        m1.metric("Gasto Total", f"${total_spent:,.2f}")
-        m2.metric("Por Persona", f"${per_person:,.2f}")
+    wa_text += "\n👉 *PAGOS A REALIZAR:*\n"
 
-        if HAS_MATPLOTLIB:
-            payer_totals = {}
-            for exp in st.session_state.expenses:
-                p = exp["payer"]
-                payer_totals[p] = payer_totals.get(p, 0.0) + exp["amount"]
-
-            if payer_totals and sum(payer_totals.values()) > 0:
-                fig, ax = plt.subplots(figsize=(4.2, 1.8))
-                fig.patch.set_facecolor("#FFFFFF")
-                ax.set_facecolor("#FFFFFF")
-                labels = list(payer_totals.keys())
-                sizes = list(payer_totals.values())
-                colors = [
-                    "#0284C7",
-                    "#10B981",
-                    "#F59E0B",
-                    "#EF4444",
-                    "#8B5CF6",
-                    "#EC4899",
-                    "#14B8A6",
-                    "#F97316",
-                ]
-
-                wedges, texts, autotexts = ax.pie(
-                    sizes,
-                    labels=labels,
-                    autopct="%1.1f%%",
-                    startangle=140,
-                    colors=colors[: len(labels)],
-                    textprops=dict(color="#334155", fontsize=8),
-                )
-                for autotext in autotexts:
-                    autotext.set_color("white")
-                    autotext.set_weight("bold")
-
-                ax.axis("equal")
-                st.pyplot(fig)
-                plt.close(fig)
-
-        st.markdown("<b>👤 Estado por Persona:</b>", unsafe_allow_html=True)
-        for p in st.session_state.participants:
-            bal = balances[p]
-            paid = sum(
-                e["amount"]
-                for e in st.session_state.expenses
-                if e["payer"] == p
-            )
-
-            if bal > 0.01:
-                badge = f'<span class="badge-creditor">+${bal:,.2f}</span>'
-            elif bal < -0.01:
-                badge = f'<span class="badge-debtor">-${abs(bal):,.2f}</span>'
-            else:
-                badge = '<span class="badge-neutral">$0.00</span>'
-
+    if not settlements:
+        st.success("🎉 ¡Todos aportaron lo mismo! Están a mano.")
+        wa_text += "¡Todos a mano!\n"
+    else:
+        for debtor, creditor, amount in settlements:
+            line = f"• *{debtor}* ➔ *{creditor}*: ${amount:,.2f}"
             st.markdown(
                 f"""
-                <div class="flat-card" style="display:flex; justify-content:space-between; align-items:center;">
-                    <div>
-                        <b>{p}</b> <small style="color:#64748B;">(puso ${paid:,.0f})</small>
-                    </div>
-                    <div>{badge}</div>
+                <div style="background:#E0F2FE; border-left:4px solid #0284C7; padding:8px 12px; border-radius:6px; margin-bottom:6px; font-size:14px; color:#0F172A;">
+                    💳 <b>{debtor}</b> ➔ <b>{creditor}</b>: <b>${amount:,.2f}</b>
                 </div>
             """,
                 unsafe_allow_html=True,
             )
+            wa_text += f"{line}\n"
 
-        st.markdown(
-            "<b>🔄 ¿Quién le transfiere a quién?</b>", unsafe_allow_html=True
+    wa_text += "\n📲 *Armá y calculá los gastos de tu evento acá:*\n"
+    wa_text += "https://cuentas-evento.streamlit.app"
+
+    col_wa, col_pdf = st.columns(2)
+
+    with col_wa:
+        encoded_wa = urllib.parse.quote(wa_text)
+        wa_url = f"https://wa.me/?text={encoded_wa}"
+        st.link_button(
+            "WhatsApp 📱", wa_url, use_container_width=True
         )
 
-        wa_text = f"🎉 *EVENTO: {event_name.upper()}*\n"
-        wa_text += f"📅 *Fecha:* {date_str}\n\n"
-        wa_text += f"💰 *Gasto Total:* ${total_spent:,.2f}\n"
-        wa_text += f"👤 *Por Persona:* ${per_person:,.2f}\n\n"
-        wa_text += "📝 *DETALLE DE COMPRAS:*\n"
-
-        for exp in st.session_state.expenses:
-            wa_text += (
-                f"• {exp['payer']}: {exp['concept']} (${exp['amount']:,.2f})\n"
-            )
-
-        wa_text += "\n👉 *PAGOS A REALIZAR:*\n"
-
-        if not settlements:
-            st.success("🎉 ¡Todos aportaron lo mismo! Están a mano.")
-            wa_text += "¡Todos a mano!\n"
-        else:
-            for debtor, creditor, amount in settlements:
-                line = f"• *{debtor}* ➔ *{creditor}*: ${amount:,.2f}"
-                st.markdown(
-                    f"""
-                    <div style="background:#E0F2FE; border-left:4px solid #0284C7; padding:8px 12px; border-radius:6px; margin-bottom:6px; font-size:14px; color:#0F172A;">
-                        💳 <b>{debtor}</b> ➔ <b>{creditor}</b>: <b>${amount:,.2f}</b>
-                    </div>
-                """,
-                    unsafe_allow_html=True,
-                )
-                wa_text += f"{line}\n"
-
-        wa_text += "\n📲 *Armá y calculá los gastos de tu evento acá:*\n"
-        wa_text += "https://cuentas-evento.streamlit.app"
-
-        col_wa, col_pdf = st.columns(2)
-
-        with col_wa:
-            encoded_wa = urllib.parse.quote(wa_text)
-            wa_url = f"https://wa.me/?text={encoded_wa}"
-            st.link_button(
-                "WhatsApp 📱", wa_url, use_container_width=True
-            )
-
-        with col_pdf:
-            pdf_bytes = generate_pdf(
-                event_name,
-                date_str,
-                total_spent,
-                per_person,
-                st.session_state.expenses,
-                balances,
-                settlements,
-            )
-            st.download_button(
-                label="Descargar PDF 📄",
-                data=pdf_bytes,
-                file_name=f"gastos_{event_name.lower().replace(' ', '_')}.pdf",
-                mime="application/pdf",
-                use_container_width=True,
-            )
+    with col_pdf:
+        pdf_bytes = generate_pdf(
+            event_name,
+            date_str,
+            total_spent,
+            per_person,
+            st.session_state.expenses,
+            balances,
+            settlements,
+        )
+        st.download_button(
+            label="Descargar PDF 📄",
+            data=pdf_bytes,
+            file_name=f"gastos_{event_name.lower().replace(' ', '_')}.pdf",
+            mime="application/pdf",
+            use_container_width=True,
+        )
