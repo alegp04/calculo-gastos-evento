@@ -25,11 +25,11 @@ st.set_page_config(
     initial_sidebar_state="collapsed",
 )
 
-# --- ESTILOS CSS CON COLORES VIVOS Y BOTONES MODERNOS ---
+# --- ESTILOS CSS CON COLORES VIVOS Y BOTONES LADO A LADO ---
 st.markdown(
     """
     <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
     
     /* BLOQUEO DE SCROLL HORIZONTAL */
     *, *:before, *:after {
@@ -55,28 +55,25 @@ st.markdown(
         box-sizing: border-box !important;
     }
 
-    iframe {
-        max-width: 100% !important;
-        width: 100% !important;
-    }
-
-    p, span, label, h1, h2, h3, h4, h5, h6, .stMarkdown {
+    /* Títulos e Inputs */
+    p, label, h1, h2, h3, h4, h5, h6, .stMarkdown {
         color: #0F172A !important;
     }
 
-    /* Banner de Título (Azul Pizarra Moderno) */
+    /* Banner de Título Principal */
     .hero-container {
         background: linear-gradient(135deg, #1E293B 0%, #334155 100%);
-        padding: 8px 12px;
-        border-radius: 8px;
+        padding: 10px 14px;
+        border-radius: 10px;
         color: #FFFFFF !important;
         text-align: center;
         margin-bottom: 8px;
         width: 100% !important;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
     }
     .hero-title {
-        font-size: 16px !important;
-        font-weight: 700 !important;
+        font-size: 17px !important;
+        font-weight: 800 !important;
         margin: 0;
         color: #FFFFFF !important;
     }
@@ -84,66 +81,94 @@ st.markdown(
     /* Formulario compacto */
     div[data-testid="stForm"] {
         padding: 8px 10px !important;
-        border-radius: 8px !important;
+        border-radius: 10px !important;
         border: 1px solid #E2E8F0 !important;
         background-color: #FFFFFF !important;
     }
 
-    /* --- DISEÑO DE BOTONES MODERNOS Y VIVOS --- */
-    
-    /* Botón Principal (🚀 Cargar Datos) - Azul Real Vibrante */
-    div[data-testid="stForm"] button {
+    /* --- CORRECCIÓN CLAVE DE BOTONES Y LETRAS BLANCAS --- */
+
+    /* Botón Cargar Datos (Azul Real con Texto Blanco Negrita) */
+    div[data-testid="stForm"] button, 
+    div[data-testid="stForm"] button p, 
+    div[data-testid="stForm"] button span {
         background-color: #2563EB !important;
         color: #FFFFFF !important;
+        font-weight: 800 !important;
+        font-size: 14px !important;
+    }
+    div[data-testid="stForm"] button {
         border: none !important;
         border-radius: 8px !important;
-        font-size: 13px !important;
-        font-weight: 700 !important;
-        height: 38px !important;
-        min-height: 38px !important;
+        height: 40px !important;
+        min-height: 40px !important;
         width: 100% !important;
-        box-shadow: 0 2px 4px rgba(37, 99, 235, 0.25) !important;
+        box-shadow: 0 2px 6px rgba(37, 99, 235, 0.3) !important;
         cursor: pointer !important;
     }
     div[data-testid="stForm"] button:hover {
         background-color: #1D4ED8 !important;
-        color: #FFFFFF !important;
     }
 
-    /* Botón WhatsApp - Verde WhatsApp Auténtico */
-    div[data-testid="stLinkButton"] a {
+    /* FORZAR BOTONES WHATSAPP Y PDF LADO A LADO EN CELULAR */
+    div[data-testid="stHorizontalBlock"]:has(div[data-testid="stLinkButton"]) {
+        display: flex !important;
+        flex-direction: row !important;
+        flex-wrap: nowrap !important;
+        gap: 8px !important;
+        width: 100% !important;
+        margin-top: 6px !important;
+    }
+    div[data-testid="stHorizontalBlock"]:has(div[data-testid="stLinkButton"]) > div[data-testid="column"] {
+        flex: 1 1 50% !important;
+        width: 50% !important;
+        min-width: 0 !important;
+    }
+
+    /* Botón WhatsApp (Verde Oficial) */
+    div[data-testid="stLinkButton"] a, 
+    div[data-testid="stLinkButton"] a p, 
+    div[data-testid="stLinkButton"] a span {
         background-color: #25D366 !important;
         color: #FFFFFF !important;
+        font-weight: 800 !important;
+        font-size: 13px !important;
+    }
+    div[data-testid="stLinkButton"] a {
         border: none !important;
         border-radius: 8px !important;
-        font-weight: 700 !important;
-        font-size: 13px !important;
-        box-shadow: 0 2px 4px rgba(37, 211, 102, 0.25) !important;
+        height: 40px !important;
         display: flex !important;
         justify-content: center !important;
         align-items: center !important;
+        box-shadow: 0 2px 6px rgba(37, 211, 102, 0.3) !important;
+        text-decoration: none !important;
     }
     div[data-testid="stLinkButton"] a:hover {
         background-color: #1EBE5D !important;
-        color: #FFFFFF !important;
     }
 
-    /* Botón PDF - Rojo Exportación Elegante */
-    .stDownloadButton button {
-        background-color: #E11D48 !important;
+    /* Botón PDF (Rojo Exportar) */
+    .stDownloadButton button, 
+    .stDownloadButton button p, 
+    .stDownloadButton button span {
+        background-color: #EF4444 !important;
         color: #FFFFFF !important;
+        font-weight: 800 !important;
+        font-size: 13px !important;
+    }
+    .stDownloadButton button {
         border: none !important;
         border-radius: 8px !important;
-        font-weight: 700 !important;
-        font-size: 13px !important;
-        box-shadow: 0 2px 4px rgba(225, 29, 72, 0.25) !important;
+        height: 40px !important;
+        width: 100% !important;
+        box-shadow: 0 2px 6px rgba(239, 68, 68, 0.3) !important;
     }
     .stDownloadButton button:hover {
-        background-color: #BE123C !important;
-        color: #FFFFFF !important;
+        background-color: #DC2626 !important;
     }
 
-    /* Inputs y Campos de Texto legibles */
+    /* Inputs de Texto */
     input[type="text"], input[type="number"], div[data-baseweb="input"] {
         font-size: 13px !important;
         background-color: #FFFFFF !important;
@@ -155,7 +180,7 @@ st.markdown(
         color: #0F172A !important;
     }
 
-    /* Desplegable */
+    /* Desplegable de Ayuda */
     details, div[data-testid="stExpander"] {
         background-color: #FFFFFF !important;
         border: 1px solid #E2E8F0 !important;
@@ -163,7 +188,7 @@ st.markdown(
         color: #0F172A !important;
     }
 
-    /* ALINEACIÓN DE LA CRUZ (✕) EN LA MISMA LÍNEA DE LA LISTA */
+    /* LISTA DE PARTICIPANTES LADO A LADO */
     div[data-testid="stHorizontalBlock"]:has(div[class*="st-key-del_p_"]) {
         display: flex !important;
         flex-direction: row !important;
@@ -173,13 +198,11 @@ st.markdown(
         width: 100% !important;
         margin-bottom: 2px !important;
     }
-
     div[data-testid="stHorizontalBlock"]:has(div[class*="st-key-del_p_"]) > div[data-testid="column"]:first-child {
         flex: 1 1 auto !important;
         min-width: 0 !important;
         width: auto !important;
     }
-
     div[data-testid="stHorizontalBlock"]:has(div[class*="st-key-del_p_"]) > div[data-testid="column"]:last-child {
         flex: 0 0 28px !important;
         width: 28px !important;
@@ -194,7 +217,7 @@ st.markdown(
         align-items: center !important;
         width: 100% !important;
     }
-    div[class*="st-key-del_p_"] button {
+    div[class*="st-key-del_p_"] button, div[class*="st-key-del_p_"] button * {
         background: transparent !important;
         border: none !important;
         color: #94A3B8 !important;
@@ -202,16 +225,10 @@ st.markdown(
         margin: 0px !important;
         width: 22px !important;
         height: 22px !important;
-        min-height: 22px !important;
-        max-height: 22px !important;
         font-size: 13px !important;
         font-weight: 700 !important;
         box-shadow: none !important;
         border-radius: 50% !important;
-        cursor: pointer !important;
-        display: inline-flex !important;
-        align-items: center !important;
-        justify-content: center !important;
     }
     div[class*="st-key-del_p_"] button:hover {
         background-color: #FEE2E2 !important;
@@ -219,21 +236,16 @@ st.markdown(
     }
 
     /* Botón Limpiar Todo */
-    div[class*="st-key-clean_all_btn"] button {
+    div[class*="st-key-clean_all_btn"] button, div[class*="st-key-clean_all_btn"] button * {
         background-color: #F1F5F9 !important;
         border: 1px solid #E2E8F0 !important;
         color: #64748B !important;
         font-size: 11px !important;
         padding: 2px 8px !important;
         height: 26px !important;
-        min-height: 26px !important;
-        box-shadow: none !important;
         border-radius: 6px !important;
         margin-top: 4px !important;
-    }
-    div[class*="st-key-clean_all_btn"] button:hover {
-        background-color: #E2E8F0 !important;
-        color: #334155 !important;
+        box-shadow: none !important;
     }
 
     /* Tarjetas de Resultado */
@@ -253,7 +265,7 @@ st.markdown(
         border: 1px solid #FCA5A5 !important;
         padding: 2px 6px;
         border-radius: 6px;
-        font-weight: 600;
+        font-weight: 700;
         font-size: 11px;
     }
     .badge-creditor {
@@ -262,7 +274,7 @@ st.markdown(
         border: 1px solid #6EE7B7 !important;
         padding: 2px 6px;
         border-radius: 6px;
-        font-weight: 600;
+        font-weight: 700;
         font-size: 11px;
     }
     .badge-neutral {
@@ -271,7 +283,7 @@ st.markdown(
         border: 1px solid #CBD5E1 !important;
         padding: 2px 6px;
         border-radius: 6px;
-        font-weight: 600;
+        font-weight: 700;
         font-size: 11px;
     }
     </style>
@@ -566,11 +578,11 @@ def generate_pdf(
 
 # --- INTERFAZ PRINCIPAL ---
 
-# Título Principal
+# Banner de Título
 st.markdown(
     """
     <div class="hero-container">
-        <div class="hero-title">🎉 Gastos de Evento</div>
+        <div class="hero-title">🥳 Cuentas del Evento</div>
     </div>
 """,
     unsafe_allow_html=True,
@@ -626,10 +638,10 @@ components.html(
 # Datos Básicos del Evento
 col_date, col_name = st.columns([1, 1.5], vertical_alignment="center")
 with col_date:
-    event_date = st.date_input("Fecha:", datetime.now())
+    event_date = st.date_input("📅 Fecha:", datetime.now())
 with col_name:
     event_name = st.text_input(
-        "Evento:",
+        "🏷️ Evento:",
         value="Asado con Amigos",
         placeholder="Ej: Topopeña...",
     )
@@ -642,7 +654,7 @@ with st.form("smart_input_form", clear_on_submit=True):
         label_visibility="collapsed",
     )
     submit_btn = st.form_submit_button(
-        "🚀 Cargar Datos", use_container_width=True
+        "⚡ Cargar Datos", use_container_width=True
     )
 
     if submit_btn and user_input.strip():
@@ -676,7 +688,7 @@ with st.form("smart_input_form", clear_on_submit=True):
 with st.expander("❓ ¿Cómo cargar datos?"):
     st.markdown(
         """
-        - **Sumar persona sin gasto:** `Nico`
+        - **Sumar integrante sin gasto:** `Nico`
         - **Gasto completo:** `Juan 18000 Carne`
         - **Gasto simple:** `Pedro 5000`
     """
@@ -684,12 +696,12 @@ with st.expander("❓ ¿Cómo cargar datos?"):
 
 # LISTA UNIFICADA DE PARTICIPANTES
 st.markdown(
-    f"<div style='font-size:12px; font-weight:700; color:#475569; margin-bottom:4px;'>👥 PARTICIPANTES ({len(st.session_state.participants)})</div>",
+    f"<div style='font-size:12px; font-weight:800; color:#475569; margin-bottom:4px;'>👥 INTEGRANTES Y COMPRAS ({len(st.session_state.participants)})</div>",
     unsafe_allow_html=True,
 )
 
 if not st.session_state.participants:
-    st.caption("Sin participantes cargados.")
+    st.caption("Sin integrantes cargados.")
 else:
     for idx, person in enumerate(st.session_state.participants):
         person_expenses = [
@@ -732,12 +744,12 @@ if st.session_state.participants or st.session_state.expenses:
         st.session_state.expenses = []
         st.rerun()
 
-# RESULTADOS AUTOMÁTICOS Y REACTIVOS
+# RESULTADOS AUTOMÁTICOS
 if st.session_state.participants and st.session_state.expenses:
     st.write("---")
     date_str = event_date.strftime("%d/%m/%Y")
     st.markdown(
-        f"<b>📊 Balances: {event_name}</b> <small>({date_str})</small>",
+        f"<b>📊 Resumen de Cuentas: {event_name}</b> <small>({date_str})</small>",
         unsafe_allow_html=True,
     )
 
@@ -753,17 +765,17 @@ if st.session_state.participants and st.session_state.expenses:
 
     settlements = calculate_settlements(balances)
 
-    # TARJETAS DE MÉTRICAS EN TONOS PLANOS
+    # TARJETAS DE MÉTRICAS COMPACTAS
     st.markdown(
         f"""
         <div style="display: flex; gap: 6px; margin: 8px 0; width:100%;">
             <div style="flex:1; background:#FFFFFF; border:1px solid #E2E8F0; padding:8px 6px; border-radius:8px; text-align:center;">
-                <div style="font-size:10px; color:#64748B; font-weight:700; text-transform:uppercase;">Gasto Total</div>
-                <div style="font-size:15px; font-weight:700; color:#1E293B; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${total_spent:,.2f}</div>
+                <div style="font-size:10px; color:#64748B; font-weight:800; text-transform:uppercase;">💰 Gasto Total</div>
+                <div style="font-size:15px; font-weight:800; color:#1E293B; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${total_spent:,.2f}</div>
             </div>
             <div style="flex:1; background:#FFFFFF; border:1px solid #E2E8F0; padding:8px 6px; border-radius:8px; text-align:center;">
-                <div style="font-size:10px; color:#64748B; font-weight:700; text-transform:uppercase;">Por Persona</div>
-                <div style="font-size:15px; font-weight:700; color:#2563EB; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${per_person:,.2f}</div>
+                <div style="font-size:10px; color:#64748B; font-weight:800; text-transform:uppercase;">🛒 Por Persona</div>
+                <div style="font-size:15px; font-weight:800; color:#2563EB; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${per_person:,.2f}</div>
             </div>
         </div>
     """,
@@ -809,7 +821,7 @@ if st.session_state.participants and st.session_state.expenses:
             st.pyplot(fig)
             plt.close(fig)
 
-    st.markdown("<b>👤 Estado por Persona:</b>", unsafe_allow_html=True)
+    st.markdown("<b>👤 Balance por Integrante:</b>", unsafe_allow_html=True)
     for p in st.session_state.participants:
         bal = balances[p]
         paid = sum(
@@ -838,7 +850,7 @@ if st.session_state.participants and st.session_state.expenses:
         )
 
     st.markdown(
-        "<b>🔄 ¿Quién le transfiere a quién?</b>", unsafe_allow_html=True
+        "<b>💸 ¿Quién le paga a quién?</b>", unsafe_allow_html=True
     )
 
     wa_text = f"🎉 *EVENTO: {event_name.upper()}*\n"
@@ -873,14 +885,14 @@ if st.session_state.participants and st.session_state.expenses:
     wa_text += "\n📲 *Armá y calculá los gastos de tu evento acá:*\n"
     wa_text += "https://cuentas-evento.streamlit.app"
 
-    # BOTONES ACCIÓN INFERIOR (WHATSAPP + PDF LADO A LADO)
+    # BOTONES INFERIORES FORZADOS LADO A LADO EN CELULAR
     col_wa, col_pdf = st.columns(2)
 
     with col_wa:
         encoded_wa = urllib.parse.quote(wa_text)
         wa_url = f"https://wa.me/?text={encoded_wa}"
         st.link_button(
-            "💬 Compartir", wa_url, use_container_width=True
+            "🟢 WhatsApp", wa_url, use_container_width=True
         )
 
     with col_pdf:
@@ -894,7 +906,7 @@ if st.session_state.participants and st.session_state.expenses:
             settlements,
         )
         st.download_button(
-            label="📄 Exportar PDF",
+            label="📄 PDF",
             data=pdf_bytes,
             file_name=f"gastos_{event_name.lower().replace(' ', '_')}.pdf",
             mime="application/pdf",
