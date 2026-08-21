@@ -25,7 +25,7 @@ st.set_page_config(
     initial_sidebar_state="collapsed",
 )
 
-# --- ESTILOS CSS CON TARGETING EXACTO DE STREAMLIT ---
+# --- ESTILOS CSS (Forzar alineación horizontal en celulares) ---
 st.markdown(
     """
     <style>
@@ -62,17 +62,33 @@ st.markdown(
 
     /* Reducción de márgenes globales en celular */
     .block-container {
-        padding-top: 1.5rem !important;
+        padding-top: 1rem !important;
         padding-bottom: 2rem !important;
-        padding-left: 0.8rem !important;
-        padding-right: 0.8rem !important;
+        padding-left: 0.6rem !important;
+        padding-right: 0.6rem !important;
     }
 
-    /* TARGETING EXACTO PARA BOTONES DE ELIMINAR (✕) */
-    div[class*="st-key-del_"] {
-        display: flex !important;
-        justify-content: center !important;
+    /* PROHIBIR APILAMIENTO VERTICAL EN CELULARES */
+    div[data-testid="stHorizontalBlock"] {
+        flex-direction: row !important;
+        flex-wrap: nowrap !important;
         align-items: center !important;
+        gap: 4px !important;
+        margin-bottom: 2px !important;
+    }
+    div[data-testid="column"] {
+        width: auto !important;
+        min-width: 0 !important;
+        flex: 1 1 auto !important;
+    }
+
+    /* BOTÓN DE ELIMINAR (✕) FIJO A LA DERECHA EN LA MISMA LÍNEA */
+    div[class*="st-key-del_"] {
+        flex: 0 0 28px !important;
+        width: 28px !important;
+        min-width: 28px !important;
+        display: flex !important;
+        justify-content: flex-end !important;
     }
     div[class*="st-key-del_"] button {
         background: transparent !important;
@@ -84,11 +100,12 @@ st.markdown(
         height: 22px !important;
         min-height: 22px !important;
         max-height: 22px !important;
-        font-size: 13px !important;
+        font-size: 14px !important;
         font-weight: 700 !important;
         line-height: 1 !important;
         box-shadow: none !important;
         border-radius: 50% !important;
+        cursor: pointer !important;
     }
     div[class*="st-key-del_"] button:hover {
         background-color: #FEE2E2 !important;
@@ -106,10 +123,6 @@ st.markdown(
         min-height: 26px !important;
         box-shadow: none !important;
         border-radius: 6px !important;
-    }
-    div[class*="st-key-clean_all_btn"] button:hover {
-        background-color: #F1F5F9 !important;
-        color: #0F172A !important;
     }
 
     /* Tarjetas de Resultado */
@@ -556,7 +569,7 @@ with st.expander("❓ ¿Cómo cargar datos?"):
     """
     )
 
-# UNIFICACIÓN EN 1 SOLA LISTA DE PARTICIPANTES Y GASTOS
+# UNIFICACIÓN EN 1 SOLA LÍNEA HORIZONTAL SIN SALTO DE LÍNEA
 st.markdown(
     f"<div style='font-size:12px; font-weight:700; color:#475569; margin-bottom:4px;'>👥 PARTICIPANTES ({len(st.session_state.participants)})</div>",
     unsafe_allow_html=True,
@@ -586,10 +599,11 @@ else:
         else:
             label_html = f"• <b>{person}</b>"
 
-        c_txt, c_del = st.columns([0.88, 0.12], vertical_alignment="center")
+        # Dos columnas forzadas por CSS a no romperse
+        c_txt, c_del = st.columns([0.9, 0.1], vertical_alignment="center")
         with c_txt:
             st.markdown(
-                f"<span style='font-size:13px;'>{label_html}</span>",
+                f"<div style='white-space:nowrap; overflow:hidden; text-overflow:ellipsis; font-size:13px;'>{label_html}</div>",
                 unsafe_allow_html=True,
             )
         with c_del:
