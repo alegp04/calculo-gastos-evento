@@ -25,33 +25,26 @@ st.set_page_config(
     initial_sidebar_state="collapsed",
 )
 
-# --- ESTILOS CSS CON BLOQUEO ANTI-DESBORDAMIENTO EN CELULARES ---
+# --- ESTILOS CSS MOBILE FIRST (480px MAX) ---
 st.markdown(
     """
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
     
-    /* BLOQUEO GENERAL ANTI SCROLL HORIZONTAL */
-    *, *:before, *:after {
-        box-sizing: border-box !important;
-    }
-
-    html, body, .stApp, [data-testid="stAppViewContainer"], [data-testid="stHeader"], main {
-        max-width: 100vw !important;
-        overflow-x: hidden !important;
+    html, body, .stApp {
         font-family: 'Inter', sans-serif;
         background-color: #F8FAFC !important;
         color: #0F172A !important;
     }
 
-    /* Padding ajustado al borde de la pantalla del celular */
+    /* Margen superior amplio para despejar la barra de Streamlit */
     .block-container {
-        padding-top: 0.6rem !important;
-        padding-bottom: 1.5rem !important;
-        padding-left: 0.5rem !important;
-        padding-right: 0.5rem !important;
-        max-width: 100% !important;
-        width: 100% !important;
+        padding-top: 3.5rem !important;
+        padding-bottom: 2rem !important;
+        padding-left: 0.8rem !important;
+        padding-right: 0.8rem !important;
+        max-width: 480px !important;
+        margin: 0 auto !important;
     }
 
     p, span, label, h1, h2, h3, h4, h5, h6, .stMarkdown {
@@ -61,101 +54,53 @@ st.markdown(
     /* Banner de Título */
     .hero-container {
         background: linear-gradient(135deg, #0284C7 0%, #0D9488 100%);
-        padding: 6px 10px;
-        border-radius: 8px;
+        padding: 10px 14px;
+        border-radius: 10px;
         color: white !important;
         text-align: center;
-        margin-bottom: 6px;
-        width: 100% !important;
+        margin-bottom: 10px;
     }
     .hero-title {
-        font-size: 15px !important;
+        font-size: 17px !important;
         font-weight: 700 !important;
         margin: 0;
         color: #FFFFFF !important;
     }
 
-    /* FORMULARIO Y CAMPOS AJUSTADOS AL ANCHO */
+    /* Formulario compacto */
     div[data-testid="stForm"] {
-        padding: 6px 8px !important;
-        border-radius: 8px !important;
+        padding: 10px !important;
+        border-radius: 10px !important;
         border: 1px solid #CBD5E1 !important;
-        width: 100% !important;
-        max-width: 100% !important;
-        background: #FFFFFF !important;
-    }
-
-    .stTextInput, .stDateInput, div[data-baseweb="input"] {
-        width: 100% !important;
-        min-width: 0 !important;
+        background-color: #FFFFFF !important;
     }
 
     input[type="text"], input[type="number"] {
-        font-size: 12px !important;
-        padding: 4px 8px !important;
+        font-size: 13px !important;
     }
 
-    /* Botón Cargar dentro del formulario */
-    div[data-testid="stForm"] button {
-        padding: 4px 6px !important;
-        font-size: 12px !important;
-        font-weight: 700 !important;
-        height: 38px !important;
-        min-height: 38px !important;
-        width: 100% !important;
-    }
-
-    /* REGULAR FILAS HORIZONTALES DENTRO DEL PANTALLAZO */
-    div[data-testid="stHorizontalBlock"] {
-        display: flex !important;
-        flex-direction: row !important;
-        flex-wrap: nowrap !important;
-        align-items: center !important;
-        gap: 4px !important;
-        width: 100% !important;
-        max-width: 100% !important;
-    }
-
-    div[data-testid="column"] {
-        min-width: 0 !important;
-        box-sizing: border-box !important;
-    }
-
-    /* Reducir espacio vertical excesivo */
-    div[data-testid="stVerticalBlock"] {
-        gap: 2px !important;
-    }
-    div[data-testid="element-container"] {
-        margin-bottom: 0px !important;
-    }
-
-    /* BOTÓN DE ELIMINAR (✕) INTEGRADO A LA DERECHA */
-    div[class*="st-key-del_"] {
+    /* Alineación perfecta de la cruz de eliminar en la lista */
+    div[class*="st-key-del_p_"] {
         display: flex !important;
         justify-content: flex-end !important;
         align-items: center !important;
-        flex: 0 0 24px !important;
-        width: 24px !important;
-        min-width: 24px !important;
     }
-    div[class*="st-key-del_"] button {
+    div[class*="st-key-del_p_"] button {
         background: transparent !important;
         border: none !important;
         color: #EF4444 !important;
         padding: 0px !important;
         margin: 0px !important;
-        width: 22px !important;
-        height: 22px !important;
-        min-height: 22px !important;
-        max-height: 22px !important;
-        font-size: 13px !important;
+        width: 24px !important;
+        height: 24px !important;
+        min-height: 24px !important;
+        font-size: 14px !important;
         font-weight: 800 !important;
-        line-height: 1 !important;
         box-shadow: none !important;
         border-radius: 50% !important;
         cursor: pointer !important;
     }
-    div[class*="st-key-del_"] button:hover {
+    div[class*="st-key-del_p_"] button:hover {
         background-color: #FEE2E2 !important;
     }
 
@@ -166,51 +111,50 @@ st.markdown(
         color: #64748B !important;
         font-size: 11px !important;
         padding: 2px 8px !important;
-        height: 24px !important;
-        min-height: 24px !important;
+        height: 26px !important;
+        min-height: 26px !important;
         box-shadow: none !important;
         border-radius: 6px !important;
         margin-top: 4px !important;
     }
 
-    /* Tarjetas de Resultado Compactas */
+    /* Tarjetas de Resultado */
     .flat-card {
         background-color: #FFFFFF !important;
         border: 1px solid #CBD5E1 !important;
-        border-radius: 6px;
-        padding: 6px 8px !important;
+        border-radius: 8px;
+        padding: 8px 10px !important;
         margin-bottom: 4px !important;
         color: #0F172A !important;
-        font-size: 12px !important;
-        width: 100% !important;
+        font-size: 13px !important;
     }
 
     .badge-debtor {
         background-color: #FEF2F2 !important;
         color: #EF4444 !important;
         border: 1px solid #FCA5A5 !important;
-        padding: 1px 5px;
+        padding: 2px 6px;
         border-radius: 6px;
         font-weight: 600;
-        font-size: 10px;
+        font-size: 11px;
     }
     .badge-creditor {
         background-color: #ECFDF5 !important;
         color: #10B981 !important;
         border: 1px solid #6EE7B7 !important;
-        padding: 1px 5px;
+        padding: 2px 6px;
         border-radius: 6px;
         font-weight: 600;
-        font-size: 10px;
+        font-size: 11px;
     }
     .badge-neutral {
         background-color: #F1F5F9 !important;
         color: #64748B !important;
         border: 1px solid #CBD5E1 !important;
-        padding: 1px 5px;
+        padding: 2px 6px;
         border-radius: 6px;
         font-weight: 600;
-        font-size: 10px;
+        font-size: 11px;
     }
     </style>
 """,
@@ -504,6 +448,7 @@ def generate_pdf(
 
 # --- INTERFAZ PRINCIPAL ---
 
+# Título Principal
 st.markdown(
     """
     <div class="hero-container">
@@ -513,6 +458,7 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
+# Botones PWA / Compartir
 components.html(
     """
     <script>
@@ -547,19 +493,20 @@ components.html(
         }
     }
     </script>
-    <div style="display: flex; gap: 6px; font-family: sans-serif; width:100%;">
-        <button id="install-pwa-btn" onclick="installPWA()" style="display:none; flex: 1; background:#10B981; color:white; border:none; padding:4px; border-radius:6px; font-weight:bold; cursor:pointer; font-size:11px;">
+    <div style="display: flex; gap: 6px; font-family: sans-serif;">
+        <button id="install-pwa-btn" onclick="installPWA()" style="display:none; flex: 1; background:#10B981; color:white; border:none; padding:5px; border-radius:6px; font-weight:bold; cursor:pointer; font-size:11px;">
             📲 Instalar App
         </button>
-        <button id="share-app-btn" onclick="shareApp()" style="flex: 1; background:#0284C7; color:white; border:none; padding:4px; border-radius:6px; font-weight:bold; cursor:pointer; font-size:11px;">
+        <button id="share-app-btn" onclick="shareApp()" style="flex: 1; background:#0284C7; color:white; border:none; padding:5px; border-radius:6px; font-weight:bold; cursor:pointer; font-size:11px;">
             🔗 Compartir App
         </button>
     </div>
 """,
-    height=32,
+    height=34,
 )
 
-col_date, col_name = st.columns([1, 1.8], vertical_alignment="center")
+# Datos Básicos del Evento
+col_date, col_name = st.columns([1, 1.5], vertical_alignment="center")
 with col_date:
     event_date = st.date_input("Fecha:", datetime.now())
 with col_name:
@@ -569,18 +516,16 @@ with col_name:
         placeholder="Ej: Topopeña...",
     )
 
+# Formulario de Carga Limpio
 with st.form("smart_input_form", clear_on_submit=True):
-    col_in, col_btn = st.columns([0.68, 0.32], vertical_alignment="center")
-    with col_in:
-        user_input = st.text_input(
-            "Ingreso rápido:",
-            placeholder="Ej: Nico | Nico 15000 Carne",
-            label_visibility="collapsed",
-        )
-    with col_btn:
-        submit_btn = st.form_submit_button(
-            "🚀 Cargar", use_container_width=True
-        )
+    user_input = st.text_input(
+        "Ingreso rápido:",
+        placeholder="Ej: Nico | Nico 15000 Carne",
+        label_visibility="collapsed",
+    )
+    submit_btn = st.form_submit_button(
+        "🚀 Cargar Datos", use_container_width=True
+    )
 
     if submit_btn and user_input.strip():
         raw_text = user_input.strip()
@@ -619,7 +564,7 @@ with st.expander("❓ ¿Cómo cargar datos?"):
     """
     )
 
-# LISTA UNIFICADA COMPACTA
+# LISTA UNIFICADA DE PARTICIPANTES
 st.markdown(
     f"<div style='font-size:12px; font-weight:700; color:#475569; margin-bottom:4px;'>👥 PARTICIPANTES ({len(st.session_state.participants)})</div>",
     unsafe_allow_html=True,
@@ -649,10 +594,10 @@ else:
         else:
             label_html = f"• <b>{person}</b>"
 
-        c_txt, c_del = st.columns([0.88, 0.12], vertical_alignment="center")
+        c_txt, c_del = st.columns([0.85, 0.15], vertical_alignment="center")
         with c_txt:
             st.markdown(
-                f"<div style='font-size:13px; line-height:22px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;'>{label_html}</div>",
+                f"<div style='font-size:13px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;'>{label_html}</div>",
                 unsafe_allow_html=True,
             )
         with c_del:
@@ -669,7 +614,7 @@ if st.session_state.participants or st.session_state.expenses:
         st.session_state.expenses = []
         st.rerun()
 
-# RESULTADOS AUTOMÁTICOS
+# RESULTADOS AUTOMÁTICOS Y REACTIVOS
 if st.session_state.participants and st.session_state.expenses:
     st.write("---")
     date_str = event_date.strftime("%d/%m/%Y")
@@ -693,12 +638,12 @@ if st.session_state.participants and st.session_state.expenses:
     # TARJETAS DE MÉTRICAS RESPONSIVAS
     st.markdown(
         f"""
-        <div style="display: flex; gap: 6px; margin: 6px 0; width:100%;">
-            <div style="flex:1; background:#FFFFFF; border:1px solid #CBD5E1; padding:6px 4px; border-radius:6px; text-align:center; min-width:0;">
+        <div style="display: flex; gap: 6px; margin: 8px 0;">
+            <div style="flex:1; background:#FFFFFF; border:1px solid #CBD5E1; padding:6px 4px; border-radius:6px; text-align:center;">
                 <div style="font-size:9px; color:#64748B; font-weight:700; text-transform:uppercase;">Gasto Total</div>
                 <div style="font-size:14px; font-weight:700; color:#0F172A; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${total_spent:,.2f}</div>
             </div>
-            <div style="flex:1; background:#FFFFFF; border:1px solid #CBD5E1; padding:6px 4px; border-radius:6px; text-align:center; min-width:0;">
+            <div style="flex:1; background:#FFFFFF; border:1px solid #CBD5E1; padding:6px 4px; border-radius:6px; text-align:center;">
                 <div style="font-size:9px; color:#64748B; font-weight:700; text-transform:uppercase;">Por Persona</div>
                 <div style="font-size:14px; font-weight:700; color:#0284C7; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${per_person:,.2f}</div>
             </div>
