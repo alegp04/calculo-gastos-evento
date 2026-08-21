@@ -25,7 +25,7 @@ st.set_page_config(
     initial_sidebar_state="collapsed",
 )
 
-# --- ESTILOS CSS MOBILE FIRST (480px MAX) ---
+# --- ESTILOS CSS MOBILE FIRST Y COMPATIBILIDAD MODO OSCURO ---
 st.markdown(
     """
     <style>
@@ -37,7 +37,7 @@ st.markdown(
         color: #0F172A !important;
     }
 
-    /* Margen superior amplio para despejar la barra de Streamlit */
+    /* Margen superior despejado para la barra de Streamlit */
     .block-container {
         padding-top: 3.5rem !important;
         padding-bottom: 2rem !important;
@@ -75,15 +75,88 @@ st.markdown(
         background-color: #FFFFFF !important;
     }
 
-    input[type="text"], input[type="number"] {
-        font-size: 13px !important;
+    /* FORZAR ESTILOS DE BOTONES EN MODO OSCURO */
+    .stButton > button, 
+    .stDownloadButton > button,
+    div[data-testid="stForm"] button,
+    a[data-testid*="stBaseButton"],
+    button[data-testid*="stBaseButton"] {
+        background-color: #0284C7 !important;
+        color: #FFFFFF !important;
+        border: none !important;
+        font-weight: 600 !important;
+        border-radius: 8px !important;
     }
 
-    /* Alineación perfecta de la cruz de eliminar en la lista */
+    .stButton > button:hover, 
+    .stDownloadButton > button:hover,
+    div[data-testid="stForm"] button:hover {
+        background-color: #0369A1 !important;
+        color: #FFFFFF !important;
+    }
+
+    /* Botón Cargar Datos */
+    div[data-testid="stForm"] button {
+        padding: 4px 6px !important;
+        font-size: 13px !important;
+        font-weight: 700 !important;
+        height: 38px !important;
+        min-height: 38px !important;
+        width: 100% !important;
+        background-color: #0284C7 !important;
+        color: #FFFFFF !important;
+    }
+
+    /* Inputs y Campos de Texto legibles */
+    input[type="text"], input[type="number"], div[data-baseweb="input"] {
+        font-size: 13px !important;
+        background-color: #FFFFFF !important;
+        color: #0F172A !important;
+        border-color: #CBD5E1 !important;
+    }
+    div[data-baseweb="input"] input {
+        background-color: #FFFFFF !important;
+        color: #0F172A !important;
+    }
+
+    /* Desplegable */
+    details, div[data-testid="stExpander"] {
+        background-color: #FFFFFF !important;
+        border: 1px solid #CBD5E1 !important;
+        border-radius: 8px !important;
+        color: #0F172A !important;
+    }
+
+    /* --- REGLA CLAVE: ANULA EL APILAMIENTO EN CELULARES PARA LA LISTA --- */
+    div[data-testid="stHorizontalBlock"]:has(div[class*="st-key-del_p_"]) {
+        display: flex !important;
+        flex-direction: row !important;
+        flex-wrap: nowrap !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+        width: 100% !important;
+        margin-bottom: 2px !important;
+    }
+
+    div[data-testid="stHorizontalBlock"]:has(div[class*="st-key-del_p_"]) > div[data-testid="column"]:first-child {
+        flex: 1 1 auto !important;
+        min-width: 0 !important;
+        width: auto !important;
+    }
+
+    div[data-testid="stHorizontalBlock"]:has(div[class*="st-key-del_p_"]) > div[data-testid="column"]:last-child {
+        flex: 0 0 28px !important;
+        width: 28px !important;
+        min-width: 28px !important;
+        max-width: 28px !important;
+    }
+
+    /* Estilo del botón ✕ */
     div[class*="st-key-del_p_"] {
         display: flex !important;
         justify-content: flex-end !important;
         align-items: center !important;
+        width: 100% !important;
     }
     div[class*="st-key-del_p_"] button {
         background: transparent !important;
@@ -94,11 +167,15 @@ st.markdown(
         width: 24px !important;
         height: 24px !important;
         min-height: 24px !important;
+        max-height: 24px !important;
         font-size: 14px !important;
         font-weight: 800 !important;
         box-shadow: none !important;
         border-radius: 50% !important;
         cursor: pointer !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
     }
     div[class*="st-key-del_p_"] button:hover {
         background-color: #FEE2E2 !important;
@@ -106,7 +183,7 @@ st.markdown(
 
     /* Botón Limpiar Todo */
     div[class*="st-key-clean_all_btn"] button {
-        background-color: transparent !important;
+        background-color: #FFFFFF !important;
         border: 1px solid #CBD5E1 !important;
         color: #64748B !important;
         font-size: 11px !important;
@@ -116,6 +193,10 @@ st.markdown(
         box-shadow: none !important;
         border-radius: 6px !important;
         margin-top: 4px !important;
+    }
+    div[class*="st-key-clean_all_btn"] button:hover {
+        background-color: #F1F5F9 !important;
+        color: #0F172A !important;
     }
 
     /* Tarjetas de Resultado */
