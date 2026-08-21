@@ -25,7 +25,7 @@ st.set_page_config(
     initial_sidebar_state="collapsed",
 )
 
-# --- ESTILOS CSS PERSONALIZADOS (100% Compatible con Modo Oscuro) ---
+# --- ESTILOS CSS PERSONALIZADOS ---
 st.markdown(
     """
     <style>
@@ -35,6 +35,16 @@ st.markdown(
         font-family: 'Inter', sans-serif;
     }
     
+    /* Forzar fondo claro */
+    .stApp {
+        background-color: #F8FAFC !important;
+        color: #0F172A !important;
+    }
+
+    p, span, label, h1, h2, h3, h4, h5, h6, .stMarkdown {
+        color: #0F172A !important;
+    }
+
     /* Banner de Título */
     .hero-container {
         background: linear-gradient(135deg, #0284C7 0%, #0D9488 100%);
@@ -42,7 +52,7 @@ st.markdown(
         border-radius: 12px;
         color: white !important;
         text-align: center;
-        margin-bottom: 12px;
+        margin-bottom: 10px;
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
     }
     .hero-title {
@@ -53,17 +63,16 @@ st.markdown(
         letter-spacing: -0.3px;
     }
     
-    /* Tarjetas fijas en fondo claro para legibilidad absoluta en Modo Oscuro */
+    /* Tarjetas Compactas */
     .flat-card {
         background-color: #FFFFFF !important;
         border: 1px solid #CBD5E1 !important;
         border-radius: 10px;
-        padding: 12px 14px !important;
+        padding: 10px 14px !important;
         margin-bottom: 8px !important;
         box-shadow: 0 1px 2px rgba(0,0,0,0.03);
     }
     
-    /* Forzar color de texto oscuro dentro de las tarjetas */
     .flat-card, .flat-card b, .flat-card span, .flat-card small, .flat-card div {
         color: #0F172A !important;
     }
@@ -97,21 +106,38 @@ st.markdown(
         font-size: 12px;
     }
     
-    /* Botón Principal "Calcular Cuentas" */
+    /* Botón Principal */
     .stButton > button {
         border-radius: 8px !important;
         font-weight: 600 !important;
         background-color: #0284C7 !important;
         color: #FFFFFF !important;
         border: none !important;
-        padding: 10px 16px !important;
+        padding: 8px 14px !important;
     }
     .stButton > button:hover {
         background-color: #0369A1 !important;
         color: #FFFFFF !important;
     }
 
-    /* Campos de Entrada legibles */
+    /* Estilo para los botones de eliminar (íconos chiquitos y discretos) */
+    div[data-testid="column"] div.stButton > button {
+        background-color: transparent !important;
+        border: 1px solid #E2E8F0 !important;
+        color: #EF4444 !important;
+        padding: 2px 6px !important;
+        min-height: 28px !important;
+        height: 28px !important;
+        font-size: 12px !important;
+        border-radius: 6px !important;
+        margin-top: 2px;
+    }
+    div[data-testid="column"] div.stButton > button:hover {
+        background-color: #FEF2F2 !important;
+        border-color: #FCA5A5 !important;
+    }
+
+    /* Campos de Entrada */
     input[type="text"], input[type="number"] {
         border-radius: 8px !important;
     }
@@ -412,9 +438,8 @@ def generate_pdf(
     return bytes(pdf.output())
 
 
-# --- INTERFAZ DE USUARIO (1 SOLA PÁGINA) ---
+# --- INTERFAZ DE USUARIO ---
 
-# Encabezado
 st.markdown(
     """
     <div class="hero-container">
@@ -424,7 +449,6 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-# Componente PWA e Instalación + Botón de Compartir App
 components.html(
     """
     <script>
@@ -471,7 +495,6 @@ components.html(
     height=42,
 )
 
-# SECCIÓN 1: DATOS DEL EVENTO (1 SOLA LÍNEA)
 col_date, col_name = st.columns([1, 2])
 with col_date:
     event_date = st.date_input("Fecha:", datetime.now())
@@ -482,7 +505,6 @@ with col_name:
         placeholder="Ej: Topopeña, Cumple...",
     )
 
-# SECCIÓN 2: ENTRADA INTELIGENTE
 with st.form("smart_input_form", clear_on_submit=True):
     col_in, col_btn = st.columns([3, 1])
     with col_in:
@@ -527,7 +549,6 @@ with st.form("smart_input_form", clear_on_submit=True):
             else:
                 st.info(f"{name} ya está en la lista.")
 
-# Ayuda desplegable
 with st.expander("❓ ¿Cómo cargar datos? (Ver ejemplos)"):
     st.markdown(
         """
@@ -537,7 +558,7 @@ with st.expander("❓ ¿Cómo cargar datos? (Ver ejemplos)"):
     """
     )
 
-# SECCIÓN 3: LISTADO DE PERSONAS Y GASTOS
+# SECCIÓN 3: LISTADO COMPACTO DE PERSONAS Y GASTOS
 col_p, col_g = st.columns(2)
 
 with col_p:
@@ -548,9 +569,9 @@ with col_p:
     if not st.session_state.participants:
         st.caption("Sin participantes.")
     for idx, name in enumerate(st.session_state.participants):
-        c_txt, c_del = st.columns([4, 1])
+        c_txt, c_del = st.columns([5, 1])
         c_txt.write(f"• {name}")
-        if c_del.button("❌", key=f"del_p_{idx}"):
+        if c_del.button("✕", key=f"del_p_{idx}"):
             st.session_state.participants.pop(idx)
             st.session_state.expenses = [
                 e
@@ -567,14 +588,15 @@ with col_g:
     if not st.session_state.expenses:
         st.caption("Sin gastos.")
     for idx, exp in enumerate(st.session_state.expenses):
-        c_txt, c_del = st.columns([4, 1])
+        c_txt, c_del = st.columns([5, 1])
         c_txt.write(f"• {exp['payer']}: ${exp['amount']:,.0f}")
-        if c_del.button("🗑️", key=f"del_e_{idx}"):
+        if c_del.button("✕", key=f"del_e_{idx}"):
             st.session_state.expenses.pop(idx)
             st.rerun()
 
 if st.session_state.participants or st.session_state.expenses:
-    if st.button("🗑️ Limpiar Todo", use_container_width=True):
+    st.markdown("<br>", unsafe_allow_html=True)
+    if st.button("🗑️ Limpiar Todo", key="clean_all_btn"):
         st.session_state.participants = []
         st.session_state.expenses = []
         st.session_state.show_results = False
@@ -586,7 +608,7 @@ st.write("---")
 if st.button("🚀 Calcular Cuentas / Ver Resultados", use_container_width=True):
     st.session_state.show_results = True
 
-# SECCIÓN 5: RESULTADOS EN LA MISMA PÁGINA
+# SECCIÓN 5: RESULTADOS
 if st.session_state.show_results:
     if not st.session_state.participants or not st.session_state.expenses:
         st.warning("⚠️ Cargá al menos una persona y un gasto para ver el cálculo.")
