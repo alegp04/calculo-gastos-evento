@@ -25,9 +25,12 @@ st.set_page_config(
     initial_sidebar_state="collapsed",
 )
 
-# --- LOGOS VECTORIALES EMBEBIDOS (DATA URI - 100% GARANTIZADOS) ---
-WA_SVG_URI = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 448 512'%3E%3Cpath fill='%2325D366' d='M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 480l117.7-30.9c32.4 17.7 68.9 27 106.1 27h.1c122.3 0 224.1-99.6 224.1-222 0-59.3-25.2-115-67.1-157zm-157 341.6c-33.2 0-65.7-8.9-94-25.7l-6.7-4-69.8 18.3 18.6-68.1-4.4-7C50 322 40.7 287.6 40.7 254c0-101 82.2-183.2 183.2-183.2 48.9 0 94.9 19.1 129.5 53.7 34.6 34.6 53.7 80.6 53.7 129.5 0 101-82.2 183.2-183.2 183.2z'/%3E%3C/svg%3E"
-ACROBAT_SVG_URI = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath fill='%23EC1C24' d='M304.2 270.3c-14.8 13.3-32.9 24.6-53 32.8-11.4 25.8-23.7 48.7-36.8 65.2-11 13.9-21.5 20.8-31.8 20.8-12.7 0-21.5-9.3-21.5-22.3 0-21.9 22.9-49.3 58-63.5 14.1-5.7 28.5-9.5 42.4-11.5-10.4-20.6-18.7-42.5-24.4-63.8-12.7 26.6-28.8 48.4-46.7 61.8-10.4 7.8-21.1 12-30.8 12-13 0-21.3-9.1-21.3-21.3 0-17.6 18-40.4 46.4-58.8 22.2-14.4 48.4-24.4 74.8-29 6.2-20.8 10.4-41.6 10.4-58.8 0-19.1 8-30.1 22.1-30.1 10.4 0 18.7 7.3 18.7 18 0 18.9-7.3 41.6-17.6 64.9 31.7 13.3 67 21.1 98.4 21.1 24.4 0 39.2-9.5 39.2-25.2 0-12.5-9.1-20.1-20.8-20.1-13 0-29.1 6.8-44.2 17.4 23.2 19.4 44.4 41.8 60.5 65.5 8.5 12.3 13 24.2 13 34.6 0 17.1-13.5 27.2-31.5 27.2-22.9 0-49.3-17.4-74.1-46.3z'/%3E%3C/svg%3E"
+# --- LOGOS VECTORIALES OFICIALES EN BASE64 ---
+WA_SVG = """<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 258"><path fill="#25D366" d="M213.4 43.1C190.9 20.5 160.9 8 129.2 8 60 8 3.7 64.3 3.7 133.5c0 22.1 5.8 43.7 16.7 62.7L2 256l61.2-16c18.3 10 39 15.3 60.1 15.3h.1c69.2 0 125.5-56.3 125.5-125.5 0-31.7-12.4-61.6-35.5-84.2z"/><path fill="#FFF" d="M129.3 234c-18.7 0-37-5-53-14.5l-3.8-2.3-39.3 10.3 10.5-38.3-2.5-4C30.8 168.8 25 151.7 25 133.5c0-57.5 46.8-104.3 104.3-104.3 27.9 0 54.1 10.8 73.8 30.6 19.7 19.7 30.5 45.9 30.5 73.8 0 57.5-46.8 104.4-104.3 104.4zm57.2-78.2c-3.1-1.6-18.5-9.1-21.4-10.2-2.9-1.1-5-1.6-7.1 1.6-2.1 3.1-8.2 10.2-10.1 12.3-1.8 2.1-3.7 2.4-6.8.8-3.1-1.6-13.2-4.9-25.1-15.5-9.3-8.3-15.6-18.5-17.4-21.6-1.8-3.1-.2-4.8 1.4-6.3 1.4-1.4 3.1-3.7 4.7-5.5 1.6-1.8 2.1-3.1 3.1-5.2 1-2.1.5-3.9-.3-5.5-.8-1.6-7.1-17.1-9.7-23.4-2.6-6.1-5.2-5.3-7.1-5.4-1.8-.1-3.9-.1-6-.1s-5.5.8-8.4 3.9c-2.9 3.1-11 10.8-11 26.3 0 15.5 11.3 30.5 12.9 32.6 1.6 2.1 22.2 33.9 53.8 47.6 7.5 3.2 13.4 5.2 18 6.6 7.6 2.4 14.5 2.1 20 1.3 6.1-.9 18.5-7.6 21.1-14.9 2.6-7.3 2.6-13.6 1.8-14.9-.8-1.3-2.9-2.1-6-3.7z"/></svg>"""
+ACROBAT_SVG = """<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256"><rect width="256" height="256" rx="50" fill="#E1251B"/><path fill="#FFF" d="M152.5 137.5c-8.8-8.8-19.5-15.8-32.3-21 4.3-15.5 6.6-31.8 6.6-44.9 0-16.7-4.4-24.5-12.9-24.5-7.3 0-12.5 6.2-12.5 15.7 0 17 7.8 43.3 20.2 69-17.3 32.5-38.6 58.7-60.4 74.2-7.1 5.2-14.1 8.1-20.5 8.1-8.8 0-14.4-6.7-14.4-17 0-18.5 23.7-43.6 58.7-62.3 2.6-1.5 1.2-3.9-1.2-3.3-37.7 9.9-72.7 34.7-72.7 68.4 0 20.4 13.2 31.3 30.7 31.3 12.2 0 25.1-5.8 37.6-16.4 26.9-22.9 51.4-58.2 69.3-95.7 24 9.3 50.3 14.9 73.7 14.9 19 0 30.7-7.5 30.7-20.5 0-12.8-10.3-19.5-25.5-19.5-18.2 0-41.6 6.8-63.2 18.5 2.3 1.7 3.5 3.8 1.5 5.3zm48.2 6.2c9.1 0 14 3.2 14 8.8 0 5.8-5.2 8.8-13.4 8.8-14.9 0-33.1-4.6-49.9-11.9 16.4-3.8 33.9-5.7 49.3-5.7z"/></svg>"""
+
+WA_URI = f"data:image/svg+xml;base64,{base64.b64encode(WA_SVG.encode('utf-8')).decode('utf-8')}"
+ACROBAT_URI = f"data:image/svg+xml;base64,{base64.b64encode(ACROBAT_SVG.encode('utf-8')).decode('utf-8')}"
 
 # --- ESTILOS CSS REFINADOS ---
 st.markdown(
@@ -42,16 +45,26 @@ st.markdown(
     }
 
     .block-container {
-        padding-top: 3.2rem !important;
+        padding-top: 2.5rem !important;
         padding-bottom: 2rem !important;
         padding-left: 0.8rem !important;
         padding-right: 0.8rem !important;
         max-width: 480px !important;
         margin: 0 auto !important;
+        overflow-x: hidden !important;
     }
 
     p, label, span, h1, h2, h3, h4, h5, h6, .stMarkdown {
         color: #0F172A !important;
+    }
+
+    /* Evitar desbordamiento de columnas e inputs */
+    div[data-testid="column"] {
+        min-width: 0 !important;
+    }
+    div[data-testid="column"] input {
+        min-width: 0 !important;
+        width: 100% !important;
     }
 
     /* Banner Superior */
@@ -68,16 +81,6 @@ st.markdown(
         font-weight: 800 !important;
         color: #FFFFFF !important;
         margin: 0;
-    }
-
-    /* MANTENER COLUMNAS EN UNA SOLA LÍNEA (EVITAR COLAPSO VERTICAL) */
-    div[data-testid="stHorizontalBlock"] {
-        display: flex !important;
-        flex-direction: row !important;
-        flex-wrap: nowrap !important;
-        align-items: center !important;
-        justify-content: space-between !important;
-        width: 100% !important;
     }
 
     /* Formulario */
@@ -104,12 +107,7 @@ st.markdown(
         font-size: 14px !important;
     }
 
-    /* Cruz Eliminar Participante en la misma fila */
-    div[class*="st-key-del_p_"] {
-        display: flex !important;
-        justify-content: flex-end !important;
-        align-items: center !important;
-    }
+    /* Cruz Eliminar Participante alineada a la derecha */
     div[class*="st-key-del_p_"] button {
         background: transparent !important;
         border: none !important;
@@ -503,7 +501,7 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-# Fecha a la Izquierda | Nombre del Evento a la Derecha
+# Fecha y Nombre del Evento Lado a Lado (Sin desbordamiento)
 col_date, col_name = st.columns([1, 1])
 with col_date:
     event_date = st.date_input("📅 Fecha:", datetime.now())
@@ -592,7 +590,7 @@ else:
         else:
             label_html = f"• <b>{person}</b>"
 
-        c_txt, c_del = st.columns([0.88, 0.12], vertical_alignment="center")
+        c_txt, c_del = st.columns([0.85, 0.15], vertical_alignment="center")
         with c_txt:
             st.markdown(
                 f"<div style='font-size:13px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;'>{label_html}</div>",
@@ -754,7 +752,7 @@ if st.session_state.participants and st.session_state.expenses:
     wa_text += "\n📲 *Armá y calculá los gastos de tu evento acá:*\n"
     wa_text += "https://cuentas-evento.streamlit.app"
 
-    # PREPARACIÓN DE ENLACES CON LOGOS DATA URI EMBEBIDOS
+    # ENLACES DE LOS BOTONES
     encoded_wa = urllib.parse.quote(wa_text)
     wa_url = f"https://wa.me/?text={encoded_wa}"
 
@@ -771,15 +769,15 @@ if st.session_state.participants and st.session_state.expenses:
     pdf_href = f"data:application/pdf;base64,{pdf_b64}"
     clean_filename = f"gastos_{event_name.lower().replace(' ', '_')}.pdf"
 
-    # BOTONES FINALES CENTRADOS Y LADO A LADO
+    # BOTONES CUADRADOS DE ACCIÓN CENTRADOS LADO A LADO
     st.markdown(
         f"""
         <div class="action-row-container">
             <a href="{wa_url}" target="_blank" class="btn-action-square" title="Compartir por WhatsApp">
-                <img src="{WA_SVG_URI}" width="36" height="36" alt="WhatsApp">
+                <img src="{WA_URI}" width="38" height="38" alt="WhatsApp">
             </a>
             <a href="{pdf_href}" download="{clean_filename}" class="btn-action-square" title="Descargar Reporte PDF">
-                <img src="{ACROBAT_SVG_URI}" width="36" height="36" alt="Adobe Acrobat PDF">
+                <img src="{ACROBAT_URI}" width="38" height="38" alt="Adobe Acrobat PDF">
             </a>
         </div>
         """,
