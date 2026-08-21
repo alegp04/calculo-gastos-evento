@@ -25,13 +25,13 @@ st.set_page_config(
     initial_sidebar_state="collapsed",
 )
 
-# --- ESTILOS CSS CON TONOS PLANOS Y BLOQUEO ANTI-DESPLAZAMIENTO ---
+# --- ESTILOS CSS CON COLORES VIVOS Y BOTONES MODERNOS ---
 st.markdown(
     """
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
     
-    /* BLOQUEO DE SCROLL HORIZONTAL Y ANCHO AJUSTADO AL 100% */
+    /* BLOQUEO DE SCROLL HORIZONTAL */
     *, *:before, *:after {
         box-sizing: border-box !important;
     }
@@ -64,9 +64,9 @@ st.markdown(
         color: #0F172A !important;
     }
 
-    /* Banner de Título (Tono Pizarra Plano) */
+    /* Banner de Título (Azul Pizarra Moderno) */
     .hero-container {
-        background-color: #334155 !important;
+        background: linear-gradient(135deg, #1E293B 0%, #334155 100%);
         padding: 8px 12px;
         border-radius: 8px;
         color: #FFFFFF !important;
@@ -89,53 +89,57 @@ st.markdown(
         background-color: #FFFFFF !important;
     }
 
-    /* ESTILO DE BOTONES EN TONOS PLANOS AMIGABLES */
+    /* --- DISEÑO DE BOTONES MODERNOS Y VIVOS --- */
     
-    /* Botón Principal (🚀 Cargar Datos) */
+    /* Botón Principal (🚀 Cargar Datos) - Azul Real Vibrante */
     div[data-testid="stForm"] button {
-        background-color: #4F46E5 !important;
+        background-color: #2563EB !important;
         color: #FFFFFF !important;
         border: none !important;
         border-radius: 8px !important;
         font-size: 13px !important;
-        font-weight: 600 !important;
+        font-weight: 700 !important;
         height: 38px !important;
         min-height: 38px !important;
         width: 100% !important;
-        box-shadow: none !important;
+        box-shadow: 0 2px 4px rgba(37, 99, 235, 0.25) !important;
+        cursor: pointer !important;
     }
     div[data-testid="stForm"] button:hover {
-        background-color: #4338CA !important;
+        background-color: #1D4ED8 !important;
         color: #FFFFFF !important;
     }
 
-    /* Botón WhatsApp */
+    /* Botón WhatsApp - Verde WhatsApp Auténtico */
     div[data-testid="stLinkButton"] a {
-        background-color: #059669 !important;
+        background-color: #25D366 !important;
         color: #FFFFFF !important;
         border: none !important;
         border-radius: 8px !important;
-        font-weight: 600 !important;
+        font-weight: 700 !important;
         font-size: 13px !important;
-        box-shadow: none !important;
+        box-shadow: 0 2px 4px rgba(37, 211, 102, 0.25) !important;
+        display: flex !important;
+        justify-content: center !important;
+        align-items: center !important;
     }
     div[data-testid="stLinkButton"] a:hover {
-        background-color: #047857 !important;
+        background-color: #1EBE5D !important;
         color: #FFFFFF !important;
     }
 
-    /* Botón Descargar PDF */
+    /* Botón PDF - Rojo Exportación Elegante */
     .stDownloadButton button {
-        background-color: #475569 !important;
+        background-color: #E11D48 !important;
         color: #FFFFFF !important;
         border: none !important;
         border-radius: 8px !important;
-        font-weight: 600 !important;
+        font-weight: 700 !important;
         font-size: 13px !important;
-        box-shadow: none !important;
+        box-shadow: 0 2px 4px rgba(225, 29, 72, 0.25) !important;
     }
     .stDownloadButton button:hover {
-        background-color: #334155 !important;
+        background-color: #BE123C !important;
         color: #FFFFFF !important;
     }
 
@@ -159,7 +163,7 @@ st.markdown(
         color: #0F172A !important;
     }
 
-    /* ALINEACIÓN DE LA CRUZ (✕) EN LA MISMA LÍNEA */
+    /* ALINEACIÓN DE LA CRUZ (✕) EN LA MISMA LÍNEA DE LA LISTA */
     div[data-testid="stHorizontalBlock"]:has(div[class*="st-key-del_p_"]) {
         display: flex !important;
         flex-direction: row !important;
@@ -210,7 +214,7 @@ st.markdown(
         justify-content: center !important;
     }
     div[class*="st-key-del_p_"] button:hover {
-        background-color: #F1F5F9 !important;
+        background-color: #FEE2E2 !important;
         color: #EF4444 !important;
     }
 
@@ -357,7 +361,7 @@ def generate_pdf(
     _ = pdf.rect(10, 30, 190, 12, "F")
     _ = pdf.set_y(32)
     _ = pdf.set_font("Helvetica", "B", 10)
-    _ = pdf.set_text_color(2, 132, 199)
+    _ = pdf.set_text_color(37, 99, 235)
     _ = pdf.cell(95, 7, clean_txt(f"  Gasto Total: ${total_spent:,.2f}"), align="L")
     _ = pdf.cell(
         95,
@@ -381,7 +385,7 @@ def generate_pdf(
             labels = [clean_txt(k) for k in payer_totals.keys()]
             sizes = list(payer_totals.values())
             colors = [
-                "#4F46E5",
+                "#2563EB",
                 "#10B981",
                 "#F59E0B",
                 "#EF4444",
@@ -427,7 +431,7 @@ def generate_pdf(
     _ = pdf.cell(0, 6, clean_txt("1. Detalle de los Gastos Cargados"), ln=True)
 
     _ = pdf.set_font("Helvetica", "B", 8)
-    _ = pdf.set_fill_color(79, 70, 229)
+    _ = pdf.set_fill_color(37, 99, 235)
     _ = pdf.set_text_color(255, 255, 255)
     _ = pdf.cell(50, 5, clean_txt(" Comprador"), border=0, fill=True)
     _ = pdf.cell(95, 5, clean_txt(" Concepto / Item"), border=0, fill=True)
@@ -472,7 +476,7 @@ def generate_pdf(
     _ = pdf.cell(0, 6, clean_txt("2. Estado de Cuentas por Persona"), ln=True)
 
     _ = pdf.set_font("Helvetica", "B", 8)
-    _ = pdf.set_fill_color(79, 70, 229)
+    _ = pdf.set_fill_color(37, 99, 235)
     _ = pdf.set_text_color(255, 255, 255)
     _ = pdf.cell(50, 5, clean_txt(" Persona"), border=0, fill=True)
     _ = pdf.cell(45, 5, clean_txt(" Pago Realizado"), border=0, fill=True, align="R")
@@ -572,7 +576,7 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-# Botones PWA / Compartir en Tonos Planos
+# Botones PWA / Compartir
 components.html(
     """
     <script>
@@ -611,7 +615,7 @@ components.html(
         <button id="install-pwa-btn" onclick="installPWA()" style="display:none; flex: 1; background:#0D9488; color:white; border:none; padding:5px; border-radius:6px; font-weight:600; cursor:pointer; font-size:11px;">
             📲 Instalar App
         </button>
-        <button id="share-app-btn" onclick="shareApp()" style="flex: 1; background:#64748B; color:white; border:none; padding:5px; border-radius:6px; font-weight:600; cursor:pointer; font-size:11px;">
+        <button id="share-app-btn" onclick="shareApp()" style="flex: 1; background:#475569; color:white; border:none; padding:5px; border-radius:6px; font-weight:600; cursor:pointer; font-size:11px;">
             🔗 Compartir App
         </button>
     </div>
@@ -759,7 +763,7 @@ if st.session_state.participants and st.session_state.expenses:
             </div>
             <div style="flex:1; background:#FFFFFF; border:1px solid #E2E8F0; padding:8px 6px; border-radius:8px; text-align:center;">
                 <div style="font-size:10px; color:#64748B; font-weight:700; text-transform:uppercase;">Por Persona</div>
-                <div style="font-size:15px; font-weight:700; color:#4F46E5; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${per_person:,.2f}</div>
+                <div style="font-size:15px; font-weight:700; color:#2563EB; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${per_person:,.2f}</div>
             </div>
         </div>
     """,
@@ -779,7 +783,7 @@ if st.session_state.participants and st.session_state.expenses:
             labels = list(payer_totals.keys())
             sizes = list(payer_totals.values())
             colors = [
-                "#4F46E5",
+                "#2563EB",
                 "#10B981",
                 "#F59E0B",
                 "#EF4444",
@@ -858,7 +862,7 @@ if st.session_state.participants and st.session_state.expenses:
             line = f"• *{debtor}* ➔ *{creditor}*: ${amount:,.2f}"
             st.markdown(
                 f"""
-                <div style="background:#F1F5F9; border-left:4px solid #6366F1; padding:6px 10px; border-radius:6px; margin-bottom:4px; font-size:13px; color:#1E293B; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">
+                <div style="background:#EFF6FF; border-left:4px solid #2563EB; padding:6px 10px; border-radius:6px; margin-bottom:4px; font-size:13px; color:#1E293B; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">
                     💳 <b>{debtor}</b> ➔ <b>{creditor}</b>: <b>${amount:,.2f}</b>
                 </div>
             """,
@@ -869,13 +873,14 @@ if st.session_state.participants and st.session_state.expenses:
     wa_text += "\n📲 *Armá y calculá los gastos de tu evento acá:*\n"
     wa_text += "https://cuentas-evento.streamlit.app"
 
+    # BOTONES ACCIÓN INFERIOR (WHATSAPP + PDF LADO A LADO)
     col_wa, col_pdf = st.columns(2)
 
     with col_wa:
         encoded_wa = urllib.parse.quote(wa_text)
         wa_url = f"https://wa.me/?text={encoded_wa}"
         st.link_button(
-            "WhatsApp 📱", wa_url, use_container_width=True
+            "💬 Compartir", wa_url, use_container_width=True
         )
 
     with col_pdf:
@@ -889,7 +894,7 @@ if st.session_state.participants and st.session_state.expenses:
             settlements,
         )
         st.download_button(
-            label="Descargar PDF 📄",
+            label="📄 Exportar PDF",
             data=pdf_bytes,
             file_name=f"gastos_{event_name.lower().replace(' ', '_')}.pdf",
             mime="application/pdf",
