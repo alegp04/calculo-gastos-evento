@@ -25,70 +25,86 @@ st.set_page_config(
     initial_sidebar_state="collapsed",
 )
 
-# --- ESTILOS CSS (Forzar alineación horizontal en celulares) ---
+# --- ESTILOS CSS ADAPTATIVOS PARA CELULAR (SIN DESBORDAMIENTO) ---
 st.markdown(
     """
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
     
-    html, body, [class*="css"] {
+    html, body, [class*="css"], .stApp {
         font-family: 'Inter', sans-serif;
-    }
-    
-    .stApp {
         background-color: #F8FAFC !important;
         color: #0F172A !important;
+        max-width: 100vw !important;
+        overflow-x: hidden !important;
+    }
+
+    /* Reducir paddings generales del contenedor principal en celular */
+    .block-container {
+        padding-top: 0.8rem !important;
+        padding-bottom: 1.5rem !important;
+        padding-left: 0.5rem !important;
+        padding-right: 0.5rem !important;
+        max-width: 100% !important;
     }
 
     p, span, label, h1, h2, h3, h4, h5, h6, .stMarkdown {
         color: #0F172A !important;
     }
 
-    /* Banner de Título */
+    /* Banner de Título súper compacto */
     .hero-container {
         background: linear-gradient(135deg, #0284C7 0%, #0D9488 100%);
-        padding: 8px 12px;
-        border-radius: 10px;
+        padding: 6px 10px;
+        border-radius: 8px;
         color: white !important;
         text-align: center;
-        margin-bottom: 8px;
+        margin-bottom: 6px;
     }
     .hero-title {
-        font-size: 16px !important;
+        font-size: 15px !important;
         font-weight: 700 !important;
         margin: 0;
         color: #FFFFFF !important;
     }
 
-    /* Reducción de márgenes globales en celular */
-    .block-container {
-        padding-top: 1rem !important;
-        padding-bottom: 2rem !important;
-        padding-left: 0.6rem !important;
-        padding-right: 0.6rem !important;
+    /* Formulario e Inputs compactos */
+    div[data-testid="stForm"] {
+        padding: 6px 8px !important;
+        border-radius: 8px !important;
+        border: 1px solid #CBD5E1 !important;
     }
 
-    /* PROHIBIR APILAMIENTO VERTICAL EN CELULARES */
+    input[type="text"], input[type="number"], .stDateInput div {
+        font-size: 12px !important;
+    }
+
+    /* FORZAR FILAS HORIZONTALES SIN APILAMIENTO EN CELULAR */
     div[data-testid="stHorizontalBlock"] {
+        display: flex !important;
         flex-direction: row !important;
         flex-wrap: nowrap !important;
         align-items: center !important;
         gap: 4px !important;
-        margin-bottom: 2px !important;
+        width: 100% !important;
     }
-    div[data-testid="column"] {
-        width: auto !important;
-        min-width: 0 !important;
-        flex: 1 1 auto !important;
+
+    /* Reducir espacio vertical entre elementos de la lista */
+    div[data-testid="stVerticalBlock"] {
+        gap: 1px !important;
+    }
+    div[data-testid="element-container"] {
+        margin-bottom: 0px !important;
     }
 
     /* BOTÓN DE ELIMINAR (✕) FIJO A LA DERECHA EN LA MISMA LÍNEA */
     div[class*="st-key-del_"] {
-        flex: 0 0 28px !important;
-        width: 28px !important;
-        min-width: 28px !important;
         display: flex !important;
         justify-content: flex-end !important;
+        align-items: center !important;
+        flex: 0 0 26px !important;
+        width: 26px !important;
+        min-width: 26px !important;
     }
     div[class*="st-key-del_"] button {
         background: transparent !important;
@@ -100,8 +116,8 @@ st.markdown(
         height: 22px !important;
         min-height: 22px !important;
         max-height: 22px !important;
-        font-size: 14px !important;
-        font-weight: 700 !important;
+        font-size: 13px !important;
+        font-weight: 800 !important;
         line-height: 1 !important;
         box-shadow: none !important;
         border-radius: 50% !important;
@@ -109,7 +125,6 @@ st.markdown(
     }
     div[class*="st-key-del_"] button:hover {
         background-color: #FEE2E2 !important;
-        color: #DC2626 !important;
     }
 
     /* Botón Limpiar Todo */
@@ -119,48 +134,50 @@ st.markdown(
         color: #64748B !important;
         font-size: 11px !important;
         padding: 2px 8px !important;
-        height: 26px !important;
-        min-height: 26px !important;
+        height: 24px !important;
+        min-height: 24px !important;
         box-shadow: none !important;
         border-radius: 6px !important;
+        margin-top: 4px !important;
     }
 
     /* Tarjetas de Resultado */
     .flat-card {
         background-color: #FFFFFF !important;
         border: 1px solid #CBD5E1 !important;
-        border-radius: 8px;
-        padding: 8px 12px !important;
-        margin-bottom: 6px !important;
+        border-radius: 6px;
+        padding: 6px 10px !important;
+        margin-bottom: 4px !important;
         color: #0F172A !important;
+        font-size: 12px !important;
     }
 
     .badge-debtor {
         background-color: #FEF2F2 !important;
         color: #EF4444 !important;
         border: 1px solid #FCA5A5 !important;
-        padding: 2px 6px;
-        border-radius: 8px;
+        padding: 1px 5px;
+        border-radius: 6px;
         font-weight: 600;
-        font-size: 11px;
+        font-size: 10px;
     }
     .badge-creditor {
         background-color: #ECFDF5 !important;
         color: #10B981 !important;
         border: 1px solid #6EE7B7 !important;
-        padding: 2px 6px;
-        border-radius: 8px;
+        padding: 1px 5px;
+        border-radius: 6px;
         font-weight: 600;
-        font-size: 11px;
+        font-size: 10px;
     }
     .badge-neutral {
         background-color: #F1F5F9 !important;
         color: #64748B !important;
         border: 1px solid #CBD5E1 !important;
-        padding: 2px 6px;
-        border-radius: 8px;
+        padding: 1px 5px;
+        border-radius: 6px;
         font-weight: 600;
-        font-size: 11px;
+        font-size: 10px;
     }
     </style>
 """,
@@ -498,15 +515,15 @@ components.html(
     }
     </script>
     <div style="display: flex; gap: 6px; font-family: sans-serif;">
-        <button id="install-pwa-btn" onclick="installPWA()" style="display:none; flex: 1; background:#10B981; color:white; border:none; padding:5px; border-radius:6px; font-weight:bold; cursor:pointer; font-size:12px;">
+        <button id="install-pwa-btn" onclick="installPWA()" style="display:none; flex: 1; background:#10B981; color:white; border:none; padding:4px; border-radius:6px; font-weight:bold; cursor:pointer; font-size:11px;">
             📲 Instalar App
         </button>
-        <button id="share-app-btn" onclick="shareApp()" style="flex: 1; background:#0284C7; color:white; border:none; padding:5px; border-radius:6px; font-weight:bold; cursor:pointer; font-size:12px;">
+        <button id="share-app-btn" onclick="shareApp()" style="flex: 1; background:#0284C7; color:white; border:none; padding:4px; border-radius:6px; font-weight:bold; cursor:pointer; font-size:11px;">
             🔗 Compartir App
         </button>
     </div>
 """,
-    height=34,
+    height=32,
 )
 
 col_date, col_name = st.columns([1, 2], vertical_alignment="center")
@@ -520,7 +537,7 @@ with col_name:
     )
 
 with st.form("smart_input_form", clear_on_submit=True):
-    col_in, col_btn = st.columns([3, 1], vertical_alignment="center")
+    col_in, col_btn = st.columns([0.72, 0.28], vertical_alignment="center")
     with col_in:
         user_input = st.text_input(
             "Ingreso rápido:",
@@ -569,7 +586,7 @@ with st.expander("❓ ¿Cómo cargar datos?"):
     """
     )
 
-# UNIFICACIÓN EN 1 SOLA LÍNEA HORIZONTAL SIN SALTO DE LÍNEA
+# UNIFICACIÓN EN 1 SOLA LÍNEA HORIZONTAL COMPACTA
 st.markdown(
     f"<div style='font-size:12px; font-weight:700; color:#475569; margin-bottom:4px;'>👥 PARTICIPANTES ({len(st.session_state.participants)})</div>",
     unsafe_allow_html=True,
@@ -591,7 +608,7 @@ else:
                 if e["concept"] and e["concept"] != "Varios"
             ]
             concept_str = (
-                f" <small style='color:#64748B;'>({', '.join(concepts)})</small>"
+                f" <span style='color:#64748B; font-size:11px;'>({', '.join(concepts)})</span>"
                 if concepts
                 else ""
             )
@@ -599,11 +616,10 @@ else:
         else:
             label_html = f"• <b>{person}</b>"
 
-        # Dos columnas forzadas por CSS a no romperse
-        c_txt, c_del = st.columns([0.9, 0.1], vertical_alignment="center")
+        c_txt, c_del = st.columns([0.88, 0.12], vertical_alignment="center")
         with c_txt:
             st.markdown(
-                f"<div style='white-space:nowrap; overflow:hidden; text-overflow:ellipsis; font-size:13px;'>{label_html}</div>",
+                f"<div style='font-size:13px; line-height:24px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;'>{label_html}</div>",
                 unsafe_allow_html=True,
             )
         with c_del:
@@ -615,7 +631,6 @@ else:
                 st.rerun()
 
 if st.session_state.participants or st.session_state.expenses:
-    st.markdown("<div style='margin-top:4px;'></div>", unsafe_allow_html=True)
     if st.button("🗑️ Limpiar Todo", key="clean_all_btn"):
         st.session_state.participants = []
         st.session_state.expenses = []
@@ -642,9 +657,22 @@ if st.session_state.participants and st.session_state.expenses:
 
     settlements = calculate_settlements(balances)
 
-    m1, m2 = st.columns(2)
-    m1.metric("Gasto Total", f"${total_spent:,.2f}")
-    m2.metric("Por Persona", f"${per_person:,.2f}")
+    # TARJETAS DE MÉTRICAS COMPACTAS (Reemplaza los números gigantes)
+    st.markdown(
+        f"""
+        <div style="display: flex; gap: 8px; margin: 8px 0;">
+            <div style="flex:1; background:#FFFFFF; border:1px solid #CBD5E1; padding:6px 8px; border-radius:8px; text-align:center;">
+                <div style="font-size:10px; color:#64748B; font-weight:700; text-transform:uppercase;">Gasto Total</div>
+                <div style="font-size:15px; font-weight:700; color:#0F172A; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${total_spent:,.2f}</div>
+            </div>
+            <div style="flex:1; background:#FFFFFF; border:1px solid #CBD5E1; padding:6px 8px; border-radius:8px; text-align:center;">
+                <div style="font-size:10px; color:#64748B; font-weight:700; text-transform:uppercase;">Por Persona</div>
+                <div style="font-size:15px; font-weight:700; color:#0284C7; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${per_person:,.2f}</div>
+            </div>
+        </div>
+    """,
+        unsafe_allow_html=True,
+    )
 
     if HAS_MATPLOTLIB:
         payer_totals = {}
@@ -738,7 +766,7 @@ if st.session_state.participants and st.session_state.expenses:
             line = f"• *{debtor}* ➔ *{creditor}*: ${amount:,.2f}"
             st.markdown(
                 f"""
-                <div style="background:#E0F2FE; border-left:4px solid #0284C7; padding:8px 12px; border-radius:6px; margin-bottom:6px; font-size:14px; color:#0F172A;">
+                <div style="background:#E0F2FE; border-left:4px solid #0284C7; padding:6px 10px; border-radius:6px; margin-bottom:4px; font-size:13px; color:#0F172A;">
                     💳 <b>{debtor}</b> ➔ <b>{creditor}</b>: <b>${amount:,.2f}</b>
                 </div>
             """,
