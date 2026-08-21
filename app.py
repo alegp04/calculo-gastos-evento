@@ -25,7 +25,7 @@ st.set_page_config(
     initial_sidebar_state="collapsed",
 )
 
-# --- ESTILOS CSS ULTRA COMPACTOS Y MODERNOS ---
+# --- ESTILOS CSS MINIMALISTAS (Cero desbordamientos) ---
 st.markdown(
     """
     <style>
@@ -35,7 +35,6 @@ st.markdown(
         font-family: 'Inter', sans-serif;
     }
     
-    /* Forzar fondo y texto claro general */
     .stApp {
         background-color: #F8FAFC !important;
         color: #0F172A !important;
@@ -48,96 +47,56 @@ st.markdown(
     /* Banner de Título */
     .hero-container {
         background: linear-gradient(135deg, #0284C7 0%, #0D9488 100%);
-        padding: 10px 14px;
-        border-radius: 12px;
+        padding: 8px 12px;
+        border-radius: 10px;
         color: white !important;
         text-align: center;
         margin-bottom: 8px;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
     }
     .hero-title {
-        font-size: 18px !important;
+        font-size: 17px !important;
         font-weight: 700 !important;
         margin: 0;
         color: #FFFFFF !important;
-        letter-spacing: -0.3px;
     }
 
-    /* Reducir espacio entre columnas en móviles */
-    div[data-testid="stHorizontalBlock"] {
-        align-items: center !important;
-        gap: 4px !important;
-        margin-bottom: 2px !important;
-    }
-    div[data-testid="column"] {
-        padding: 0px 1px !important;
+    /* Forzar que las columnas se mantengan juntas en celulares */
+    [data-testid="column"] {
         min-width: 0 !important;
-    }
-    
-    /* FILA MICRO-COMPACTA PARA LISTAS */
-    .micro-item {
-        background-color: #FFFFFF !important;
-        border: 1px solid #E2E8F0 !important;
-        border-radius: 6px;
-        padding: 4px 8px !important;
-        margin-bottom: 4px !important;
-        font-size: 13px !important;
-        font-weight: 500;
-        color: #1E293B !important;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        transition: all 0.2s ease;
-    }
-    .micro-item:hover {
-        border-color: #CBD5E1 !important;
-        background-color: #F1F5F9 !important;
+        padding: 0px 2px !important;
     }
 
-    /* BOTONES DE ELIMINAR (✕) MINÚSCULOS Y REDONDOS */
-    div[data-testid="column"] button[key*="del_"] {
-        width: 20px !important;
-        height: 20px !important;
-        min-height: 20px !important;
-        max-height: 20px !important;
-        min-width: 20px !important;
-        max-width: 20px !important;
-        padding: 0 !important;
-        border-radius: 50% !important;
-        background-color: #FEE2E2 !important;
+    /* BOTONES DE BORRADO MINÚSCULOS (Estilo texto plano) */
+    button[key*="del_"] {
+        background: transparent !important;
+        border: none !important;
         color: #EF4444 !important;
-        border: 1px solid #FCA5A5 !important;
-        font-size: 10px !important;
-        font-weight: 800 !important;
-        line-height: 18px !important;
-        display: inline-flex !important;
-        align-items: center !important;
-        justify-content: center !important;
-        margin: 0 0 0 auto !important;
-        cursor: pointer;
+        padding: 0px 4px !important;
+        margin: 0 !important;
+        font-size: 12px !important;
+        font-weight: 700 !important;
+        height: 22px !important;
+        min-height: 22px !important;
+        line-height: 1 !important;
+        box-shadow: none !important;
+        cursor: pointer !important;
     }
-    div[data-testid="column"] button[key*="del_"]:hover {
-        background-color: #EF4444 !important;
-        color: #FFFFFF !important;
-        border-color: #DC2626 !important;
+    button[key*="del_"]:hover {
+        color: #DC2626 !important;
+        background-color: #FEE2E2 !important;
+        border-radius: 4px !important;
     }
 
-    /* Botón Limpiar Todo Discreto */
+    /* Botón Limpiar Todo discreto */
     button[key="clean_all_btn"] {
         background-color: transparent !important;
         border: 1px solid #CBD5E1 !important;
         color: #64748B !important;
-        font-size: 12px !important;
-        padding: 4px 10px !important;
-        height: 30px !important;
-        min-height: 30px !important;
+        font-size: 11px !important;
+        padding: 2px 8px !important;
+        height: 26px !important;
+        min-height: 26px !important;
         border-radius: 6px !important;
-        font-weight: 500 !important;
-    }
-    button[key="clean_all_btn"]:hover {
-        background-color: #F1F5F9 !important;
-        color: #0F172A !important;
-        border-color: #94A3B8 !important;
     }
 
     /* Tarjetas de Resultado */
@@ -149,17 +108,13 @@ st.markdown(
         margin-bottom: 6px !important;
         color: #0F172A !important;
     }
-    .flat-card b, .flat-card span, .flat-card small {
-        color: #0F172A !important;
-    }
 
-    /* Badges de Estado */
     .badge-debtor {
         background-color: #FEF2F2 !important;
         color: #EF4444 !important;
         border: 1px solid #FCA5A5 !important;
         padding: 2px 6px;
-        border-radius: 10px;
+        border-radius: 8px;
         font-weight: 600;
         font-size: 11px;
     }
@@ -168,7 +123,7 @@ st.markdown(
         color: #10B981 !important;
         border: 1px solid #6EE7B7 !important;
         padding: 2px 6px;
-        border-radius: 10px;
+        border-radius: 8px;
         font-weight: 600;
         font-size: 11px;
     }
@@ -177,12 +132,11 @@ st.markdown(
         color: #64748B !important;
         border: 1px solid #CBD5E1 !important;
         padding: 2px 6px;
-        border-radius: 10px;
+        border-radius: 8px;
         font-weight: 600;
         font-size: 11px;
     }
     
-    /* Botón Principal */
     .stButton > button {
         border-radius: 8px !important;
         font-weight: 600 !important;
@@ -190,13 +144,6 @@ st.markdown(
         color: #FFFFFF !important;
         border: none !important;
         padding: 8px 12px !important;
-    }
-    .stButton > button:hover {
-        background-color: #0369A1 !important;
-    }
-
-    input[type="text"], input[type="number"] {
-        border-radius: 6px !important;
     }
     </style>
 """,
@@ -260,7 +207,6 @@ def generate_pdf(
     def clean_txt(t):
         return str(t).encode("latin-1", "replace").decode("latin-1")
 
-    # Encabezado
     _ = pdf.set_font("Helvetica", "B", 15)
     _ = pdf.set_text_color(30, 41, 59)
     _ = pdf.cell(
@@ -284,7 +230,6 @@ def generate_pdf(
     )
     _ = pdf.ln(3)
 
-    # Métricas
     _ = pdf.set_fill_color(240, 249, 255)
     _ = pdf.rect(10, 30, 190, 12, "F")
     _ = pdf.set_y(32)
@@ -300,7 +245,6 @@ def generate_pdf(
     )
     _ = pdf.ln(3)
 
-    # Gráfico circular
     if HAS_MATPLOTLIB:
         payer_totals = {}
         for exp in expenses:
@@ -355,7 +299,6 @@ def generate_pdf(
             _ = pdf.image(img_buf, x=60, w=90)
             _ = pdf.ln(2)
 
-    # 1. Tabla Gastos
     _ = pdf.set_font("Helvetica", "B", 10)
     _ = pdf.set_text_color(30, 41, 59)
     _ = pdf.cell(0, 6, clean_txt("1. Detalle de los Gastos Cargados"), ln=True)
@@ -401,7 +344,6 @@ def generate_pdf(
 
     _ = pdf.ln(3)
 
-    # 2. Balances
     _ = pdf.set_font("Helvetica", "B", 10)
     _ = pdf.set_text_color(30, 41, 59)
     _ = pdf.cell(0, 6, clean_txt("2. Estado de Cuentas por Persona"), ln=True)
@@ -465,7 +407,6 @@ def generate_pdf(
 
     _ = pdf.ln(3)
 
-    # 3. Transferencias
     _ = pdf.set_font("Helvetica", "B", 10)
     _ = pdf.set_text_color(30, 41, 59)
     _ = pdf.cell(0, 6, clean_txt("3. Pagos / Transferencias a Realizar"), ln=True)
@@ -542,18 +483,18 @@ components.html(
     }
     </script>
     <div style="display: flex; gap: 6px; font-family: sans-serif;">
-        <button id="install-pwa-btn" onclick="installPWA()" style="display:none; flex: 1; background:#10B981; color:white; border:none; padding:6px; border-radius:6px; font-weight:bold; cursor:pointer; font-size:12px;">
+        <button id="install-pwa-btn" onclick="installPWA()" style="display:none; flex: 1; background:#10B981; color:white; border:none; padding:5px; border-radius:6px; font-weight:bold; cursor:pointer; font-size:12px;">
             📲 Instalar App
         </button>
-        <button id="share-app-btn" onclick="shareApp()" style="flex: 1; background:#0284C7; color:white; border:none; padding:6px; border-radius:6px; font-weight:bold; cursor:pointer; font-size:12px;">
+        <button id="share-app-btn" onclick="shareApp()" style="flex: 1; background:#0284C7; color:white; border:none; padding:5px; border-radius:6px; font-weight:bold; cursor:pointer; font-size:12px;">
             🔗 Compartir App
         </button>
     </div>
 """,
-    height=38,
+    height=34,
 )
 
-col_date, col_name = st.columns([1, 2])
+col_date, col_name = st.columns([1, 2], vertical_alignment="center")
 with col_date:
     event_date = st.date_input("Fecha:", datetime.now())
 with col_name:
@@ -564,7 +505,7 @@ with col_name:
     )
 
 with st.form("smart_input_form", clear_on_submit=True):
-    col_in, col_btn = st.columns([3, 1])
+    col_in, col_btn = st.columns([3, 1], vertical_alignment="center")
     with col_in:
         user_input = st.text_input(
             "Ingreso rápido:",
@@ -591,9 +532,7 @@ with st.form("smart_input_form", clear_on_submit=True):
                 st.session_state.expenses.append(
                     {"payer": name, "amount": amount, "concept": concept}
                 )
-                st.toast(
-                    f"¡Registrado! {name}: ${amount:,.2f} ({concept})"
-                )
+                st.toast(f"¡Registrado! {name}: ${amount:,.2f} ({concept})")
                 st.session_state.show_results = True
                 st.rerun()
             else:
@@ -607,7 +546,7 @@ with st.form("smart_input_form", clear_on_submit=True):
             else:
                 st.info(f"{name} ya está en la lista.")
 
-with st.expander("❓ ¿Cómo cargar datos? (Ver ejemplos)"):
+with st.expander("❓ ¿Cómo cargar datos?"):
     st.markdown(
         """
         - **Sumar persona sin gasto:** `Nico`
@@ -616,20 +555,23 @@ with st.expander("❓ ¿Cómo cargar datos? (Ver ejemplos)"):
     """
     )
 
-# LISTAS MICRO-COMPACTAS EN 2 COLUMNAS
+# LISTAS INLINE DE BAJO PERFIL Y ALINEACIÓN EXACTA
 col_p, col_g = st.columns(2)
 
 with col_p:
     st.markdown(
-        f"<div style='font-size:13px; font-weight:700; margin-bottom:4px;'>👤 Personas ({len(st.session_state.participants)}):</div>",
+        f"<div style='font-size:12px; font-weight:700; color:#475569; margin-bottom:2px;'>👤 PERSONAS ({len(st.session_state.participants)})</div>",
         unsafe_allow_html=True,
     )
     if not st.session_state.participants:
         st.caption("Sin personas.")
     for idx, name in enumerate(st.session_state.participants):
-        c_txt, c_del = st.columns([5, 1])
+        c_txt, c_del = st.columns([0.82, 0.18], vertical_alignment="center")
         with c_txt:
-            st.markdown(f"<div class='micro-item'><span>• {name}</span></div>", unsafe_allow_html=True)
+            st.markdown(
+                f"<span style='font-size:13px; font-weight:500;'>• {name}</span>",
+                unsafe_allow_html=True,
+            )
         with c_del:
             if st.button("✕", key=f"del_p_{idx}"):
                 st.session_state.participants.pop(idx)
@@ -642,16 +584,16 @@ with col_p:
 
 with col_g:
     st.markdown(
-        f"<div style='font-size:13px; font-weight:700; margin-bottom:4px;'>🛒 Gastos ({len(st.session_state.expenses)}):</div>",
+        f"<div style='font-size:12px; font-weight:700; color:#475569; margin-bottom:2px;'>🛒 GASTOS ({len(st.session_state.expenses)})</div>",
         unsafe_allow_html=True,
     )
     if not st.session_state.expenses:
         st.caption("Sin gastos.")
     for idx, exp in enumerate(st.session_state.expenses):
-        c_txt, c_del = st.columns([5, 1])
+        c_txt, c_del = st.columns([0.82, 0.18], vertical_alignment="center")
         with c_txt:
             st.markdown(
-                f"<div class='micro-item'><span>• {exp['payer']}: <b>${exp['amount']:,.0f}</b></span></div>",
+                f"<span style='font-size:13px;'>• {exp['payer']}: <b>${exp['amount']:,.0f}</b></span>",
                 unsafe_allow_html=True,
             )
         with c_del:
@@ -660,13 +602,12 @@ with col_g:
                 st.rerun()
 
 if st.session_state.participants or st.session_state.expenses:
-    col_clean, _ = st.columns([1, 1])
-    with col_clean:
-        if st.button("🗑️ Limpiar Todo", key="clean_all_btn"):
-            st.session_state.participants = []
-            st.session_state.expenses = []
-            st.session_state.show_results = False
-            st.rerun()
+    st.markdown("<div style='margin-top:6px;'></div>", unsafe_allow_html=True)
+    if st.button("🗑️ Limpiar Todo", key="clean_all_btn"):
+        st.session_state.participants = []
+        st.session_state.expenses = []
+        st.session_state.show_results = False
+        st.rerun()
 
 st.write("---")
 
