@@ -25,15 +25,11 @@ st.set_page_config(
     initial_sidebar_state="collapsed",
 )
 
-# --- LOGOS VECTORIALES OFICIALES EXACTOS ---
-WA_OFFICIAL_SVG = """<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="#25D366" d="M0 512l35.3-128C12 347 0 303.5 0 256 0 114.6 114.6 0 256 0c141.4 0 256 114.6 256 256 0 141.4-114.6 256-256 256-47.5 0-91-12-128-35.3L0 512z"/><path fill="#FFFFFF" d="M256 46.5c-115.7 0-209.5 93.8-209.5 209.5 0 41.5 12.1 80.2 33 112.8L59.2 452.8l86-20.3c31.3 19.4 68.3 30.7 108 30.7 115.7 0 209.5-93.8 209.5-209.5S371.7 46.5 256 46.5zm121.2 296c-5.1 14.4-29.8 27.5-41.2 29.2-11 1.6-25.2 2.3-41-2.7-9.6-3-22-7.2-38.1-14.1-67.1-29.1-110.8-97.1-114.1-101.6-3.3-4.5-27.2-36.2-27.2-69 0-32.8 17.2-48.9 23.3-55.5 6.1-6.6 13.3-8.3 17.7-8.3 4.4 0 8.8 0 12.7.2 4.1.2 9.6-1.5 15 11.4 5.5 13.3 18.8 45.9 20.4 49.2 1.6 3.3 2.7 7.2.5 11.6-2.2 4.4-3.3 7.2-6.6 11-3.3 3.8-7 8.5-10 11.4-3.3 3.3-6.8 6.9-2.9 13.5 3.9 6.6 17.4 28.7 37.3 46.4 25.6 22.8 47.3 29.9 53.9 33.2 6.6 3.3 10.5 2.7 14.4-1.6 3.9-4.4 16.6-19.4 21-26.1 4.4-6.6 8.8-5.5 14.9-3.3 6.1 2.2 38.7 18.3 45.3 21.6 6.6 3.3 11 4.9 12.7 7.7 1.6 2.8 1.6 16.1-3.5 30.5z"/></svg>"""
+# --- LOGOS OFICIALES DE MARCA (CDN WIKIMEDIA/SIMPLEICONS) ---
+WA_LOGO_URL = "https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg"
+ACROBAT_LOGO_URL = "https://upload.wikimedia.org/wikipedia/commons/b/b9/Adobe_Acrobat_Reader_icon_%282020%29.svg"
 
-ACROBAT_OFFICIAL_SVG = """<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="#EC1C24" d="M128 0h256c70.7 0 128 57.3 128 128v256c0 70.7-57.3 128-128 128H128C57.3 512 0 454.7 0 384V128C0 57.3 57.3 0 128 0z"/><path fill="#FFFFFF" d="M358.5 284c-13.8-12-33.8-21.8-55.8-28.3 6.8-24.6 10.6-51.5 10.6-72.8 0-29.2-8.2-42.5-24.6-42.5-13.7 0-23.3 10.9-23.3 28 0 29.7 13.3 75.8 34.2 120.9-29 53.9-64.9 96.9-101.5 122.5-11.6 8.2-23.3 13-33.9 13-16 0-26.3-12-26.3-29.7 0-32.4 42-75.8 102.5-108.6 5.1-2.7 2.7-7.5-2.7-5.8-65.9 20.1-127 61.8-127 119.1 0 35.8 23.3 55.3 53.9 55.3 21.5 0 44-10.2 65.9-29 47.1-40.3 90.1-102.5 121.5-168.3 42 16.4 88.1 26.3 129 26.3 33.4 0 53.9-13.3 53.9-36.2 0-22.5-18.1-34.1-45-34.1-32.1 0-73 12-110.6 32.8 4.1 3.1 6.1 6.8 2.7 9.5zm84.3 10.9c16 0 24.6 5.5 24.6 15.3 0 10.2-9.2 15.3-23.5 15.3-26.3 0-58.4-8.2-87.7-20.8 28.6-6.8 59.3-9.8 86.6-9.8zM228.1 199.1c0-10.2 4.1-15.7 9.6-15.7 4.1 0 6.8 4.1 6.8 10.9 0 13.7-3.1 31.5-8.2 50.5-5.8-17.4-8.2-34.1-8.2-45.7z"/></svg>"""
-
-WA_URI = f"data:image/svg+xml;base64,{base64.b64encode(WA_OFFICIAL_SVG.encode('utf-8')).decode('utf-8')}"
-ACROBAT_URI = f"data:image/svg+xml;base64,{base64.b64encode(ACROBAT_OFFICIAL_SVG.encode('utf-8')).decode('utf-8')}"
-
-# --- ESTILOS CSS CON ANULACIÓN DE COLAPSO EN MÓVIL ---
+# --- ESTILOS CSS ---
 st.markdown(
     """
     <style>
@@ -59,12 +55,13 @@ st.markdown(
         color: #0F172A !important;
     }
 
-    /* FORZAR COLUMNAS SIEMPRE LADO A LADO EN CELULARES */
+    /* FORZAR COLUMNAS SIEMPRE EN UNA SOLA LÍNEA HORIZONTAL (CELULARES Y PC) */
     div[data-testid="stHorizontalBlock"] {
         display: flex !important;
         flex-direction: row !important;
         flex-wrap: nowrap !important;
         align-items: center !important;
+        justify-content: space-between !important;
         width: 100% !important;
     }
 
@@ -72,15 +69,12 @@ st.markdown(
         min-width: 0 !important;
     }
 
-    @media (max-width: 640px) {
-        div[data-testid="stHorizontalBlock"] {
-            display: flex !important;
-            flex-direction: row !important;
-            flex-wrap: nowrap !important;
-        }
-        div[data-testid="column"] {
-            min-width: 0 !important;
-        }
+    /* Columna de la cruz siempre pegada a la derecha */
+    div[data-testid="column"]:last-child {
+        display: flex !important;
+        justify-content: flex-end !important;
+        align-items: center !important;
+        flex: 0 0 auto !important;
     }
 
     /* Banner Superior */
@@ -124,11 +118,6 @@ st.markdown(
     }
 
     /* Cruz Eliminar Participante */
-    div[class*="st-key-del_p_"] {
-        display: flex !important;
-        justify-content: flex-end !important;
-        align-items: center !important;
-    }
     div[class*="st-key-del_p_"] button {
         background: transparent !important;
         border: none !important;
@@ -222,6 +211,9 @@ st.markdown(
     .btn-action-square:hover {
         transform: translateY(-2px);
         box-shadow: 0 4px 10px rgba(0,0,0,0.1) !important;
+    }
+    .btn-action-square img {
+        object-fit: contain !important;
     }
     </style>
 """,
@@ -609,7 +601,7 @@ else:
         else:
             label_html = f"• <b>{person}</b>"
 
-        c_txt, c_del = st.columns([0.85, 0.15], vertical_alignment="center")
+        c_txt, c_del = st.columns([0.88, 0.12], vertical_alignment="center")
         with c_txt:
             st.markdown(
                 f"<div style='font-size:13px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;'>{label_html}</div>",
@@ -788,15 +780,15 @@ if st.session_state.participants and st.session_state.expenses:
     pdf_href = f"data:application/pdf;base64,{pdf_b64}"
     clean_filename = f"gastos_{event_name.lower().replace(' ', '_')}.pdf"
 
-    # BOTONES CUADRADOS DE ACCIÓN CON LOGOS OFICIALES REALES
+    # BOTONES CUADRADOS DE ACCIÓN CON LOGOS VECTORIALES REALES DE MARCA
     st.markdown(
         f"""
         <div class="action-row-container">
             <a href="{wa_url}" target="_blank" class="btn-action-square" title="Compartir por WhatsApp">
-                <img src="{WA_URI}" width="38" height="38" alt="WhatsApp">
+                <img src="{WA_LOGO_URL}" width="38" height="38" alt="WhatsApp">
             </a>
             <a href="{pdf_href}" download="{clean_filename}" class="btn-action-square" title="Descargar Reporte PDF">
-                <img src="{ACROBAT_URI}" width="38" height="38" alt="Adobe Acrobat PDF">
+                <img src="{ACROBAT_LOGO_URL}" width="38" height="38" alt="Adobe Acrobat PDF">
             </a>
         </div>
         """,
