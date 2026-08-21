@@ -1,3 +1,4 @@
+import base64
 from datetime import datetime
 import io
 import re
@@ -5,7 +6,7 @@ import urllib.parse
 from fpdf import FPDF
 import streamlit as st
 
-# Configuración de Matplotlib sin interfaz gráfica
+# Configuración de Matplotlib
 import matplotlib
 
 matplotlib.use("Agg")
@@ -24,7 +25,7 @@ st.set_page_config(
     initial_sidebar_state="collapsed",
 )
 
-# --- ESTILOS CSS DEFINITIVOS ---
+# --- ESTILOS CSS MÍNIMOS Y SEGUROS ---
 st.markdown(
     """
     <style>
@@ -36,9 +37,8 @@ st.markdown(
         color: #0F172A !important;
     }
 
-    /* Contenedor Principal Ajustado */
     .block-container {
-        padding-top: 3.5rem !important;
+        padding-top: 3.2rem !important;
         padding-bottom: 2rem !important;
         padding-left: 0.8rem !important;
         padding-right: 0.8rem !important;
@@ -66,23 +66,7 @@ st.markdown(
         margin: 0;
     }
 
-    /* Prevenir apilamiento vertical en celular para columnas */
-    div[data-testid="stHorizontalBlock"] {
-        display: flex !important;
-        flex-direction: row !important;
-        flex-wrap: nowrap !important;
-        align-items: center !important;
-        gap: 8px !important;
-        width: 100% !important;
-    }
-
-    div[data-testid="column"] {
-        flex: 1 1 50% !important;
-        width: 50% !important;
-        min-width: 0 !important;
-    }
-
-    /* Formulario de Carga */
+    /* Formulario */
     div[data-testid="stForm"] {
         padding: 10px !important;
         border-radius: 10px !important;
@@ -104,18 +88,6 @@ st.markdown(
         color: #FFFFFF !important;
         font-weight: 800 !important;
         font-size: 14px !important;
-    }
-
-    /* Inputs de Texto */
-    input[type="text"], input[type="number"], div[data-baseweb="input"] {
-        font-size: 13px !important;
-        background-color: #FFFFFF !important;
-        color: #0F172A !important;
-        border-color: #CBD5E1 !important;
-    }
-    div[data-baseweb="input"] input {
-        background-color: #FFFFFF !important;
-        color: #0F172A !important;
     }
 
     /* Cruz Eliminar Participante */
@@ -182,52 +154,32 @@ st.markdown(
         font-size: 11px;
     }
 
-    /* BOTONES FINALES CUADRADOS LADO A LADO CON LOGOS OFICIALES */
-    .action-row {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        gap: 24px;
-        margin-top: 15px;
-        width: 100%;
+    /* BOTONES CUADRADOS DE ACCIÓN */
+    .action-row-container {
+        display: flex !important;
+        justify-content: center !important;
+        align-items: center !important;
+        gap: 20px !important;
+        margin-top: 15px !important;
+        margin-bottom: 15px !important;
+        width: 100% !important;
     }
-    .btn-square-wa {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 65px;
-        height: 65px;
-        background-color: #FFFFFF;
-        border: 1.5px solid #CBD5E1;
-        border-radius: 16px;
-        box-shadow: 0 2px 6px rgba(0,0,0,0.05);
-        text-decoration: none;
-        transition: all 0.2s ease;
-    }
-    .btn-square-wa:hover {
-        border-color: #25D366;
-        background-color: #F0FDF4;
-    }
-    
-    /* Botón de Descarga PDF */
-    .stDownloadButton button {
+    .btn-action-square {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
         width: 65px !important;
         height: 65px !important;
-        min-width: 65px !important;
-        min-height: 65px !important;
         background-color: #FFFFFF !important;
         border: 1.5px solid #CBD5E1 !important;
         border-radius: 16px !important;
         box-shadow: 0 2px 6px rgba(0,0,0,0.05) !important;
-        padding: 0 !important;
-        cursor: pointer !important;
+        text-decoration: none !important;
+        transition: all 0.2s ease !important;
     }
-    .stDownloadButton button p, .stDownloadButton button span {
-        display: none !important;
-    }
-    .stDownloadButton button:hover {
-        border-color: #DC2626 !important;
-        background-color: #FEF2F2 !important;
+    .btn-action-square:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 10px rgba(0,0,0,0.1) !important;
     }
     </style>
 """,
@@ -272,7 +224,7 @@ def calculate_settlements(balances):
     return settlements
 
 
-# --- GENERADOR DE PDF COMPLETO ---
+# --- GENERADOR DE PDF ---
 def generate_pdf(
     event_name,
     event_date_str,
@@ -530,8 +482,8 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-# Fecha y Evento Lado a Lado
-col_date, col_name = st.columns(2)
+# Fecha a la Izquierda | Nombre del Evento a la Derecha
+col_date, col_name = st.columns([1, 1])
 with col_date:
     event_date = st.date_input("📅 Fecha:", datetime.now())
 with col_name:
@@ -781,9 +733,10 @@ if st.session_state.participants and st.session_state.expenses:
     wa_text += "\n📲 *Armá y calculá los gastos de tu evento acá:*\n"
     wa_text += "https://cuentas-evento.streamlit.app"
 
-    # BOTONES CUADRADOS LADO A LADO CON LOGOS OFICIALES
+    # PREPARACIÓN DE ENLACES PARA BOTONES INFERIORES
     encoded_wa = urllib.parse.quote(wa_text)
     wa_url = f"https://wa.me/?text={encoded_wa}"
+
     pdf_bytes = generate_pdf(
         event_name,
         date_str,
@@ -793,41 +746,21 @@ if st.session_state.participants and st.session_state.expenses:
         balances,
         settlements,
     )
+    pdf_b64 = base64.b64encode(pdf_bytes).decode("utf-8")
+    pdf_href = f"data:application/pdf;base64,{pdf_b64}"
+    clean_filename = f"gastos_{event_name.lower().replace(' ', '_')}.pdf"
 
-    col_btn_wa, col_btn_pdf = st.columns(2)
-    with col_btn_wa:
-        st.markdown(
-            f"""
-            <div style="display:flex; justify-content:center;">
-                <a href="{wa_url}" target="_blank" class="btn-square-wa">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" width="36" height="36" alt="WhatsApp">
-                </a>
-            </div>
-            """,
-            unsafe_allow_html=True,
-        )
-    with col_btn_pdf:
-        st.download_button(
-            label="",
-            data=pdf_bytes,
-            file_name=f"gastos_{event_name.lower().replace(' ', '_')}.pdf",
-            mime="application/pdf",
-            use_container_width=False,
-        )
-        st.markdown(
-            """
-            <style>
-            div[data-testid="column"]:last-child {
-                display: flex;
-                justify-content: center;
-            }
-            .stDownloadButton button {
-                background-image: url('https://upload.wikimedia.org/wikipedia/commons/1/1a/Adobe_Acrobat_DC_logo.svg') !important;
-                background-repeat: no-repeat !important;
-                background-position: center !important;
-                background-size: 34px !important;
-            }
-            </style>
-            """,
-            unsafe_allow_html=True,
-        )
+    # AMBOS BOTONES EN UN SOLO BLOQUE FLEX NATIVO (100% PERFECTOS Y CENTRADOS LADO A LADO)
+    st.markdown(
+        f"""
+        <div class="action-row-container">
+            <a href="{wa_url}" target="_blank" class="btn-action-square" title="Compartir por WhatsApp">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" width="38" height="38" alt="WhatsApp">
+            </a>
+            <a href="{pdf_href}" download="{clean_filename}" class="btn-action-square" title="Descargar Reporte PDF">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/1/1a/Adobe_Acrobat_DC_logo.svg" width="38" height="38" alt="Adobe Acrobat PDF">
+            </a>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
