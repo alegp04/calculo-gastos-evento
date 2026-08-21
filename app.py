@@ -556,50 +556,48 @@ with st.expander("❓ ¿Cómo cargar datos?"):
     """
     )
 
-# LISTAS INLINE DE BAJO PERFIL
-col_p, col_g = st.columns(2)
+# UNIFICACIÓN EN 1 SOLA LISTA DE PARTICIPANTES Y GASTOS
+st.markdown(
+    f"<div style='font-size:12px; font-weight:700; color:#475569; margin-bottom:4px;'>👥 PARTICIPANTES ({len(st.session_state.participants)})</div>",
+    unsafe_allow_html=True,
+)
 
-with col_p:
-    st.markdown(
-        f"<div style='font-size:12px; font-weight:700; color:#475569; margin-bottom:2px;'>👤 PERSONAS ({len(st.session_state.participants)})</div>",
-        unsafe_allow_html=True,
-    )
-    if not st.session_state.participants:
-        st.caption("Sin personas.")
-    for idx, name in enumerate(st.session_state.participants):
-        c_txt, c_del = st.columns([0.85, 0.15], vertical_alignment="center")
+if not st.session_state.participants:
+    st.caption("Sin participantes cargados.")
+else:
+    for idx, person in enumerate(st.session_state.participants):
+        person_expenses = [
+            e for e in st.session_state.expenses if e["payer"] == person
+        ]
+        total_p = sum(e["amount"] for e in person_expenses)
+
+        if person_expenses:
+            concepts = [
+                e["concept"]
+                for e in person_expenses
+                if e["concept"] and e["concept"] != "Varios"
+            ]
+            concept_str = (
+                f" <small style='color:#64748B;'>({', '.join(concepts)})</small>"
+                if concepts
+                else ""
+            )
+            label_html = f"• <b>{person}</b>: ${total_p:,.0f}{concept_str}"
+        else:
+            label_html = f"• <b>{person}</b>"
+
+        c_txt, c_del = st.columns([0.88, 0.12], vertical_alignment="center")
         with c_txt:
             st.markdown(
-                f"<span style='font-size:13px;'>• {name}</span>",
+                f"<span style='font-size:13px;'>{label_html}</span>",
                 unsafe_allow_html=True,
             )
         with c_del:
             if st.button("✕", key=f"del_p_{idx}"):
                 st.session_state.participants.pop(idx)
                 st.session_state.expenses = [
-                    e
-                    for e in st.session_state.expenses
-                    if e["payer"] != name
+                    e for e in st.session_state.expenses if e["payer"] != person
                 ]
-                st.rerun()
-
-with col_g:
-    st.markdown(
-        f"<div style='font-size:12px; font-weight:700; color:#475569; margin-bottom:2px;'>🛒 GASTOS ({len(st.session_state.expenses)})</div>",
-        unsafe_allow_html=True,
-    )
-    if not st.session_state.expenses:
-        st.caption("Sin gastos.")
-    for idx, exp in enumerate(st.session_state.expenses):
-        c_txt, c_del = st.columns([0.85, 0.15], vertical_alignment="center")
-        with c_txt:
-            st.markdown(
-                f"<span style='font-size:13px;'>• {exp['payer']}: <b>${exp['amount']:,.0f}</b></span>",
-                unsafe_allow_html=True,
-            )
-        with c_del:
-            if st.button("✕", key=f"del_e_{idx}"):
-                st.session_state.expenses.pop(idx)
                 st.rerun()
 
 if st.session_state.participants or st.session_state.expenses:
