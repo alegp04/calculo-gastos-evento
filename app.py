@@ -4,8 +4,9 @@ import re
 import urllib.parse
 from fpdf import FPDF
 import streamlit as st
+import streamlit.components.v1 as components
 
-# Configuración de Matplotlib sin interfaz gráfica para alta velocidad
+# Configuración de Matplotlib sin interfaz gráfica
 import matplotlib
 
 matplotlib.use("Agg")
@@ -18,13 +19,13 @@ except ImportError:
 
 # --- CONFIGURACIÓN DE PÁGINA ---
 st.set_page_config(
-    page_title="Cálculo de Gastos de Evento",
+    page_title="Gastos de Evento",
     page_icon="🎉",
     layout="centered",
     initial_sidebar_state="collapsed",
 )
 
-# --- ESTILOS CSS PERSONALIZADOS ---
+# --- ESTILOS CSS PERSONALIZADOS (Compacto + Compatible con Modo Oscuro) ---
 st.markdown(
     """
     <style>
@@ -34,111 +35,124 @@ st.markdown(
         font-family: 'Inter', sans-serif;
     }
     
+    /* Forzar fondo claro y textos legibles en Modo Oscuro */
     .stApp {
-        background-color: #F8FAFC;
+        background-color: #F8FAFC !important;
+        color: #0F172A !important;
     }
-    
+
+    /* Textos generales legibles en cualquier modo */
+    p, span, label, h1, h2, h3, h4, h5, h6, .stMarkdown {
+        color: #0F172A !important;
+    }
+
+    /* Banner de Título Chico y Amigable */
     .hero-container {
-        background: linear-gradient(135deg, #4F46E5 0%, #7C3AED 100%);
-        padding: 22px;
-        border-radius: 16px;
-        color: white;
+        background: linear-gradient(135deg, #0284C7 0%, #0D9488 100%);
+        padding: 12px 16px;
+        border-radius: 12px;
+        color: white !important;
         text-align: center;
-        margin-bottom: 20px;
-        box-shadow: 0 10px 15px -3px rgba(79, 70, 229, 0.3);
+        margin-bottom: 10px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
     }
     .hero-title {
-        font-size: 26px;
-        font-weight: 800;
+        font-size: 19px !important;
+        font-weight: 700 !important;
         margin: 0;
-        letter-spacing: -0.5px;
-    }
-    .hero-subtitle {
-        font-size: 13px;
-        color: #E0E7FF;
-        margin-top: 4px;
+        color: #FFFFFF !important;
+        letter-spacing: -0.3px;
     }
     
+    /* Tarjetas Compactas */
     .flat-card {
-        background-color: #FFFFFF;
-        border: 1px solid #E2E8F0;
-        border-radius: 12px;
-        padding: 16px;
-        margin-bottom: 12px;
-        box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+        background-color: #FFFFFF !important;
+        border: 1px solid #E2E8F0 !important;
+        border-radius: 10px;
+        padding: 10px 14px !important;
+        margin-bottom: 8px !important;
+        box-shadow: 0 1px 2px rgba(0,0,0,0.02);
     }
     
-    .guide-card {
-        background-color: #EEF2FF;
-        border: 1px dashed #A5B4FC;
-        border-radius: 12px;
-        padding: 16px;
-        margin-top: 20px;
-        color: #312E81;
-    }
-
+    /* Badges de Estado */
     .badge-debtor {
-        background-color: #FEF2F2;
-        color: #EF4444;
-        border: 1px solid #FCA5A5;
-        padding: 4px 10px;
-        border-radius: 20px;
+        background-color: #FEF2F2 !important;
+        color: #EF4444 !important;
+        border: 1px solid #FCA5A5 !important;
+        padding: 2px 8px;
+        border-radius: 12px;
         font-weight: 600;
-        font-size: 13px;
+        font-size: 12px;
     }
     .badge-creditor {
-        background-color: #ECFDF5;
-        color: #10B981;
-        border: 1px solid #6EE7B7;
-        padding: 4px 10px;
-        border-radius: 20px;
+        background-color: #ECFDF5 !important;
+        color: #10B981 !important;
+        border: 1px solid #6EE7B7 !important;
+        padding: 2px 8px;
+        border-radius: 12px;
         font-weight: 600;
-        font-size: 13px;
+        font-size: 12px;
     }
     .badge-neutral {
-        background-color: #F1F5F9;
-        color: #64748B;
-        border: 1px solid #CBD5E1;
-        padding: 4px 10px;
-        border-radius: 20px;
+        background-color: #F1F5F9 !important;
+        color: #64748B !important;
+        border: 1px solid #CBD5E1 !important;
+        padding: 2px 8px;
+        border-radius: 12px;
         font-weight: 600;
-        font-size: 13px;
+        font-size: 12px;
     }
     
-    .stButton > button {
+    /* Pestañas Marcadas y Claras */
+    .stTabs [data-baseweb="tab-list"] {
+        gap: 6px;
+        background-color: #E2E8F0 !important;
+        padding: 4px;
         border-radius: 10px;
-        font-weight: 600;
-        background-color: #4F46E5;
-        color: white;
-        border: none;
-        padding: 12px 16px;
+        margin-bottom: 12px;
     }
-    .stButton > button:hover {
-        background-color: #4338CA;
-        color: white;
+    .stTabs [data-baseweb="tab"] {
+        height: 38px;
+        border-radius: 8px;
+        color: #475569 !important;
+        font-weight: 600;
+        font-size: 13px;
+        padding: 0 12px;
+    }
+    .stTabs [aria-selected="true"] {
+        background-color: #FFFFFF !important;
+        color: #0284C7 !important;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1) !important;
     }
 
-    /* Estilo para selector de pestañas navegable */
-    div[data-testid="stRadio"] > div {
-        display: flex;
-        gap: 8px;
-        background-color: #E2E8F0;
-        padding: 6px;
-        border-radius: 12px;
-        margin-bottom: 16px;
+    /* Botones */
+    .stButton > button {
+        border-radius: 8px !important;
+        font-weight: 600 !important;
+        background-color: #0284C7 !important;
+        color: white !important;
+        border: none !important;
+        padding: 8px 14px !important;
     }
-    div[data-testid="stRadio"] label {
-        flex: 1;
-        text-align: center;
-        background-color: transparent;
-        padding: 8px 12px;
-        border-radius: 8px;
-        font-weight: 600;
-        color: #475569;
-        cursor: pointer;
+    .stButton > button:hover {
+        background-color: #0369A1 !important;
     }
-    div[data-testid="stRadio"] div[role="radiogroup"] > label > div:first-child {
-        display: none;
+
+    /* Compatibilidad con campos de texto en Modo Oscuro */
+    input[type="text"], input[type="number"], select {
+        background-color: #FFFFFF !important;
+        color: #0F172A !important;
+        border: 1px solid #CBD5E1 !important;
+    }
+    
+    /* Métricas ajustadas */
+    [data-testid="stMetricValue"] {
+        color: #0284C7 !important;
+        font-size: 20px !important;
+    }
+    [data-testid="stMetricLabel"] {
+        color: #64748B !important;
+        font-size: 12px !important;
     }
     </style>
 """,
@@ -150,15 +164,6 @@ if "participants" not in st.session_state:
     st.session_state.participants = []
 if "expenses" not in st.session_state:
     st.session_state.expenses = []
-
-TAB_OPTIONS = ["⚡ 1. Cargar Gastos y Personas", "📊 2. Cuentas & PDF"]
-
-if "tab_selector" not in st.session_state:
-    st.session_state.tab_selector = TAB_OPTIONS[0]
-
-
-def go_to_results():
-    st.session_state.tab_selector = TAB_OPTIONS[1]
 
 
 # --- ALGORITMO DE LIQUIDACIÓN DE DEUDAS ---
@@ -192,7 +197,7 @@ def calculate_settlements(balances):
     return settlements
 
 
-# --- GENERADOR DE PDF DETALLADO ---
+# --- GENERADOR DE PDF ---
 def generate_pdf(
     event_name,
     event_date_str,
@@ -210,11 +215,11 @@ def generate_pdf(
         return str(t).encode("latin-1", "replace").decode("latin-1")
 
     # Encabezado
-    _ = pdf.set_font("Helvetica", "B", 16)
+    _ = pdf.set_font("Helvetica", "B", 15)
     _ = pdf.set_text_color(30, 41, 59)
     _ = pdf.cell(
         0,
-        10,
+        9,
         clean_txt(f"GASTOS DE EVENTO: {event_name.upper()}"),
         ln=True,
         align="C",
@@ -224,32 +229,32 @@ def generate_pdf(
     _ = pdf.set_text_color(100, 116, 139)
     _ = pdf.cell(
         0,
-        6,
+        5,
         clean_txt(
             f"Fecha: {event_date_str} | Reporte de Gastos y Transferencias"
         ),
         ln=True,
         align="C",
     )
-    _ = pdf.ln(4)
+    _ = pdf.ln(3)
 
-    # Cuadro de Métricas
-    _ = pdf.set_fill_color(238, 242, 255)
-    _ = pdf.rect(10, 32, 190, 14, "F")
-    _ = pdf.set_y(35)
-    _ = pdf.set_font("Helvetica", "B", 11)
-    _ = pdf.set_text_color(49, 46, 129)
-    _ = pdf.cell(95, 8, clean_txt(f"  Gasto Total: ${total_spent:,.2f}"), align="L")
+    # Métricas
+    _ = pdf.set_fill_color(240, 249, 255)
+    _ = pdf.rect(10, 30, 190, 12, "F")
+    _ = pdf.set_y(32)
+    _ = pdf.set_font("Helvetica", "B", 10)
+    _ = pdf.set_text_color(2, 132, 199)
+    _ = pdf.cell(95, 7, clean_txt(f"  Gasto Total: ${total_spent:,.2f}"), align="L")
     _ = pdf.cell(
         95,
-        8,
+        7,
         clean_txt(f"Total por Persona: ${per_person:,.2f}  "),
         align="R",
         ln=True,
     )
-    _ = pdf.ln(4)
+    _ = pdf.ln(3)
 
-    # Gráfico circular para el PDF
+    # Gráfico circular
     if HAS_MATPLOTLIB:
         payer_totals = {}
         for exp in expenses:
@@ -257,11 +262,11 @@ def generate_pdf(
             payer_totals[p] = payer_totals.get(p, 0.0) + exp["amount"]
 
         if payer_totals and sum(payer_totals.values()) > 0:
-            fig, ax = plt.subplots(figsize=(4.5, 2.3))
+            fig, ax = plt.subplots(figsize=(4.2, 2.0))
             labels = [clean_txt(k) for k in payer_totals.keys()]
             sizes = list(payer_totals.values())
             colors = [
-                "#4F46E5",
+                "#0284C7",
                 "#10B981",
                 "#F59E0B",
                 "#EF4444",
@@ -286,35 +291,35 @@ def generate_pdf(
             _ = ax.axis("equal")
             _ = plt.title(
                 clean_txt("Distribución de Gastos"),
-                fontsize=10,
+                fontsize=9,
                 fontweight="bold",
                 color="#1E293B",
-                pad=6,
+                pad=4,
             )
 
             img_buf = io.BytesIO()
             _ = plt.savefig(
-                img_buf, format="png", bbox_inches="tight", dpi=140
+                img_buf, format="png", bbox_inches="tight", dpi=130
             )
             _ = plt.close(fig)
             _ = img_buf.seek(0)
 
-            _ = pdf.image(img_buf, x=55, w=100)
+            _ = pdf.image(img_buf, x=60, w=90)
             _ = pdf.ln(2)
 
     # 1. Tabla Gastos
-    _ = pdf.set_font("Helvetica", "B", 11)
+    _ = pdf.set_font("Helvetica", "B", 10)
     _ = pdf.set_text_color(30, 41, 59)
-    _ = pdf.cell(0, 7, clean_txt("1. Detalle de los Gastos Cargados"), ln=True)
+    _ = pdf.cell(0, 6, clean_txt("1. Detalle de los Gastos Cargados"), ln=True)
 
-    _ = pdf.set_font("Helvetica", "B", 9)
-    _ = pdf.set_fill_color(79, 70, 229)
+    _ = pdf.set_font("Helvetica", "B", 8)
+    _ = pdf.set_fill_color(2, 132, 199)
     _ = pdf.set_text_color(255, 255, 255)
-    _ = pdf.cell(50, 6, clean_txt(" Comprador"), border=0, fill=True)
-    _ = pdf.cell(95, 6, clean_txt(" Concepto / Item"), border=0, fill=True)
+    _ = pdf.cell(50, 5, clean_txt(" Comprador"), border=0, fill=True)
+    _ = pdf.cell(95, 5, clean_txt(" Concepto / Item"), border=0, fill=True)
     _ = pdf.cell(
         45,
-        6,
+        5,
         clean_txt(" Monto ($) "),
         border=0,
         fill=True,
@@ -322,23 +327,22 @@ def generate_pdf(
         ln=True,
     )
 
-    _ = pdf.set_font("Helvetica", "", 9)
+    _ = pdf.set_font("Helvetica", "", 8)
     _ = pdf.set_text_color(51, 65, 85)
     fill = False
     for exp in expenses:
-        if fill:
-            _ = pdf.set_fill_color(248, 250, 252)
-        else:
-            _ = pdf.set_fill_color(255, 255, 255)
-        _ = pdf.cell(
-            50, 6, clean_txt(f" {exp['payer']}"), border="B", fill=fill
+        _ = pdf.set_fill_color(248, 250, 252) if fill else pdf.set_fill_color(
+            255, 255, 255
         )
         _ = pdf.cell(
-            95, 6, clean_txt(f" {exp['concept']}"), border="B", fill=fill
+            50, 5, clean_txt(f" {exp['payer']}"), border="B", fill=fill
+        )
+        _ = pdf.cell(
+            95, 5, clean_txt(f" {exp['concept']}"), border="B", fill=fill
         )
         _ = pdf.cell(
             45,
-            6,
+            5,
             clean_txt(f"${exp['amount']:,.2f} "),
             border="B",
             fill=fill,
@@ -347,24 +351,24 @@ def generate_pdf(
         )
         fill = not fill
 
-    _ = pdf.ln(4)
+    _ = pdf.ln(3)
 
     # 2. Balances
-    _ = pdf.set_font("Helvetica", "B", 11)
+    _ = pdf.set_font("Helvetica", "B", 10)
     _ = pdf.set_text_color(30, 41, 59)
-    _ = pdf.cell(0, 7, clean_txt("2. Estado de Cuentas por Persona"), ln=True)
+    _ = pdf.cell(0, 6, clean_txt("2. Estado de Cuentas por Persona"), ln=True)
 
-    _ = pdf.set_font("Helvetica", "B", 9)
-    _ = pdf.set_fill_color(79, 70, 229)
+    _ = pdf.set_font("Helvetica", "B", 8)
+    _ = pdf.set_fill_color(2, 132, 199)
     _ = pdf.set_text_color(255, 255, 255)
-    _ = pdf.cell(50, 6, clean_txt(" Persona"), border=0, fill=True)
-    _ = pdf.cell(45, 6, clean_txt(" Pago Realizado"), border=0, fill=True, align="R")
+    _ = pdf.cell(50, 5, clean_txt(" Persona"), border=0, fill=True)
+    _ = pdf.cell(45, 5, clean_txt(" Pago Realizado"), border=0, fill=True, align="R")
     _ = pdf.cell(
-        45, 6, clean_txt(" Le Correspondia"), border=0, fill=True, align="R"
+        45, 5, clean_txt(" Le Correspondia"), border=0, fill=True, align="R"
     )
     _ = pdf.cell(
         50,
-        6,
+        5,
         clean_txt(" Balance "),
         border=0,
         fill=True,
@@ -372,15 +376,14 @@ def generate_pdf(
         ln=True,
     )
 
-    _ = pdf.set_font("Helvetica", "", 9)
+    _ = pdf.set_font("Helvetica", "", 8)
     _ = pdf.set_text_color(51, 65, 85)
     fill = False
     for person, bal in balances.items():
         paid = sum(e["amount"] for e in expenses if e["payer"] == person)
-        if fill:
-            _ = pdf.set_fill_color(248, 250, 252)
-        else:
-            _ = pdf.set_fill_color(255, 255, 255)
+        _ = pdf.set_fill_color(248, 250, 252) if fill else pdf.set_fill_color(
+            255, 255, 255
+        )
 
         if bal > 0.01:
             status = f"+${bal:,.2f} (A favor)"
@@ -389,13 +392,13 @@ def generate_pdf(
         else:
             status = "$0.00 (A mano)"
 
-        _ = pdf.cell(50, 6, clean_txt(f" {person}"), border="B", fill=fill)
+        _ = pdf.cell(50, 5, clean_txt(f" {person}"), border="B", fill=fill)
         _ = pdf.cell(
-            45, 6, clean_txt(f"${paid:,.2f} "), border="B", fill=fill, align="R"
+            45, 5, clean_txt(f"${paid:,.2f} "), border="B", fill=fill, align="R"
         )
         _ = pdf.cell(
             45,
-            6,
+            5,
             clean_txt(f"${per_person:,.2f} "),
             border="B",
             fill=fill,
@@ -403,7 +406,7 @@ def generate_pdf(
         )
         _ = pdf.cell(
             50,
-            6,
+            5,
             clean_txt(f"{status} "),
             border="B",
             fill=fill,
@@ -412,28 +415,28 @@ def generate_pdf(
         )
         fill = not fill
 
-    _ = pdf.ln(4)
+    _ = pdf.ln(3)
 
     # 3. Transferencias
-    _ = pdf.set_font("Helvetica", "B", 11)
+    _ = pdf.set_font("Helvetica", "B", 10)
     _ = pdf.set_text_color(30, 41, 59)
-    _ = pdf.cell(0, 7, clean_txt("3. Pagos / Transferencias a Realizar"), ln=True)
+    _ = pdf.cell(0, 6, clean_txt("3. Pagos / Transferencias a Realizar"), ln=True)
 
     if not settlements:
-        _ = pdf.set_font("Helvetica", "I", 9)
+        _ = pdf.set_font("Helvetica", "I", 8)
         _ = pdf.cell(
             0,
-            6,
+            5,
             clean_txt("Todos aportaron la misma cantidad. No hay deudas."),
             ln=True,
         )
     else:
-        _ = pdf.set_font("Helvetica", "", 9)
+        _ = pdf.set_font("Helvetica", "", 8)
         for debtor, creditor, amount in settlements:
             _ = pdf.set_fill_color(241, 245, 249)
             _ = pdf.cell(
                 0,
-                7,
+                6,
                 clean_txt(
                     f"   - {debtor} ---> le transfiere a ---> {creditor}:   ${amount:,.2f}"
                 ),
@@ -445,78 +448,99 @@ def generate_pdf(
     return bytes(pdf.output())
 
 
-# --- INTERFAZ PRINCIPAL ---
+# --- INTERFAZ PRINCIPAL COMPACTA ---
 
+# Encabezado Chico
 st.markdown(
     """
     <div class="hero-container">
         <div class="hero-title">🎉 Cálculo de Gastos de Evento</div>
-        <div class="hero-subtitle">Dividí gastos entre amigos fácil y rápido</div>
     </div>
 """,
     unsafe_allow_html=True,
 )
 
-# Guía para pantalla de inicio
-with st.expander(
-    "📲 ¿Cómo agregar esta App a la pantalla de inicio de tu celular?"
-):
-    st.markdown(
-        """
-        - **En iPhone (Safari):** Tocá el botón **Compartir** (cuadrado con flecha hacia arriba) y elegí **"Agregar a inicio"**.
-        - **En Android (Chrome):** Tocá los **tres puntos** arriba a la derecha y elegí **"Agregar a la pantalla principal"**.
+# Componente PWA e Instalación + Botón de Compartir App
+components.html(
     """
-    )
-
-# Selector de pestañas dinámico
-st.radio(
-    "Navegación",
-    options=TAB_OPTIONS,
-    horizontal=True,
-    label_visibility="collapsed",
-    key="tab_selector",
+    <script>
+    let deferredPrompt;
+    window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        deferredPrompt = e;
+        const btn = document.getElementById('install-pwa-btn');
+        if(btn) btn.style.display = 'block';
+    });
+    function installPWA() {
+        if (deferredPrompt) {
+            deferredPrompt.prompt();
+            deferredPrompt.userChoice.then((choiceResult) => {
+                deferredPrompt = null;
+            });
+        } else {
+            alert("Para instalar: tocá 'Compartir' en iPhone (Agregar a inicio) o los 3 puntos en Android (Instalar Aplicación).");
+        }
+    }
+    function shareApp() {
+        const shareData = {
+            title: 'Cálculo de Gastos de Evento',
+            text: '¡Usá esta app para dividir y calcular los gastos de nuestro evento!',
+            url: window.top ? window.top.location.href : window.location.href
+        };
+        if (navigator.share) {
+            navigator.share(shareData).catch((err) => console.log(err));
+        } else {
+            navigator.clipboard.writeText(shareData.url);
+            alert('¡Link de la app copiado al portapapeles!');
+        }
+    }
+    </script>
+    <div style="display: flex; gap: 8px; font-family: sans-serif;">
+        <button id="install-pwa-btn" onclick="installPWA()" style="display:none; flex: 1; background:#10B981; color:white; border:none; padding:8px; border-radius:8px; font-weight:bold; cursor:pointer; font-size:13px;">
+            📲 Instalar App
+        </button>
+        <button id="share-app-btn" onclick="shareApp()" style="flex: 1; background:#0284C7; color:white; border:none; padding:8px; border-radius:8px; font-weight:bold; cursor:pointer; font-size:13px;">
+            🔗 Compartir App
+        </button>
+    </div>
+""",
+    height=45,
 )
 
-# -----------------------------------------------------------------------------
-# PESTAÑA 1: CARGA UNIFICADA
-# -----------------------------------------------------------------------------
-if st.session_state.tab_selector == "⚡ 1. Cargar Gastos y Personas":
-    st.write("### 🎈 Datos del Evento")
-    col_e1, col_e2 = st.columns([2, 1])
+# Pestañas Estilizadas
+tab1, tab2 = st.tabs(["⚡ 1. Cargar Gastos y Personas", "📊 2. Cuentas & PDF"])
 
-    with col_e1:
+# -----------------------------------------------------------------------------
+# PESTAÑA 1: CARGA
+# -----------------------------------------------------------------------------
+with tab1:
+    # Fila unificada: Fecha primero, Nombre después (1 sola línea)
+    col_date, col_name = st.columns([1, 2])
+    with col_date:
+        event_date = st.date_input("Fecha:", datetime.now())
+    with col_name:
         event_name = st.text_input(
             "Nombre del Evento:",
-            value=st.session_state.get("event_name", "Asado con Amigos"),
-            placeholder="Ej: Asado, Topopeña, Cumple de Juan...",
-            key="input_event_name",
+            value="Asado con Amigos",
+            placeholder="Ej: Topopeña, Cumple...",
         )
-        st.session_state.event_name = event_name
 
-    with col_e2:
-        event_date = st.date_input(
-            "Fecha:",
-            st.session_state.get("event_date", datetime.now()),
-            key="input_event_date",
-        )
-        st.session_state.event_date = event_date
-
-    st.write("---")
-    st.write("### ⚡ Carga Inteligente")
-
+    # Input inteligente compacto
     with st.form("smart_input_form", clear_on_submit=True):
-        user_input = st.text_input(
-            "Escribí acá:",
-            placeholder="Ej: Nico | Nico 15000 Carne | Sofi 4500 Bebidas",
-            label_visibility="collapsed",
-        )
-        submit_btn = st.form_submit_button(
-            "🚀 Cargar Datos", use_container_width=True
-        )
+        col_in, col_btn = st.columns([3, 1])
+        with col_in:
+            user_input = st.text_input(
+                "Ingreso rápido:",
+                placeholder="Ej: Nico | Nico 15000 Carne",
+                label_visibility="collapsed",
+            )
+        with col_btn:
+            submit_btn = st.form_submit_button(
+                "🚀 Cargar", use_container_width=True
+            )
 
         if submit_btn and user_input.strip():
             raw_text = user_input.strip()
-
             match = re.search(r"^(.*?)\s+(\d+(?:[\.,]\d+)?)\s*(.*)$", raw_text)
 
             if match:
@@ -531,7 +555,7 @@ if st.session_state.tab_selector == "⚡ 1. Cargar Gastos y Personas":
                         {"payer": name, "amount": amount, "concept": concept}
                     )
                     st.toast(
-                        f"¡Gasto registrado! {name}: ${amount:,.2f} ({concept})"
+                        f"¡Registrado! {name}: ${amount:,.2f} ({concept})"
                     )
                     st.rerun()
                 else:
@@ -540,19 +564,31 @@ if st.session_state.tab_selector == "⚡ 1. Cargar Gastos y Personas":
                 name = raw_text.capitalize()
                 if name not in st.session_state.participants:
                     st.session_state.participants.append(name)
-                    st.toast(f"¡{name} agregado a la mesa!")
+                    st.toast(f"¡{name} agregado!")
                     st.rerun()
                 else:
                     st.info(f"{name} ya está en la lista.")
 
+    # Ayuda desplegable (sin ocupar espacio fijo)
+    with st.expander("❓ ¿Cómo cargar datos? (Ver ejemplos)"):
+        st.markdown(
+            """
+            - **Sumar participante sin gasto:** Escribí solo el nombre (`Nico`).
+            - **Gasto completo:** Nombre + Monto + Detalle (`Juan 18000 Carne`).
+            - **Gasto sin detalle:** Nombre + Monto (`Pedro 5000`).
+        """
+        )
+
+    # Tablas resumidas de Personas y Gastos
     col_p, col_g = st.columns(2)
 
     with col_p:
-        st.write(
-            f"**👤 Personas ({len(st.session_state.participants)}):**"
+        st.markdown(
+            f"<b>👤 Personas ({len(st.session_state.participants)}):</b>",
+            unsafe_allow_html=True,
         )
         if not st.session_state.participants:
-            st.caption("No hay participantes cargados.")
+            st.caption("Sin participantes.")
         for idx, name in enumerate(st.session_state.participants):
             c_txt, c_del = st.columns([4, 1])
             c_txt.write(f"• {name}")
@@ -566,9 +602,12 @@ if st.session_state.tab_selector == "⚡ 1. Cargar Gastos y Personas":
                 st.rerun()
 
     with col_g:
-        st.write(f"**🛒 Gastos ({len(st.session_state.expenses)}):**")
+        st.markdown(
+            f"<b>🛒 Gastos ({len(st.session_state.expenses)}):</b>",
+            unsafe_allow_html=True,
+        )
         if not st.session_state.expenses:
-            st.caption("No hay gastos cargados.")
+            st.caption("Sin gastos.")
         for idx, exp in enumerate(st.session_state.expenses):
             c_txt, c_del = st.columns([4, 1])
             c_txt.write(f"• {exp['payer']}: ${exp['amount']:,.0f}")
@@ -582,42 +621,22 @@ if st.session_state.tab_selector == "⚡ 1. Cargar Gastos y Personas":
             st.session_state.expenses = []
             st.rerun()
 
+    # Guía visual para ir a la pestaña 2
+    if st.session_state.expenses:
+        st.info("👉 Tocá arriba en **2. Cuentas & PDF** para ver la división de gastos.")
+
+# -----------------------------------------------------------------------------
+# PESTAÑA 2: RESULTADOS
+# -----------------------------------------------------------------------------
+with tab2:
+    date_str = event_date.strftime("%d/%m/%Y")
     st.markdown(
-        """
-        <div class="guide-card">
-            <b>💡 ¿Cómo usar la carga inteligente?</b>
-            <ul style="margin-top: 8px; margin-bottom: 0px; padding-left: 20px;">
-                <li><b>Para sumar una persona:</b> Escribí solo el nombre.<br><i>Ejemplo: <code>Nico</code></i></li>
-                <li><b>Para cargar un gasto con concepto:</b> Escribí Nombre + Monto + Concepto.<br><i>Ejemplo: <code>Juan 18000 Carne y achuras</code></i></li>
-                <li><b>Para cargar un gasto rápido:</b> Escribí Nombre + Monto.<br><i>Ejemplo: <code>Pedro 5000</code></i></li>
-            </ul>
-        </div>
-    """,
+        f"<b>Balances: {event_name}</b> <small>({date_str})</small>",
         unsafe_allow_html=True,
     )
 
-    # BOTÓN VISIBLE FUNCIONAL
-    st.write("---")
-    st.button(
-        "🚀 Continuar a Resultados ➔",
-        key="btn_continue_to_results",
-        on_click=go_to_results,
-        use_container_width=True,
-    )
-
-# -----------------------------------------------------------------------------
-# PESTAÑA 2: RESULTADOS Y EXPORTACIÓN
-# -----------------------------------------------------------------------------
-elif st.session_state.tab_selector == "📊 2. Cuentas & PDF":
-    event_name = st.session_state.get("event_name", "Asado con Amigos")
-    event_date = st.session_state.get("event_date", datetime.now())
-    date_str = event_date.strftime("%d/%m/%Y")
-
-    st.subheader(f"Balances: {event_name}")
-    st.caption(f"📅 Fecha del evento: {date_str}")
-
     if not st.session_state.participants or not st.session_state.expenses:
-        st.info("💡 Ingresá personas y gastos en la pestaña 1 para ver el resumen.")
+        st.info("💡 Cargá personas y gastos en la pestaña 1 primero.")
     else:
         num_people = len(st.session_state.participants)
         total_spent = sum(e["amount"] for e in st.session_state.expenses)
@@ -633,9 +652,9 @@ elif st.session_state.tab_selector == "📊 2. Cuentas & PDF":
 
         m1, m2 = st.columns(2)
         m1.metric("Gasto Total", f"${total_spent:,.2f}")
-        m2.metric("Total por Persona", f"${per_person:,.2f}")
+        m2.metric("Por Persona", f"${per_person:,.2f}")
 
-        # Gráfico visual en pantalla
+        # Gráfico en pantalla
         if HAS_MATPLOTLIB:
             payer_totals = {}
             for exp in st.session_state.expenses:
@@ -643,11 +662,11 @@ elif st.session_state.tab_selector == "📊 2. Cuentas & PDF":
                 payer_totals[p] = payer_totals.get(p, 0.0) + exp["amount"]
 
             if payer_totals and sum(payer_totals.values()) > 0:
-                fig, ax = plt.subplots(figsize=(5, 2.5))
+                fig, ax = plt.subplots(figsize=(4.5, 2.0))
                 labels = list(payer_totals.keys())
                 sizes = list(payer_totals.values())
                 colors = [
-                    "#4F46E5",
+                    "#0284C7",
                     "#10B981",
                     "#F59E0B",
                     "#EF4444",
@@ -663,25 +682,17 @@ elif st.session_state.tab_selector == "📊 2. Cuentas & PDF":
                     autopct="%1.1f%%",
                     startangle=140,
                     colors=colors[: len(labels)],
-                    textprops=dict(color="#334155", fontsize=9),
+                    textprops=dict(color="#334155", fontsize=8),
                 )
                 for autotext in autotexts:
-                    _ = autotext.set_color("white")
-                    _ = autotext.set_weight("bold")
+                    autotext.set_color("white")
+                    autotext.set_weight("bold")
 
-                _ = ax.axis("equal")
-                _ = plt.title(
-                    "Distribución del Gasto",
-                    fontsize=11,
-                    fontweight="bold",
-                    color="#1E293B",
-                )
+                ax.axis("equal")
                 st.pyplot(fig)
                 plt.close(fig)
 
-        st.write("---")
-
-        st.write("### 👤 Estado por Persona")
+        st.markdown("<b>👤 Estado por Persona:</b>", unsafe_allow_html=True)
         for p in st.session_state.participants:
             bal = balances[p]
             paid = sum(
@@ -691,18 +702,17 @@ elif st.session_state.tab_selector == "📊 2. Cuentas & PDF":
             )
 
             if bal > 0.01:
-                badge = f'<span class="badge-creditor">+${bal:,.2f} (A favor)</span>'
+                badge = f'<span class="badge-creditor">+${bal:,.2f}</span>'
             elif bal < -0.01:
-                badge = f'<span class="badge-debtor">-${abs(bal):,.2f} (Debe)</span>'
+                badge = f'<span class="badge-debtor">-${abs(bal):,.2f}</span>'
             else:
-                badge = '<span class="badge-neutral">$0.00 (A mano)</span>'
+                badge = '<span class="badge-neutral">$0.00</span>'
 
             st.markdown(
                 f"""
                 <div class="flat-card" style="display:flex; justify-content:space-between; align-items:center;">
                     <div>
-                        <b>{p}</b><br>
-                        <small style="color:#64748B;">Puso ${paid:,.2f} de ${per_person:,.2f}</small>
+                        <b>{p}</b> <small style="color:#64748B;">(puso ${paid:,.0f})</small>
                     </div>
                     <div>{badge}</div>
                 </div>
@@ -710,8 +720,9 @@ elif st.session_state.tab_selector == "📊 2. Cuentas & PDF":
                 unsafe_allow_html=True,
             )
 
-        st.write("---")
-        st.write("### 🔄 ¿Quién le transfiere a quién?")
+        st.markdown(
+            "<b>🔄 ¿Quién le transfiere a quién?</b>", unsafe_allow_html=True
+        )
 
         wa_text = f"🎉 *EVENTO: {event_name.upper()}*\n"
         wa_text += f"📅 *Fecha:* {date_str}\n\n"
@@ -728,22 +739,23 @@ elif st.session_state.tab_selector == "📊 2. Cuentas & PDF":
 
         if not settlements:
             st.success("🎉 ¡Todos aportaron lo mismo! Están a mano.")
-            wa_text += "¡Todos a mano!"
+            wa_text += "¡Todos a mano!\n"
         else:
             for debtor, creditor, amount in settlements:
                 line = f"• *{debtor}* ➔ *{creditor}*: ${amount:,.2f}"
                 st.markdown(
                     f"""
-                    <div style="background:#EEF2FF; border-left:4px solid #4F46E5; padding:12px; border-radius:8px; margin-bottom:8px;">
-                        💳 <b>{debtor}</b> le transfiere a <b>{creditor}</b>: 
-                        <span style="color:#4F46E5; font-weight:700;">${amount:,.2f}</span>
+                    <div style="background:#E0F2FE; border-left:4px solid #0284C7; padding:8px 12px; border-radius:6px; margin-bottom:6px; font-size:14px;">
+                        💳 <b>{debtor}</b> ➔ <b>{creditor}</b>: <b>${amount:,.2f}</b>
                     </div>
                 """,
                     unsafe_allow_html=True,
                 )
                 wa_text += f"{line}\n"
 
-        st.write("---")
+        # ENLACE A LA APP AL FINAL DEL MENSAJE DE WHATSAPP
+        wa_text += "\n📲 *Armá y calculá los gastos de tu evento acá:*\n"
+        wa_text += "https://cuentas-evento.streamlit.app"
 
         col_wa, col_pdf = st.columns(2)
 
@@ -751,7 +763,7 @@ elif st.session_state.tab_selector == "📊 2. Cuentas & PDF":
             encoded_wa = urllib.parse.quote(wa_text)
             wa_url = f"https://wa.me/?text={encoded_wa}"
             st.link_button(
-                "Compartir en WhatsApp 📱", wa_url, use_container_width=True
+                "WhatsApp 📱", wa_url, use_container_width=True
             )
 
         with col_pdf:
@@ -765,7 +777,7 @@ elif st.session_state.tab_selector == "📊 2. Cuentas & PDF":
                 settlements,
             )
             st.download_button(
-                label="Descargar PDF Detallado 📄",
+                label="Descargar PDF 📄",
                 data=pdf_bytes,
                 file_name=f"gastos_{event_name.lower().replace(' ', '_')}.pdf",
                 mime="application/pdf",
