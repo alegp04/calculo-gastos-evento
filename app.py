@@ -25,7 +25,7 @@ st.set_page_config(
     initial_sidebar_state="collapsed",
 )
 
-# --- ESTILOS CSS REFINADOS CON LOGOS SVG OFICIALES ---
+# --- ESTILOS CSS REFINADOS Y RESPONSIVOS ---
 st.markdown(
     """
     <style>
@@ -41,8 +41,9 @@ st.markdown(
         color: #0F172A !important;
     }
 
+    /* Margen superior para bajar el título una línea entera */
     .block-container {
-        padding-top: 2rem !important;
+        padding-top: 4.2rem !important;
         padding-bottom: 2rem !important;
         padding-left: 0.8rem !important;
         padding-right: 0.8rem !important;
@@ -70,7 +71,7 @@ st.markdown(
         color: #FFFFFF !important;
     }
 
-    /* FORZAR FILAS LADO A LADO EN CELULAR (SIN COLAPSO VERTICAL) */
+    /* FORZAR FILAS HORIZONTALES EN CELULAR */
     div[data-testid="stHorizontalBlock"] {
         display: flex !important;
         flex-direction: row !important;
@@ -81,8 +82,6 @@ st.markdown(
     }
 
     div[data-testid="column"] {
-        flex: 1 1 50% !important;
-        width: 50% !important;
         min-width: 0 !important;
     }
 
@@ -94,7 +93,7 @@ st.markdown(
         background-color: #FFFFFF !important;
     }
 
-    /* Botón Cargar Datos (Azul Real con Texto Blanco Extra Bold) */
+    /* Botón Cargar Datos */
     div[data-testid="stForm"] button {
         background-color: #2563EB !important;
         color: #FFFFFF !important;
@@ -114,41 +113,55 @@ st.markdown(
         font-size: 14px !important;
     }
 
-    div[data-testid="stForm"] button:hover {
-        background-color: #1D4ED8 !important;
+    /* --- BOTONES CUADRADOS CON LOGOS LIMPIOS (WHATSAPP + ACROBAT) --- */
+    
+    div[data-testid="stHorizontalBlock"]:has(div[data-testid="stLinkButton"]) {
+        display: flex !important;
+        flex-direction: row !important;
+        justify-content: center !important;
+        align-items: center !important;
+        gap: 20px !important;
+        width: 100% !important;
+        margin-top: 10px !important;
     }
 
-    /* --- BOTONES INFERIORES LADO A LADO CON LOGOS SVG --- */
+    div[data-testid="stHorizontalBlock"]:has(div[data-testid="stLinkButton"]) > div[data-testid="column"] {
+        flex: 0 0 auto !important;
+        width: auto !important;
+        display: flex !important;
+        justify-content: center !important;
+    }
 
-    /* Botón WhatsApp (Estilo Tarjeta Blanca con Logo Oficial de WhatsApp) */
+    /* Botón Cuadrado WhatsApp */
     div[data-testid="stLinkButton"] a {
+        width: 60px !important;
+        height: 60px !important;
+        min-width: 60px !important;
+        min-height: 60px !important;
         background-color: #FFFFFF !important;
-        color: #0F172A !important;
-        border: 1.5px solid #CBD5E1 !important;
-        border-radius: 10px !important;
-        height: 46px !important;
+        border: 1.5px solid #E2E8F0 !important;
+        border-radius: 14px !important;
         display: flex !important;
         justify-content: center !important;
         align-items: center !important;
+        box-shadow: 0 3px 8px rgba(0,0,0,0.06) !important;
+        padding: 0 !important;
         text-decoration: none !important;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.03) !important;
-        transition: all 0.2s ease !important;
+        overflow: hidden !important;
+        cursor: pointer !important;
     }
 
     div[data-testid="stLinkButton"] a *,
     div[data-testid="stLinkButton"] a p,
     div[data-testid="stLinkButton"] a span {
-        color: #0F172A !important;
-        font-weight: 700 !important;
-        font-size: 13px !important;
+        display: none !important;
     }
 
     div[data-testid="stLinkButton"] a::before {
         content: "" !important;
-        display: inline-block !important;
-        width: 22px !important;
-        height: 22px !important;
-        margin-right: 6px !important;
+        display: block !important;
+        width: 34px !important;
+        height: 34px !important;
         background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2325D366'%3E%3Cpath d='M12.012 2c-5.506 0-9.989 4.478-9.99 9.984 0 1.763.459 3.486 1.332 5.003l-1.416 5.17 5.291-1.387c1.464.798 3.116 1.218 4.78 1.218h.004c5.506 0 9.989-4.478 9.99-9.984 0-2.669-1.038-5.177-2.925-7.064C17.19 3.039 14.68 2 12.012 2zm0 1.834c4.493 0 8.152 3.656 8.153 8.15 0 2.181-.849 4.232-2.39 5.773-1.54 1.541-3.591 2.39-5.77 2.39h-.003c-1.488 0-2.951-.397-4.228-1.149l-.303-.18-3.142.823.838-3.061-.197-.314a8.127 8.127 0 0 1-1.246-4.282c0-4.494 3.659-8.15 8.153-8.15zm-3.6 4.398c-.22 0-.582.083-.888.416-.305.333-1.165 1.137-1.165 2.774 0 1.637 1.192 3.218 1.358 3.44.166.222 2.348 3.585 5.688 5.027 2.773 1.198 3.337.96 3.947.904.61-.055 1.969-.804 2.247-1.58.277-.777.277-1.442.194-1.58-.083-.139-.305-.222-.638-.388-.333-.166-1.969-.971-2.274-1.082-.305-.111-.527-.166-.749.166-.222.333-.86 1.082-1.054 1.304-.194.222-.388.25-.721.083-.333-.166-1.406-.518-2.678-1.652-.99-.883-1.658-1.974-1.853-2.307-.194-.333-.021-.513.146-.679.15-.149.333-.388.5-.582.166-.194.222-.333.333-.555.111-.222.055-.416-.028-.582-.083-.166-.749-1.803-1.026-2.468-.27-.648-.545-.56-.749-.57-.194-.01-.416-.01-.638-.01z'/%3E%3C/svg%3E") !important;
         background-repeat: no-repeat !important;
         background-position: center !important;
@@ -160,48 +173,47 @@ st.markdown(
         background-color: #F0FDF4 !important;
     }
 
-    /* Botón PDF (Estilo Tarjeta Blanca con Logo Oficial Adobe Acrobat PDF) */
+    /* Botón Cuadrado PDF Acrobat */
     .stDownloadButton button {
+        width: 60px !important;
+        height: 60px !important;
+        min-width: 60px !important;
+        min-height: 60px !important;
         background-color: #FFFFFF !important;
-        color: #0F172A !important;
-        border: 1.5px solid #CBD5E1 !important;
-        border-radius: 10px !important;
-        height: 46px !important;
-        width: 100% !important;
+        border: 1.5px solid #E2E8F0 !important;
+        border-radius: 14px !important;
         display: flex !important;
         justify-content: center !important;
         align-items: center !important;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.03) !important;
+        box-shadow: 0 3px 8px rgba(0,0,0,0.06) !important;
+        padding: 0 !important;
+        overflow: hidden !important;
         cursor: pointer !important;
-        transition: all 0.2s ease !important;
     }
 
     .stDownloadButton button *,
     .stDownloadButton button p,
     .stDownloadButton button span {
-        color: #0F172A !important;
-        font-weight: 700 !important;
-        font-size: 13px !important;
+        display: none !important;
     }
 
     .stDownloadButton button::before {
         content: "" !important;
-        display: inline-block !important;
-        width: 22px !important;
-        height: 22px !important;
-        margin-right: 6px !important;
-        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23DC2626'%3E%3Cpath d='M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-9.5 8.5c0 .8-.7 1.5-1.5 1.5H7v2H5.5V9H8c.8 0 1.5.7 1.5 1.5v1zm5 1c0 .8-.7 1.5-1.5 1.5h-2.5V9H13c.8 0 1.5.7 1.5 1.5v2zm4.5-2.5h-3v1.5h2.5V13H16v2h-1.5V9H19v1.5zM7 10.5h1v1H7v-1zm5.5 0h1v2h-1v-2z'/%3E%3C/svg%3E") !important;
+        display: block !important;
+        width: 34px !important;
+        height: 34px !important;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23E1251B'%3E%3Cpath d='M19.36 2.72H4.64A1.92 1.92 0 0 0 2.72 4.64v14.72a1.92 1.92 0 0 0 1.92 1.92h14.72a1.92 1.92 0 0 0 1.92-1.92V4.64a1.92 1.92 0 0 0-1.92-1.92zm-5.06 13.91c-.88-.88-2.02-2.31-3.15-4.04-1.29 2.65-2.66 4.31-3.69 4.31-.5 0-.82-.32-.82-.82 0-1.14 1.78-3.68 4.24-7.07-.58-1.89-.92-3.69-.92-4.88 0-.93.38-1.47 1.01-1.47.53 0 .88.38.88.94 0 1.34-.41 2.97-.99 4.58 1.63 2.14 3.28 3.65 4.54 4.33 1.57-.68 3.02-1.18 3.98-1.18.66 0 1.04.38 1.04.9 0 .86-1.39 1.76-3.17 2.16a18.23 18.23 0 0 1-2.95 2.24z'/%3E%3C/svg%3E") !important;
         background-repeat: no-repeat !important;
         background-position: center !important;
         background-size: contain !important;
     }
 
     .stDownloadButton button:hover {
-        border-color: #DC2626 !important;
+        border-color: #E1251B !important;
         background-color: #FEF2F2 !important;
     }
 
-    /* Inputs y Campos de Texto */
+    /* Inputs de Texto */
     input[type="text"], input[type="number"], div[data-baseweb="input"] {
         font-size: 13px !important;
         background-color: #FFFFFF !important;
@@ -896,14 +908,14 @@ if st.session_state.participants and st.session_state.expenses:
     wa_text += "\n📲 *Armá y calculá los gastos de tu evento acá:*\n"
     wa_text += "https://cuentas-evento.streamlit.app"
 
-    # BOTONES INFERIORES LADO A LADO CON LOGOS SVG (50/50)
+    # BOTONES CUADRADOS LADO A LADO CON LOGOS VECTORIALES
     col_wa, col_pdf = st.columns(2)
 
     with col_wa:
         encoded_wa = urllib.parse.quote(wa_text)
         wa_url = f"https://wa.me/?text={encoded_wa}"
         st.link_button(
-            "Compartir", wa_url, use_container_width=True
+            "WA", wa_url, use_container_width=False
         )
 
     with col_pdf:
@@ -917,9 +929,9 @@ if st.session_state.participants and st.session_state.expenses:
             settlements,
         )
         st.download_button(
-            label="Descargar PDF",
+            label="PDF",
             data=pdf_bytes,
             file_name=f"gastos_{event_name.lower().replace(' ', '_')}.pdf",
             mime="application/pdf",
-            use_container_width=True,
+            use_container_width=False,
         )
