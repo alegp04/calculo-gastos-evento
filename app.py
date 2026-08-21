@@ -25,7 +25,7 @@ st.set_page_config(
     initial_sidebar_state="collapsed",
 )
 
-# --- ESTILOS CSS PERSONALIZADOS (Compacto + Compatible con Modo Oscuro) ---
+# --- ESTILOS CSS PERSONALIZADOS (100% Compatible con Modo Oscuro) ---
 st.markdown(
     """
     <style>
@@ -35,43 +35,37 @@ st.markdown(
         font-family: 'Inter', sans-serif;
     }
     
-    /* Forzar fondo claro y textos legibles en Modo Oscuro */
-    .stApp {
-        background-color: #F8FAFC !important;
-        color: #0F172A !important;
-    }
-
-    /* Textos generales legibles en cualquier modo */
-    p, span, label, h1, h2, h3, h4, h5, h6, .stMarkdown {
-        color: #0F172A !important;
-    }
-
-    /* Banner de Título Chico y Amigable */
+    /* Banner de Título */
     .hero-container {
         background: linear-gradient(135deg, #0284C7 0%, #0D9488 100%);
         padding: 12px 16px;
         border-radius: 12px;
         color: white !important;
         text-align: center;
-        margin-bottom: 10px;
+        margin-bottom: 12px;
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
     }
     .hero-title {
-        font-size: 19px !important;
+        font-size: 20px !important;
         font-weight: 700 !important;
         margin: 0;
         color: #FFFFFF !important;
         letter-spacing: -0.3px;
     }
     
-    /* Tarjetas Compactas */
+    /* Tarjetas fijas en fondo claro para legibilidad absoluta en Modo Oscuro */
     .flat-card {
         background-color: #FFFFFF !important;
-        border: 1px solid #E2E8F0 !important;
+        border: 1px solid #CBD5E1 !important;
         border-radius: 10px;
-        padding: 10px 14px !important;
+        padding: 12px 14px !important;
         margin-bottom: 8px !important;
-        box-shadow: 0 1px 2px rgba(0,0,0,0.02);
+        box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+    }
+    
+    /* Forzar color de texto oscuro dentro de las tarjetas */
+    .flat-card, .flat-card b, .flat-card span, .flat-card small, .flat-card div {
+        color: #0F172A !important;
     }
     
     /* Badges de Estado */
@@ -79,7 +73,7 @@ st.markdown(
         background-color: #FEF2F2 !important;
         color: #EF4444 !important;
         border: 1px solid #FCA5A5 !important;
-        padding: 2px 8px;
+        padding: 3px 8px;
         border-radius: 12px;
         font-weight: 600;
         font-size: 12px;
@@ -88,7 +82,7 @@ st.markdown(
         background-color: #ECFDF5 !important;
         color: #10B981 !important;
         border: 1px solid #6EE7B7 !important;
-        padding: 2px 8px;
+        padding: 3px 8px;
         border-radius: 12px;
         font-weight: 600;
         font-size: 12px;
@@ -97,62 +91,29 @@ st.markdown(
         background-color: #F1F5F9 !important;
         color: #64748B !important;
         border: 1px solid #CBD5E1 !important;
-        padding: 2px 8px;
+        padding: 3px 8px;
         border-radius: 12px;
         font-weight: 600;
         font-size: 12px;
     }
     
-    /* Pestañas Marcadas y Claras */
-    .stTabs [data-baseweb="tab-list"] {
-        gap: 6px;
-        background-color: #E2E8F0 !important;
-        padding: 4px;
-        border-radius: 10px;
-        margin-bottom: 12px;
-    }
-    .stTabs [data-baseweb="tab"] {
-        height: 38px;
-        border-radius: 8px;
-        color: #475569 !important;
-        font-weight: 600;
-        font-size: 13px;
-        padding: 0 12px;
-    }
-    .stTabs [aria-selected="true"] {
-        background-color: #FFFFFF !important;
-        color: #0284C7 !important;
-        box-shadow: 0 1px 3px rgba(0,0,0,0.1) !important;
-    }
-
-    /* Botones */
+    /* Botón Principal "Calcular Cuentas" */
     .stButton > button {
         border-radius: 8px !important;
         font-weight: 600 !important;
         background-color: #0284C7 !important;
-        color: white !important;
+        color: #FFFFFF !important;
         border: none !important;
-        padding: 8px 14px !important;
+        padding: 10px 16px !important;
     }
     .stButton > button:hover {
         background-color: #0369A1 !important;
+        color: #FFFFFF !important;
     }
 
-    /* Compatibilidad con campos de texto en Modo Oscuro */
-    input[type="text"], input[type="number"], select {
-        background-color: #FFFFFF !important;
-        color: #0F172A !important;
-        border: 1px solid #CBD5E1 !important;
-    }
-    
-    /* Métricas ajustadas */
-    [data-testid="stMetricValue"] {
-        color: #0284C7 !important;
-        font-size: 20px !important;
-    }
-    [data-testid="stMetricLabel"] {
-        color: #64748B !important;
-        font-size: 12px !important;
+    /* Campos de Entrada legibles */
+    input[type="text"], input[type="number"] {
+        border-radius: 8px !important;
     }
     </style>
 """,
@@ -164,6 +125,8 @@ if "participants" not in st.session_state:
     st.session_state.participants = []
 if "expenses" not in st.session_state:
     st.session_state.expenses = []
+if "show_results" not in st.session_state:
+    st.session_state.show_results = False
 
 
 # --- ALGORITMO DE LIQUIDACIÓN DE DEUDAS ---
@@ -263,6 +226,7 @@ def generate_pdf(
 
         if payer_totals and sum(payer_totals.values()) > 0:
             fig, ax = plt.subplots(figsize=(4.2, 2.0))
+            fig.patch.set_facecolor("#FFFFFF")
             labels = [clean_txt(k) for k in payer_totals.keys()]
             sizes = list(payer_totals.values())
             colors = [
@@ -299,7 +263,7 @@ def generate_pdf(
 
             img_buf = io.BytesIO()
             _ = plt.savefig(
-                img_buf, format="png", bbox_inches="tight", dpi=130
+                img_buf, format="png", bbox_inches="tight", dpi=130, facecolor=fig.get_facecolor()
             )
             _ = plt.close(fig)
             _ = img_buf.seek(0)
@@ -448,9 +412,9 @@ def generate_pdf(
     return bytes(pdf.output())
 
 
-# --- INTERFAZ PRINCIPAL COMPACTA ---
+# --- INTERFAZ DE USUARIO (1 SOLA PÁGINA) ---
 
-# Encabezado Chico
+# Encabezado
 st.markdown(
     """
     <div class="hero-container">
@@ -504,140 +468,135 @@ components.html(
         </button>
     </div>
 """,
-    height=45,
+    height=42,
 )
 
-# Pestañas Estilizadas
-tab1, tab2 = st.tabs(["⚡ 1. Cargar Gastos y Personas", "📊 2. Cuentas & PDF"])
-
-# -----------------------------------------------------------------------------
-# PESTAÑA 1: CARGA
-# -----------------------------------------------------------------------------
-with tab1:
-    # Fila unificada: Fecha primero, Nombre después (1 sola línea)
-    col_date, col_name = st.columns([1, 2])
-    with col_date:
-        event_date = st.date_input("Fecha:", datetime.now())
-    with col_name:
-        event_name = st.text_input(
-            "Nombre del Evento:",
-            value="Asado con Amigos",
-            placeholder="Ej: Topopeña, Cumple...",
-        )
-
-    # Input inteligente compacto
-    with st.form("smart_input_form", clear_on_submit=True):
-        col_in, col_btn = st.columns([3, 1])
-        with col_in:
-            user_input = st.text_input(
-                "Ingreso rápido:",
-                placeholder="Ej: Nico | Nico 15000 Carne",
-                label_visibility="collapsed",
-            )
-        with col_btn:
-            submit_btn = st.form_submit_button(
-                "🚀 Cargar", use_container_width=True
-            )
-
-        if submit_btn and user_input.strip():
-            raw_text = user_input.strip()
-            match = re.search(r"^(.*?)\s+(\d+(?:[\.,]\d+)?)\s*(.*)$", raw_text)
-
-            if match:
-                name = match.group(1).strip().capitalize()
-                amount = float(match.group(2).replace(",", "."))
-                concept = match.group(3).strip() or "Varios"
-
-                if amount > 0:
-                    if name not in st.session_state.participants:
-                        st.session_state.participants.append(name)
-                    st.session_state.expenses.append(
-                        {"payer": name, "amount": amount, "concept": concept}
-                    )
-                    st.toast(
-                        f"¡Registrado! {name}: ${amount:,.2f} ({concept})"
-                    )
-                    st.rerun()
-                else:
-                    st.error("El monto debe ser mayor a 0.")
-            else:
-                name = raw_text.capitalize()
-                if name not in st.session_state.participants:
-                    st.session_state.participants.append(name)
-                    st.toast(f"¡{name} agregado!")
-                    st.rerun()
-                else:
-                    st.info(f"{name} ya está en la lista.")
-
-    # Ayuda desplegable (sin ocupar espacio fijo)
-    with st.expander("❓ ¿Cómo cargar datos? (Ver ejemplos)"):
-        st.markdown(
-            """
-            - **Sumar participante sin gasto:** Escribí solo el nombre (`Nico`).
-            - **Gasto completo:** Nombre + Monto + Detalle (`Juan 18000 Carne`).
-            - **Gasto sin detalle:** Nombre + Monto (`Pedro 5000`).
-        """
-        )
-
-    # Tablas resumidas de Personas y Gastos
-    col_p, col_g = st.columns(2)
-
-    with col_p:
-        st.markdown(
-            f"<b>👤 Personas ({len(st.session_state.participants)}):</b>",
-            unsafe_allow_html=True,
-        )
-        if not st.session_state.participants:
-            st.caption("Sin participantes.")
-        for idx, name in enumerate(st.session_state.participants):
-            c_txt, c_del = st.columns([4, 1])
-            c_txt.write(f"• {name}")
-            if c_del.button("❌", key=f"del_p_{idx}"):
-                st.session_state.participants.pop(idx)
-                st.session_state.expenses = [
-                    e
-                    for e in st.session_state.expenses
-                    if e["payer"] != name
-                ]
-                st.rerun()
-
-    with col_g:
-        st.markdown(
-            f"<b>🛒 Gastos ({len(st.session_state.expenses)}):</b>",
-            unsafe_allow_html=True,
-        )
-        if not st.session_state.expenses:
-            st.caption("Sin gastos.")
-        for idx, exp in enumerate(st.session_state.expenses):
-            c_txt, c_del = st.columns([4, 1])
-            c_txt.write(f"• {exp['payer']}: ${exp['amount']:,.0f}")
-            if c_del.button("🗑️", key=f"del_e_{idx}"):
-                st.session_state.expenses.pop(idx)
-                st.rerun()
-
-    if st.session_state.participants or st.session_state.expenses:
-        if st.button("🗑️ Limpiar Todo", use_container_width=True):
-            st.session_state.participants = []
-            st.session_state.expenses = []
-            st.rerun()
-
-    # Guía visual para ir a la pestaña 2
-    if st.session_state.expenses:
-        st.info("👉 Tocá arriba en **2. Cuentas & PDF** para ver la división de gastos.")
-
-# -----------------------------------------------------------------------------
-# PESTAÑA 2: RESULTADOS
-# -----------------------------------------------------------------------------
-with tab2:
-    date_str = event_date.strftime("%d/%m/%Y")
-    st.markdown(
-        f"<b>Balances: {event_name}</b> <small>({date_str})</small>",
-        unsafe_allow_html=True,
+# SECCIÓN 1: DATOS DEL EVENTO (1 SOLA LÍNEA)
+col_date, col_name = st.columns([1, 2])
+with col_date:
+    event_date = st.date_input("Fecha:", datetime.now())
+with col_name:
+    event_name = st.text_input(
+        "Nombre del Evento:",
+        value="Asado con Amigos",
+        placeholder="Ej: Topopeña, Cumple...",
     )
 
+# SECCIÓN 2: ENTRADA INTELIGENTE
+with st.form("smart_input_form", clear_on_submit=True):
+    col_in, col_btn = st.columns([3, 1])
+    with col_in:
+        user_input = st.text_input(
+            "Ingreso rápido:",
+            placeholder="Ej: Nico | Nico 15000 Carne",
+            label_visibility="collapsed",
+        )
+    with col_btn:
+        submit_btn = st.form_submit_button(
+            "🚀 Cargar", use_container_width=True
+        )
+
+    if submit_btn and user_input.strip():
+        raw_text = user_input.strip()
+        match = re.search(r"^(.*?)\s+(\d+(?:[\.,]\d+)?)\s*(.*)$", raw_text)
+
+        if match:
+            name = match.group(1).strip().capitalize()
+            amount = float(match.group(2).replace(",", "."))
+            concept = match.group(3).strip() or "Varios"
+
+            if amount > 0:
+                if name not in st.session_state.participants:
+                    st.session_state.participants.append(name)
+                st.session_state.expenses.append(
+                    {"payer": name, "amount": amount, "concept": concept}
+                )
+                st.toast(
+                    f"¡Registrado! {name}: ${amount:,.2f} ({concept})"
+                )
+                st.session_state.show_results = True
+                st.rerun()
+            else:
+                st.error("El monto debe ser mayor a 0.")
+        else:
+            name = raw_text.capitalize()
+            if name not in st.session_state.participants:
+                st.session_state.participants.append(name)
+                st.toast(f"¡{name} agregado!")
+                st.rerun()
+            else:
+                st.info(f"{name} ya está en la lista.")
+
+# Ayuda desplegable
+with st.expander("❓ ¿Cómo cargar datos? (Ver ejemplos)"):
+    st.markdown(
+        """
+        - **Sumar participante sin gasto:** Escribí solo el nombre (`Nico`).
+        - **Gasto completo:** Nombre + Monto + Detalle (`Juan 18000 Carne`).
+        - **Gasto sin detalle:** Nombre + Monto (`Pedro 5000`).
+    """
+    )
+
+# SECCIÓN 3: LISTADO DE PERSONAS Y GASTOS
+col_p, col_g = st.columns(2)
+
+with col_p:
+    st.markdown(
+        f"<b>👤 Personas ({len(st.session_state.participants)}):</b>",
+        unsafe_allow_html=True,
+    )
+    if not st.session_state.participants:
+        st.caption("Sin participantes.")
+    for idx, name in enumerate(st.session_state.participants):
+        c_txt, c_del = st.columns([4, 1])
+        c_txt.write(f"• {name}")
+        if c_del.button("❌", key=f"del_p_{idx}"):
+            st.session_state.participants.pop(idx)
+            st.session_state.expenses = [
+                e
+                for e in st.session_state.expenses
+                if e["payer"] != name
+            ]
+            st.rerun()
+
+with col_g:
+    st.markdown(
+        f"<b>🛒 Gastos ({len(st.session_state.expenses)}):</b>",
+        unsafe_allow_html=True,
+    )
+    if not st.session_state.expenses:
+        st.caption("Sin gastos.")
+    for idx, exp in enumerate(st.session_state.expenses):
+        c_txt, c_del = st.columns([4, 1])
+        c_txt.write(f"• {exp['payer']}: ${exp['amount']:,.0f}")
+        if c_del.button("🗑️", key=f"del_e_{idx}"):
+            st.session_state.expenses.pop(idx)
+            st.rerun()
+
+if st.session_state.participants or st.session_state.expenses:
+    if st.button("🗑️ Limpiar Todo", use_container_width=True):
+        st.session_state.participants = []
+        st.session_state.expenses = []
+        st.session_state.show_results = False
+        st.rerun()
+
+st.write("---")
+
+# SECCIÓN 4: BOTÓN "CALCULAR CUENTAS"
+if st.button("🚀 Calcular Cuentas / Ver Resultados", use_container_width=True):
+    st.session_state.show_results = True
+
+# SECCIÓN 5: RESULTADOS EN LA MISMA PÁGINA
+if st.session_state.show_results:
     if not st.session_state.participants or not st.session_state.expenses:
-        st.info("💡 Cargá personas y gastos en la pestaña 1 primero.")
+        st.warning("⚠️ Cargá al menos una persona y un gasto para ver el cálculo.")
     else:
+        date_str = event_date.strftime("%d/%m/%Y")
+        st.markdown(
+            f"### 📊 Balances: {event_name} <small>({date_str})</small>",
+            unsafe_allow_html=True,
+        )
+
         num_people = len(st.session_state.participants)
         total_spent = sum(e["amount"] for e in st.session_state.expenses)
         per_person = total_spent / num_people
@@ -654,7 +613,7 @@ with tab2:
         m1.metric("Gasto Total", f"${total_spent:,.2f}")
         m2.metric("Por Persona", f"${per_person:,.2f}")
 
-        # Gráfico en pantalla
+        # Gráfico visual en pantalla
         if HAS_MATPLOTLIB:
             payer_totals = {}
             for exp in st.session_state.expenses:
@@ -663,6 +622,7 @@ with tab2:
 
             if payer_totals and sum(payer_totals.values()) > 0:
                 fig, ax = plt.subplots(figsize=(4.5, 2.0))
+                fig.patch.set_facecolor("#FFFFFF")
                 labels = list(payer_totals.keys())
                 sizes = list(payer_totals.values())
                 colors = [
@@ -745,7 +705,7 @@ with tab2:
                 line = f"• *{debtor}* ➔ *{creditor}*: ${amount:,.2f}"
                 st.markdown(
                     f"""
-                    <div style="background:#E0F2FE; border-left:4px solid #0284C7; padding:8px 12px; border-radius:6px; margin-bottom:6px; font-size:14px;">
+                    <div style="background:#E0F2FE; border-left:4px solid #0284C7; padding:8px 12px; border-radius:6px; margin-bottom:6px; font-size:14px; color:#0F172A;">
                         💳 <b>{debtor}</b> ➔ <b>{creditor}</b>: <b>${amount:,.2f}</b>
                     </div>
                 """,
@@ -753,7 +713,6 @@ with tab2:
                 )
                 wa_text += f"{line}\n"
 
-        # ENLACE A LA APP AL FINAL DEL MENSAJE DE WHATSAPP
         wa_text += "\n📲 *Armá y calculá los gastos de tu evento acá:*\n"
         wa_text += "https://cuentas-evento.streamlit.app"
 
