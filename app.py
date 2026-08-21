@@ -25,17 +25,15 @@ st.set_page_config(
     initial_sidebar_state="collapsed",
 )
 
-# --- LOGOS VECTORIALES OFICIALES EXACTOS (DATA URI BASE64) ---
-# Official WhatsApp Logo SVG
-WA_OFFICIAL_SVG = """<svg xmlns="http://www.w3.org/2000/svg" width="2400" height="2406" viewBox="0 0 2400 2406"><path fill="#25d366" d="M2040 361C1816 136 1517 13 1200 13 543 13 8 548 8 1205c0 210 55 415 159 596L0 2406l621-163c175 95 372 146 578 146h1c657 0 1192-535 1192-1192 0-317-124-616-352-836z"/><path fill="#fff" d="M1200 2190c-178 0-352-48-504-138l-36-21-374 98 100-365-24-38C258 1568 203 1389 203 1205c0-550 447-997 997-997 266 0 516 104 704 292s292 438 292 704c0 550-447 997-996 997z"/><path fill="#fff" fill-rule="evenodd" d="M962 725c-27-60-55-61-80-62-21-1-45-1-69-1-24 0-63 9-96 45s-126 123-126 300 129 348 147 372c18 24 250 382 606 535 85 36 151 58 203 74 85 27 163 23 224 14 68-10 209-85 238-168s29-153 20-168-33-24-69-42-209-103-242-115-57-18-81 18-93 115-114 139-42 27-78 9-153-56-291-179c-108-96-180-215-201-251s-2-56 16-74c16-16 36-42 54-63 18-21 24-36 36-60 12-24 6-45-3-63s-80-192-110-264z" clip-rule="evenodd"/></svg>"""
+# --- LOGOS VECTORIALES OFICIALES DE MARCA (100% REALES) ---
+WA_OFFICIAL_SVG = """<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 175.216 175.552"><path fill="#25D366" d="M87.608 0C39.222 0 0 39.222 0 87.608c0 15.48 4.026 30.582 11.67 43.86L1.872 173.682l43.2-11.328c12.78 6.96 27.21 10.638 42.536 10.638h.036c48.386 0 87.608-39.222 87.608-87.608C175.252 39.222 135.994 0 87.608 0z"/><path fill="#FFF" d="M87.608 16.038c39.462 0 71.57 32.108 71.57 71.57 0 39.462-32.108 71.57-71.57 71.57h-.03c-13.626 0-26.988-3.882-38.646-11.232l-2.772-1.758-25.686 6.726 6.846-25.02-1.926-2.886C17.658 113.12 13.57 100.51 13.57 87.608c0-39.462 32.108-71.57 74.038-71.57z"/><path fill="#25D366" d="M62.61 46.128c-1.578-3.51-3.246-3.582-4.752-3.648-1.23-.054-2.634-.054-4.038-.054-1.404 0-3.684.528-5.616 2.634-1.932 2.106-7.368 7.2-7.368 17.562 0 10.362 7.542 20.37 8.598 21.774 1.056 1.404 14.532 22.866 35.808 31.956 17.688 7.56 21.282 6.054 25.134 5.7 3.852-.354 12.456-5.088 14.208-10.002 1.752-4.914 1.752-9.126 1.23-10.002-.522-.876-1.932-1.404-4.038-2.46-2.106-1.056-12.456-6.144-14.388-6.846-1.932-.702-3.336-1.056-4.74 1.056-1.404 2.106-5.436 6.846-6.666 8.25-1.23 1.404-2.46 1.578-4.566.522-2.106-1.056-8.892-3.276-16.938-10.446-6.258-5.58-10.482-12.474-11.712-14.58-1.23-2.106-.132-3.246.918-4.296.942-.942 2.106-2.46 3.162-3.684 1.056-1.23 1.404-2.106 2.106-3.51.702-1.404.354-2.634-.174-3.684-.528-1.056-4.566-11.232-6.42-15.606z"/></svg>"""
 
-# Official Adobe Acrobat Logo SVG
-ACROBAT_OFFICIAL_SVG = """<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512"><path fill="#FA0F00" d="M110.5 0h291C462.4 0 512 49.6 512 110.5v291c0 60.9-49.6 110.5-110.5 110.5h-291C49.6 512 0 462.4 0 401.5v-291C0 49.6 49.6 0 110.5 0z"/><path fill="#FFF" d="M363.6 272c-15.6-13.6-38.3-24.8-63.1-32.2 7.7-27.9 12-58.4 12-82.6 0-33.1-9.3-48.2-27.9-48.2-15.5 0-26.4 12.4-26.4 31.8 0 33.7 15.1 86 38.8 137.1-32.9 61.2-73.6 109.9-115.1 138.9-13.2 9.3-26.4 14.7-38.4 14.7-18.2 0-29.8-13.6-29.8-33.7 0-36.8 47.7-86 116.3-123.3 5.8-3.1 3.1-8.5-3.1-6.6-74.8 22.9-144.2 70.2-144.2 135.3 0 40.7 26.4 62.8 61.2 62.8 24.4 0 50-11.6 74.8-32.9 53.5-45.7 102.3-116.3 138-191.1 47.7 18.6 100 29.8 146.5 29.8 38 0 61.2-15.1 61.2-41.1 0-25.6-20.5-38.8-51.2-38.8-36.4 0-82.9 13.6-125.6 37.2 4.7 3.5 7 7.8 3 10.9zm95.7 12.4c18.2 0 27.9 6.2 27.9 17.4 0 11.6-10.5 17.4-26.7 17.4-29.8 0-66.3-9.3-99.6-23.6 32.5-7.8 67.4-11.2 98.4-11.2zM258.9 175.1c0-11.6 4.7-17.8 10.9-17.8 4.7 0 7.8 4.7 7.8 12.4 0 15.5-3.5 35.7-9.3 57.4-6.6-19.8-9.4-38.8-9.4-52z"/></svg>"""
+ACROBAT_OFFICIAL_SVG = """<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><rect width="512" height="512" rx="100" fill="#E1251B"/><path fill="#FFF" d="M363.6 272c-15.6-13.6-38.3-24.8-63.1-32.2 7.7-27.9 12-58.4 12-82.6 0-33.1-9.3-48.2-27.9-48.2-15.5 0-26.4 12.4-26.4 31.8 0 33.7 15.1 86 38.8 137.1-32.9 61.2-73.6 109.9-115.1 138.9-13.2 9.3-26.4 14.7-38.4 14.7-18.2 0-29.8-13.6-29.8-33.7 0-36.8 47.7-86 116.3-123.3 5.8-3.1 3.1-8.5-3.1-6.6-74.8 22.9-144.2 70.2-144.2 135.3 0 40.7 26.4 62.8 61.2 62.8 24.4 0 50-11.6 74.8-32.9 53.5-45.7 102.3-116.3 138-191.1 47.7 18.6 100 29.8 146.5 29.8 38 0 61.2-15.1 61.2-41.1 0-25.6-20.5-38.8-51.2-38.8-36.4 0-82.9 13.6-125.6 37.2 4.7 3.5 7 7.8 3 10.9zm95.7 12.4c18.2 0 27.9 6.2 27.9 17.4 0 11.6-10.5 17.4-26.7 17.4-29.8 0-66.3-9.3-99.6-23.6 32.5-7.8 67.4-11.2 98.4-11.2zM258.9 175.1c0-11.6 4.7-17.8 10.9-17.8 4.7 0 7.8 4.7 7.8 12.4 0 15.5-3.5 35.7-9.3 57.4-6.6-19.8-9.4-38.8-9.4-52z"/></svg>"""
 
 WA_URI = f"data:image/svg+xml;base64,{base64.b64encode(WA_OFFICIAL_SVG.encode('utf-8')).decode('utf-8')}"
 ACROBAT_URI = f"data:image/svg+xml;base64,{base64.b64encode(ACROBAT_OFFICIAL_SVG.encode('utf-8')).decode('utf-8')}"
 
-# --- ESTILOS CSS ---
+# --- ESTILOS CSS CON ANULACIÓN DE COLAPSO EN MÓVIL ---
 st.markdown(
     """
     <style>
@@ -59,6 +57,30 @@ st.markdown(
 
     p, label, span, h1, h2, h3, h4, h5, h6, .stMarkdown {
         color: #0F172A !important;
+    }
+
+    /* FORZAR COLUMNAS SIEMPRE LADO A LADO EN CELULARES */
+    div[data-testid="stHorizontalBlock"] {
+        display: flex !important;
+        flex-direction: row !important;
+        flex-wrap: nowrap !important;
+        align-items: center !important;
+        width: 100% !important;
+    }
+
+    div[data-testid="column"] {
+        min-width: 0 !important;
+    }
+
+    @media (max-width: 640px) {
+        div[data-testid="stHorizontalBlock"] {
+            display: flex !important;
+            flex-direction: row !important;
+            flex-wrap: nowrap !important;
+        }
+        div[data-testid="column"] {
+            min-width: 0 !important;
+        }
     }
 
     /* Banner Superior */
@@ -101,7 +123,7 @@ st.markdown(
         font-size: 14px !important;
     }
 
-    /* Cruz Eliminar Participante (Strict alignment en la misma fila) */
+    /* Cruz Eliminar Participante */
     div[class*="st-key-del_p_"] {
         display: flex !important;
         justify-content: flex-end !important;
@@ -117,6 +139,8 @@ st.markdown(
         margin: 0 !important;
         box-shadow: none !important;
         cursor: pointer !important;
+        height: auto !important;
+        min-height: 0 !important;
     }
     div[class*="st-key-del_p_"] button:hover {
         color: #EF4444 !important;
@@ -172,7 +196,7 @@ st.markdown(
         font-size: 11px;
     }
 
-    /* BOTONES CUADRADOS DE ACCIÓN */
+    /* BOTONES CUADRADOS DE ACCIÓN CENTRADOS */
     .action-row-container {
         display: flex !important;
         justify-content: center !important;
@@ -500,7 +524,7 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-# Nombre del Evento a ancho completo (sin fecha)
+# Nombre del Evento a ancho completo
 event_name = st.text_input(
     "🏷️ Evento:",
     value="Asado con Amigos",
@@ -585,7 +609,7 @@ else:
         else:
             label_html = f"• <b>{person}</b>"
 
-        c_txt, c_del = st.columns([0.88, 0.12], vertical_alignment="center")
+        c_txt, c_del = st.columns([0.85, 0.15], vertical_alignment="center")
         with c_txt:
             st.markdown(
                 f"<div style='font-size:13px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;'>{label_html}</div>",
