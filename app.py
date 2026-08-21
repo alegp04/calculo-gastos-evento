@@ -25,7 +25,7 @@ st.set_page_config(
     initial_sidebar_state="collapsed",
 )
 
-# --- ESTILOS CSS MINIMALISTAS (Cero desbordamientos) ---
+# --- ESTILOS CSS CON TARGETING EXACTO DE STREAMLIT ---
 st.markdown(
     """
     <style>
@@ -54,41 +54,49 @@ st.markdown(
         margin-bottom: 8px;
     }
     .hero-title {
-        font-size: 17px !important;
+        font-size: 16px !important;
         font-weight: 700 !important;
         margin: 0;
         color: #FFFFFF !important;
     }
 
-    /* Forzar que las columnas se mantengan juntas en celulares */
-    [data-testid="column"] {
-        min-width: 0 !important;
-        padding: 0px 2px !important;
+    /* Reducción de márgenes globales en celular */
+    .block-container {
+        padding-top: 1.5rem !important;
+        padding-bottom: 2rem !important;
+        padding-left: 0.8rem !important;
+        padding-right: 0.8rem !important;
     }
 
-    /* BOTONES DE BORRADO MINÚSCULOS (Estilo texto plano) */
-    button[key*="del_"] {
+    /* TARGETING EXACTO PARA BOTONES DE ELIMINAR (✕) */
+    div[class*="st-key-del_"] {
+        display: flex !important;
+        justify-content: center !important;
+        align-items: center !important;
+    }
+    div[class*="st-key-del_"] button {
         background: transparent !important;
         border: none !important;
         color: #EF4444 !important;
-        padding: 0px 4px !important;
-        margin: 0 !important;
-        font-size: 12px !important;
-        font-weight: 700 !important;
+        padding: 0px !important;
+        margin: 0px !important;
+        width: 22px !important;
         height: 22px !important;
         min-height: 22px !important;
+        max-height: 22px !important;
+        font-size: 13px !important;
+        font-weight: 700 !important;
         line-height: 1 !important;
         box-shadow: none !important;
-        cursor: pointer !important;
+        border-radius: 50% !important;
     }
-    button[key*="del_"]:hover {
-        color: #DC2626 !important;
+    div[class*="st-key-del_"] button:hover {
         background-color: #FEE2E2 !important;
-        border-radius: 4px !important;
+        color: #DC2626 !important;
     }
 
-    /* Botón Limpiar Todo discreto */
-    button[key="clean_all_btn"] {
+    /* Botón Limpiar Todo */
+    div[class*="st-key-clean_all_btn"] button {
         background-color: transparent !important;
         border: 1px solid #CBD5E1 !important;
         color: #64748B !important;
@@ -96,7 +104,12 @@ st.markdown(
         padding: 2px 8px !important;
         height: 26px !important;
         min-height: 26px !important;
+        box-shadow: none !important;
         border-radius: 6px !important;
+    }
+    div[class*="st-key-clean_all_btn"] button:hover {
+        background-color: #F1F5F9 !important;
+        color: #0F172A !important;
     }
 
     /* Tarjetas de Resultado */
@@ -137,7 +150,8 @@ st.markdown(
         font-size: 11px;
     }
     
-    .stButton > button {
+    /* Botón Principal */
+    div[class*="st-key-btn_calc"] button, .stButton > button {
         border-radius: 8px !important;
         font-weight: 600 !important;
         background-color: #0284C7 !important;
@@ -566,10 +580,10 @@ with col_p:
     if not st.session_state.participants:
         st.caption("Sin personas.")
     for idx, name in enumerate(st.session_state.participants):
-        c_txt, c_del = st.columns([0.82, 0.18], vertical_alignment="center")
+        c_txt, c_del = st.columns([0.85, 0.15], vertical_alignment="center")
         with c_txt:
             st.markdown(
-                f"<span style='font-size:13px; font-weight:500;'>• {name}</span>",
+                f"<span style='font-size:13px;'>• {name}</span>",
                 unsafe_allow_html=True,
             )
         with c_del:
@@ -590,7 +604,7 @@ with col_g:
     if not st.session_state.expenses:
         st.caption("Sin gastos.")
     for idx, exp in enumerate(st.session_state.expenses):
-        c_txt, c_del = st.columns([0.82, 0.18], vertical_alignment="center")
+        c_txt, c_del = st.columns([0.85, 0.15], vertical_alignment="center")
         with c_txt:
             st.markdown(
                 f"<span style='font-size:13px;'>• {exp['payer']}: <b>${exp['amount']:,.0f}</b></span>",
@@ -602,7 +616,7 @@ with col_g:
                 st.rerun()
 
 if st.session_state.participants or st.session_state.expenses:
-    st.markdown("<div style='margin-top:6px;'></div>", unsafe_allow_html=True)
+    st.markdown("<div style='margin-top:4px;'></div>", unsafe_allow_html=True)
     if st.button("🗑️ Limpiar Todo", key="clean_all_btn"):
         st.session_state.participants = []
         st.session_state.expenses = []
@@ -612,7 +626,7 @@ if st.session_state.participants or st.session_state.expenses:
 st.write("---")
 
 # BOTÓN PRINCIPAL
-if st.button("🚀 Calcular Cuentas / Ver Resultados", use_container_width=True):
+if st.button("🚀 Calcular Cuentas / Ver Resultados", key="btn_calc", use_container_width=True):
     st.session_state.show_results = True
 
 # RESULTADOS
