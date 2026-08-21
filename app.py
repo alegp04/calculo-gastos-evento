@@ -25,9 +25,11 @@ st.set_page_config(
     initial_sidebar_state="collapsed",
 )
 
-# --- LOGOS OFICIALES DE MARCA (CDN WIKIMEDIA/SIMPLEICONS) ---
-WA_LOGO_URL = "https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg"
-ACROBAT_LOGO_URL = "https://upload.wikimedia.org/wikipedia/commons/b/b9/Adobe_Acrobat_Reader_icon_%282020%29.svg"
+# --- LOGOS DIRECTOS DESDE LAS PÁGINAS DE WIKIMEDIA SOLICITADAS ---
+WA_LOGO_URL = (
+    "https://commons.wikimedia.org/wiki/Special:FilePath/WhatsApp.svg"
+)
+ACROBAT_LOGO_URL = "https://commons.wikimedia.org/wiki/Special:FilePath/Adobe_Acrobat_DC_logo_2020.svg"
 
 # --- ESTILOS CSS ---
 st.markdown(
@@ -55,7 +57,7 @@ st.markdown(
         color: #0F172A !important;
     }
 
-    /* FORZAR COLUMNAS SIEMPRE EN UNA SOLA LÍNEA HORIZONTAL (CELULARES Y PC) */
+    /* FORZAR COLUMNAS SIEMPRE EN UNA SOLA LÍNEA HORIZONTAL */
     div[data-testid="stHorizontalBlock"] {
         display: flex !important;
         flex-direction: row !important;
@@ -516,7 +518,7 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-# Nombre del Evento a ancho completo
+# Nombre del Evento
 event_name = st.text_input(
     "🏷️ Evento:",
     value="Asado con Amigos",
@@ -780,7 +782,7 @@ if st.session_state.participants and st.session_state.expenses:
     pdf_href = f"data:application/pdf;base64,{pdf_b64}"
     clean_filename = f"gastos_{event_name.lower().replace(' ', '_')}.pdf"
 
-    # BOTONES CUADRADOS DE ACCIÓN CON LOGOS VECTORIALES REALES DE MARCA
+    # BOTONES CUADRADOS DE ACCIÓN CON LOGOS DIRECTOS DE WIKIMEDIA
     st.markdown(
         f"""
         <div class="action-row-container">
