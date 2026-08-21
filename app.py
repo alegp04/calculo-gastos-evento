@@ -25,34 +25,40 @@ st.set_page_config(
     initial_sidebar_state="collapsed",
 )
 
-# --- ESTILOS CSS ADAPTATIVOS PARA CELULAR (SIN DESBORDAMIENTO) ---
+# --- ESTILOS CSS CON BLOQUEO ANTI-DESBORDAMIENTO EN CELULARES ---
 st.markdown(
     """
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
     
-    html, body, [class*="css"], .stApp {
+    /* BLOQUEO GENERAL ANTI SCROLL HORIZONTAL */
+    *, *:before, *:after {
+        box-sizing: border-box !important;
+    }
+
+    html, body, .stApp, [data-testid="stAppViewContainer"], [data-testid="stHeader"], main {
+        max-width: 100vw !important;
+        overflow-x: hidden !important;
         font-family: 'Inter', sans-serif;
         background-color: #F8FAFC !important;
         color: #0F172A !important;
-        max-width: 100vw !important;
-        overflow-x: hidden !important;
     }
 
-    /* Reducir paddings generales del contenedor principal en celular */
+    /* Padding ajustado al borde de la pantalla del celular */
     .block-container {
-        padding-top: 0.8rem !important;
+        padding-top: 0.6rem !important;
         padding-bottom: 1.5rem !important;
         padding-left: 0.5rem !important;
         padding-right: 0.5rem !important;
         max-width: 100% !important;
+        width: 100% !important;
     }
 
     p, span, label, h1, h2, h3, h4, h5, h6, .stMarkdown {
         color: #0F172A !important;
     }
 
-    /* Banner de Título súper compacto */
+    /* Banner de Título */
     .hero-container {
         background: linear-gradient(135deg, #0284C7 0%, #0D9488 100%);
         padding: 6px 10px;
@@ -60,6 +66,7 @@ st.markdown(
         color: white !important;
         text-align: center;
         margin-bottom: 6px;
+        width: 100% !important;
     }
     .hero-title {
         font-size: 15px !important;
@@ -68,18 +75,37 @@ st.markdown(
         color: #FFFFFF !important;
     }
 
-    /* Formulario e Inputs compactos */
+    /* FORMULARIO Y CAMPOS AJUSTADOS AL ANCHO */
     div[data-testid="stForm"] {
         padding: 6px 8px !important;
         border-radius: 8px !important;
         border: 1px solid #CBD5E1 !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        background: #FFFFFF !important;
     }
 
-    input[type="text"], input[type="number"], .stDateInput div {
+    .stTextInput, .stDateInput, div[data-baseweb="input"] {
+        width: 100% !important;
+        min-width: 0 !important;
+    }
+
+    input[type="text"], input[type="number"] {
         font-size: 12px !important;
+        padding: 4px 8px !important;
     }
 
-    /* FORZAR FILAS HORIZONTALES SIN APILAMIENTO EN CELULAR */
+    /* Botón Cargar dentro del formulario */
+    div[data-testid="stForm"] button {
+        padding: 4px 6px !important;
+        font-size: 12px !important;
+        font-weight: 700 !important;
+        height: 38px !important;
+        min-height: 38px !important;
+        width: 100% !important;
+    }
+
+    /* REGULAR FILAS HORIZONTALES DENTRO DEL PANTALLAZO */
     div[data-testid="stHorizontalBlock"] {
         display: flex !important;
         flex-direction: row !important;
@@ -87,24 +113,30 @@ st.markdown(
         align-items: center !important;
         gap: 4px !important;
         width: 100% !important;
+        max-width: 100% !important;
     }
 
-    /* Reducir espacio vertical entre elementos de la lista */
+    div[data-testid="column"] {
+        min-width: 0 !important;
+        box-sizing: border-box !important;
+    }
+
+    /* Reducir espacio vertical excesivo */
     div[data-testid="stVerticalBlock"] {
-        gap: 1px !important;
+        gap: 2px !important;
     }
     div[data-testid="element-container"] {
         margin-bottom: 0px !important;
     }
 
-    /* BOTÓN DE ELIMINAR (✕) FIJO A LA DERECHA EN LA MISMA LÍNEA */
+    /* BOTÓN DE ELIMINAR (✕) INTEGRADO A LA DERECHA */
     div[class*="st-key-del_"] {
         display: flex !important;
         justify-content: flex-end !important;
         align-items: center !important;
-        flex: 0 0 26px !important;
-        width: 26px !important;
-        min-width: 26px !important;
+        flex: 0 0 24px !important;
+        width: 24px !important;
+        min-width: 24px !important;
     }
     div[class*="st-key-del_"] button {
         background: transparent !important;
@@ -141,15 +173,16 @@ st.markdown(
         margin-top: 4px !important;
     }
 
-    /* Tarjetas de Resultado */
+    /* Tarjetas de Resultado Compactas */
     .flat-card {
         background-color: #FFFFFF !important;
         border: 1px solid #CBD5E1 !important;
         border-radius: 6px;
-        padding: 6px 10px !important;
+        padding: 6px 8px !important;
         margin-bottom: 4px !important;
         color: #0F172A !important;
         font-size: 12px !important;
+        width: 100% !important;
     }
 
     .badge-debtor {
@@ -469,7 +502,7 @@ def generate_pdf(
     return bytes(pdf.output())
 
 
-# --- INTERFAZ PRINCIPAL COMPACTA ---
+# --- INTERFAZ PRINCIPAL ---
 
 st.markdown(
     """
@@ -514,7 +547,7 @@ components.html(
         }
     }
     </script>
-    <div style="display: flex; gap: 6px; font-family: sans-serif;">
+    <div style="display: flex; gap: 6px; font-family: sans-serif; width:100%;">
         <button id="install-pwa-btn" onclick="installPWA()" style="display:none; flex: 1; background:#10B981; color:white; border:none; padding:4px; border-radius:6px; font-weight:bold; cursor:pointer; font-size:11px;">
             📲 Instalar App
         </button>
@@ -526,18 +559,18 @@ components.html(
     height=32,
 )
 
-col_date, col_name = st.columns([1, 2], vertical_alignment="center")
+col_date, col_name = st.columns([1, 1.8], vertical_alignment="center")
 with col_date:
     event_date = st.date_input("Fecha:", datetime.now())
 with col_name:
     event_name = st.text_input(
-        "Nombre del Evento:",
+        "Evento:",
         value="Asado con Amigos",
         placeholder="Ej: Topopeña...",
     )
 
 with st.form("smart_input_form", clear_on_submit=True):
-    col_in, col_btn = st.columns([0.72, 0.28], vertical_alignment="center")
+    col_in, col_btn = st.columns([0.68, 0.32], vertical_alignment="center")
     with col_in:
         user_input = st.text_input(
             "Ingreso rápido:",
@@ -586,7 +619,7 @@ with st.expander("❓ ¿Cómo cargar datos?"):
     """
     )
 
-# UNIFICACIÓN EN 1 SOLA LÍNEA HORIZONTAL COMPACTA
+# LISTA UNIFICADA COMPACTA
 st.markdown(
     f"<div style='font-size:12px; font-weight:700; color:#475569; margin-bottom:4px;'>👥 PARTICIPANTES ({len(st.session_state.participants)})</div>",
     unsafe_allow_html=True,
@@ -619,7 +652,7 @@ else:
         c_txt, c_del = st.columns([0.88, 0.12], vertical_alignment="center")
         with c_txt:
             st.markdown(
-                f"<div style='font-size:13px; line-height:24px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;'>{label_html}</div>",
+                f"<div style='font-size:13px; line-height:22px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;'>{label_html}</div>",
                 unsafe_allow_html=True,
             )
         with c_del:
@@ -636,7 +669,7 @@ if st.session_state.participants or st.session_state.expenses:
         st.session_state.expenses = []
         st.rerun()
 
-# RESULTADOS AUTOMÁTICOS Y REACTIVOS
+# RESULTADOS AUTOMÁTICOS
 if st.session_state.participants and st.session_state.expenses:
     st.write("---")
     date_str = event_date.strftime("%d/%m/%Y")
@@ -657,17 +690,17 @@ if st.session_state.participants and st.session_state.expenses:
 
     settlements = calculate_settlements(balances)
 
-    # TARJETAS DE MÉTRICAS COMPACTAS (Reemplaza los números gigantes)
+    # TARJETAS DE MÉTRICAS RESPONSIVAS
     st.markdown(
         f"""
-        <div style="display: flex; gap: 8px; margin: 8px 0;">
-            <div style="flex:1; background:#FFFFFF; border:1px solid #CBD5E1; padding:6px 8px; border-radius:8px; text-align:center;">
-                <div style="font-size:10px; color:#64748B; font-weight:700; text-transform:uppercase;">Gasto Total</div>
-                <div style="font-size:15px; font-weight:700; color:#0F172A; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${total_spent:,.2f}</div>
+        <div style="display: flex; gap: 6px; margin: 6px 0; width:100%;">
+            <div style="flex:1; background:#FFFFFF; border:1px solid #CBD5E1; padding:6px 4px; border-radius:6px; text-align:center; min-width:0;">
+                <div style="font-size:9px; color:#64748B; font-weight:700; text-transform:uppercase;">Gasto Total</div>
+                <div style="font-size:14px; font-weight:700; color:#0F172A; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${total_spent:,.2f}</div>
             </div>
-            <div style="flex:1; background:#FFFFFF; border:1px solid #CBD5E1; padding:6px 8px; border-radius:8px; text-align:center;">
-                <div style="font-size:10px; color:#64748B; font-weight:700; text-transform:uppercase;">Por Persona</div>
-                <div style="font-size:15px; font-weight:700; color:#0284C7; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${per_person:,.2f}</div>
+            <div style="flex:1; background:#FFFFFF; border:1px solid #CBD5E1; padding:6px 4px; border-radius:6px; text-align:center; min-width:0;">
+                <div style="font-size:9px; color:#64748B; font-weight:700; text-transform:uppercase;">Por Persona</div>
+                <div style="font-size:14px; font-weight:700; color:#0284C7; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${per_person:,.2f}</div>
             </div>
         </div>
     """,
@@ -681,7 +714,7 @@ if st.session_state.participants and st.session_state.expenses:
             payer_totals[p] = payer_totals.get(p, 0.0) + exp["amount"]
 
         if payer_totals and sum(payer_totals.values()) > 0:
-            fig, ax = plt.subplots(figsize=(4.2, 1.8))
+            fig, ax = plt.subplots(figsize=(4.0, 1.7))
             fig.patch.set_facecolor("#FFFFFF")
             ax.set_facecolor("#FFFFFF")
             labels = list(payer_totals.keys())
@@ -732,7 +765,7 @@ if st.session_state.participants and st.session_state.expenses:
         st.markdown(
             f"""
             <div class="flat-card" style="display:flex; justify-content:space-between; align-items:center;">
-                <div>
+                <div style="white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">
                     <b>{p}</b> <small style="color:#64748B;">(puso ${paid:,.0f})</small>
                 </div>
                 <div>{badge}</div>
@@ -766,7 +799,7 @@ if st.session_state.participants and st.session_state.expenses:
             line = f"• *{debtor}* ➔ *{creditor}*: ${amount:,.2f}"
             st.markdown(
                 f"""
-                <div style="background:#E0F2FE; border-left:4px solid #0284C7; padding:6px 10px; border-radius:6px; margin-bottom:4px; font-size:13px; color:#0F172A;">
+                <div style="background:#E0F2FE; border-left:4px solid #0284C7; padding:6px 8px; border-radius:6px; margin-bottom:4px; font-size:12px; color:#0F172A; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">
                     💳 <b>{debtor}</b> ➔ <b>{creditor}</b>: <b>${amount:,.2f}</b>
                 </div>
             """,
