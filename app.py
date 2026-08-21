@@ -25,43 +25,57 @@ st.set_page_config(
     initial_sidebar_state="collapsed",
 )
 
-# --- ESTILOS CSS MOBILE FIRST Y COMPATIBILIDAD MODO OSCURO ---
+# --- ESTILOS CSS CON TONOS PLANOS Y BLOQUEO ANTI-DESPLAZAMIENTO ---
 st.markdown(
     """
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
     
-    html, body, .stApp {
+    /* BLOQUEO DE SCROLL HORIZONTAL Y ANCHO AJUSTADO AL 100% */
+    *, *:before, *:after {
+        box-sizing: border-box !important;
+    }
+
+    html, body, .stApp, [data-testid="stAppViewContainer"], [data-testid="stHeader"], [data-testid="stMain"], .main {
+        overflow-x: hidden !important;
+        max-width: 100vw !important;
+        width: 100% !important;
         font-family: 'Inter', sans-serif;
         background-color: #F8FAFC !important;
         color: #0F172A !important;
     }
 
-    /* Margen superior despejado para la barra de Streamlit */
     .block-container {
-        padding-top: 3.5rem !important;
+        padding-top: 3.2rem !important;
         padding-bottom: 2rem !important;
-        padding-left: 0.8rem !important;
-        padding-right: 0.8rem !important;
-        max-width: 480px !important;
-        margin: 0 auto !important;
+        padding-left: 0.75rem !important;
+        padding-right: 0.75rem !important;
+        max-width: 100% !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
+    }
+
+    iframe {
+        max-width: 100% !important;
+        width: 100% !important;
     }
 
     p, span, label, h1, h2, h3, h4, h5, h6, .stMarkdown {
         color: #0F172A !important;
     }
 
-    /* Banner de Título */
+    /* Banner de Título (Tono Pizarra Plano) */
     .hero-container {
-        background: linear-gradient(135deg, #0284C7 0%, #0D9488 100%);
-        padding: 10px 14px;
-        border-radius: 10px;
-        color: white !important;
+        background-color: #334155 !important;
+        padding: 8px 12px;
+        border-radius: 8px;
+        color: #FFFFFF !important;
         text-align: center;
-        margin-bottom: 10px;
+        margin-bottom: 8px;
+        width: 100% !important;
     }
     .hero-title {
-        font-size: 17px !important;
+        font-size: 16px !important;
         font-weight: 700 !important;
         margin: 0;
         color: #FFFFFF !important;
@@ -69,41 +83,59 @@ st.markdown(
 
     /* Formulario compacto */
     div[data-testid="stForm"] {
-        padding: 10px !important;
-        border-radius: 10px !important;
-        border: 1px solid #CBD5E1 !important;
+        padding: 8px 10px !important;
+        border-radius: 8px !important;
+        border: 1px solid #E2E8F0 !important;
         background-color: #FFFFFF !important;
     }
 
-    /* FORZAR ESTILOS DE BOTONES EN MODO OSCURO */
-    .stButton > button, 
-    .stDownloadButton > button,
-    div[data-testid="stForm"] button,
-    a[data-testid*="stBaseButton"],
-    button[data-testid*="stBaseButton"] {
-        background-color: #0284C7 !important;
+    /* ESTILO DE BOTONES EN TONOS PLANOS AMIGABLES */
+    
+    /* Botón Principal (🚀 Cargar Datos) */
+    div[data-testid="stForm"] button {
+        background-color: #4F46E5 !important;
         color: #FFFFFF !important;
         border: none !important;
-        font-weight: 600 !important;
         border-radius: 8px !important;
-    }
-
-    .stButton > button:hover, 
-    .stDownloadButton > button:hover,
-    div[data-testid="stForm"] button:hover {
-        background-color: #0369A1 !important;
-        color: #FFFFFF !important;
-    }
-
-    /* Botón Cargar Datos */
-    div[data-testid="stForm"] button {
-        padding: 4px 6px !important;
         font-size: 13px !important;
-        font-weight: 700 !important;
+        font-weight: 600 !important;
         height: 38px !important;
         min-height: 38px !important;
         width: 100% !important;
-        background-color: #0284C7 !important;
+        box-shadow: none !important;
+    }
+    div[data-testid="stForm"] button:hover {
+        background-color: #4338CA !important;
+        color: #FFFFFF !important;
+    }
+
+    /* Botón WhatsApp */
+    div[data-testid="stLinkButton"] a {
+        background-color: #059669 !important;
+        color: #FFFFFF !important;
+        border: none !important;
+        border-radius: 8px !important;
+        font-weight: 600 !important;
+        font-size: 13px !important;
+        box-shadow: none !important;
+    }
+    div[data-testid="stLinkButton"] a:hover {
+        background-color: #047857 !important;
+        color: #FFFFFF !important;
+    }
+
+    /* Botón Descargar PDF */
+    .stDownloadButton button {
+        background-color: #475569 !important;
+        color: #FFFFFF !important;
+        border: none !important;
+        border-radius: 8px !important;
+        font-weight: 600 !important;
+        font-size: 13px !important;
+        box-shadow: none !important;
+    }
+    .stDownloadButton button:hover {
+        background-color: #334155 !important;
         color: #FFFFFF !important;
     }
 
@@ -122,12 +154,12 @@ st.markdown(
     /* Desplegable */
     details, div[data-testid="stExpander"] {
         background-color: #FFFFFF !important;
-        border: 1px solid #CBD5E1 !important;
+        border: 1px solid #E2E8F0 !important;
         border-radius: 8px !important;
         color: #0F172A !important;
     }
 
-    /* --- REGLA CLAVE: ANULA EL APILAMIENTO EN CELULARES PARA LA LISTA --- */
+    /* ALINEACIÓN DE LA CRUZ (✕) EN LA MISMA LÍNEA */
     div[data-testid="stHorizontalBlock"]:has(div[class*="st-key-del_p_"]) {
         display: flex !important;
         flex-direction: row !important;
@@ -151,7 +183,7 @@ st.markdown(
         max-width: 28px !important;
     }
 
-    /* Estilo del botón ✕ */
+    /* Cruz de eliminar discreta */
     div[class*="st-key-del_p_"] {
         display: flex !important;
         justify-content: flex-end !important;
@@ -161,15 +193,15 @@ st.markdown(
     div[class*="st-key-del_p_"] button {
         background: transparent !important;
         border: none !important;
-        color: #EF4444 !important;
+        color: #94A3B8 !important;
         padding: 0px !important;
         margin: 0px !important;
-        width: 24px !important;
-        height: 24px !important;
-        min-height: 24px !important;
-        max-height: 24px !important;
-        font-size: 14px !important;
-        font-weight: 800 !important;
+        width: 22px !important;
+        height: 22px !important;
+        min-height: 22px !important;
+        max-height: 22px !important;
+        font-size: 13px !important;
+        font-weight: 700 !important;
         box-shadow: none !important;
         border-radius: 50% !important;
         cursor: pointer !important;
@@ -178,13 +210,14 @@ st.markdown(
         justify-content: center !important;
     }
     div[class*="st-key-del_p_"] button:hover {
-        background-color: #FEE2E2 !important;
+        background-color: #F1F5F9 !important;
+        color: #EF4444 !important;
     }
 
     /* Botón Limpiar Todo */
     div[class*="st-key-clean_all_btn"] button {
-        background-color: #FFFFFF !important;
-        border: 1px solid #CBD5E1 !important;
+        background-color: #F1F5F9 !important;
+        border: 1px solid #E2E8F0 !important;
         color: #64748B !important;
         font-size: 11px !important;
         padding: 2px 8px !important;
@@ -195,14 +228,14 @@ st.markdown(
         margin-top: 4px !important;
     }
     div[class*="st-key-clean_all_btn"] button:hover {
-        background-color: #F1F5F9 !important;
-        color: #0F172A !important;
+        background-color: #E2E8F0 !important;
+        color: #334155 !important;
     }
 
     /* Tarjetas de Resultado */
     .flat-card {
         background-color: #FFFFFF !important;
-        border: 1px solid #CBD5E1 !important;
+        border: 1px solid #E2E8F0 !important;
         border-radius: 8px;
         padding: 8px 10px !important;
         margin-bottom: 4px !important;
@@ -348,7 +381,7 @@ def generate_pdf(
             labels = [clean_txt(k) for k in payer_totals.keys()]
             sizes = list(payer_totals.values())
             colors = [
-                "#0284C7",
+                "#4F46E5",
                 "#10B981",
                 "#F59E0B",
                 "#EF4444",
@@ -394,7 +427,7 @@ def generate_pdf(
     _ = pdf.cell(0, 6, clean_txt("1. Detalle de los Gastos Cargados"), ln=True)
 
     _ = pdf.set_font("Helvetica", "B", 8)
-    _ = pdf.set_fill_color(2, 132, 199)
+    _ = pdf.set_fill_color(79, 70, 229)
     _ = pdf.set_text_color(255, 255, 255)
     _ = pdf.cell(50, 5, clean_txt(" Comprador"), border=0, fill=True)
     _ = pdf.cell(95, 5, clean_txt(" Concepto / Item"), border=0, fill=True)
@@ -439,7 +472,7 @@ def generate_pdf(
     _ = pdf.cell(0, 6, clean_txt("2. Estado de Cuentas por Persona"), ln=True)
 
     _ = pdf.set_font("Helvetica", "B", 8)
-    _ = pdf.set_fill_color(2, 132, 199)
+    _ = pdf.set_fill_color(79, 70, 229)
     _ = pdf.set_text_color(255, 255, 255)
     _ = pdf.cell(50, 5, clean_txt(" Persona"), border=0, fill=True)
     _ = pdf.cell(45, 5, clean_txt(" Pago Realizado"), border=0, fill=True, align="R")
@@ -539,7 +572,7 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-# Botones PWA / Compartir
+# Botones PWA / Compartir en Tonos Planos
 components.html(
     """
     <script>
@@ -575,10 +608,10 @@ components.html(
     }
     </script>
     <div style="display: flex; gap: 6px; font-family: sans-serif;">
-        <button id="install-pwa-btn" onclick="installPWA()" style="display:none; flex: 1; background:#10B981; color:white; border:none; padding:5px; border-radius:6px; font-weight:bold; cursor:pointer; font-size:11px;">
+        <button id="install-pwa-btn" onclick="installPWA()" style="display:none; flex: 1; background:#0D9488; color:white; border:none; padding:5px; border-radius:6px; font-weight:600; cursor:pointer; font-size:11px;">
             📲 Instalar App
         </button>
-        <button id="share-app-btn" onclick="shareApp()" style="flex: 1; background:#0284C7; color:white; border:none; padding:5px; border-radius:6px; font-weight:bold; cursor:pointer; font-size:11px;">
+        <button id="share-app-btn" onclick="shareApp()" style="flex: 1; background:#64748B; color:white; border:none; padding:5px; border-radius:6px; font-weight:600; cursor:pointer; font-size:11px;">
             🔗 Compartir App
         </button>
     </div>
@@ -597,7 +630,7 @@ with col_name:
         placeholder="Ej: Topopeña...",
     )
 
-# Formulario de Carga Limpio
+# Formulario de Carga
 with st.form("smart_input_form", clear_on_submit=True):
     user_input = st.text_input(
         "Ingreso rápido:",
@@ -716,17 +749,17 @@ if st.session_state.participants and st.session_state.expenses:
 
     settlements = calculate_settlements(balances)
 
-    # TARJETAS DE MÉTRICAS RESPONSIVAS
+    # TARJETAS DE MÉTRICAS EN TONOS PLANOS
     st.markdown(
         f"""
-        <div style="display: flex; gap: 6px; margin: 8px 0;">
-            <div style="flex:1; background:#FFFFFF; border:1px solid #CBD5E1; padding:6px 4px; border-radius:6px; text-align:center;">
-                <div style="font-size:9px; color:#64748B; font-weight:700; text-transform:uppercase;">Gasto Total</div>
-                <div style="font-size:14px; font-weight:700; color:#0F172A; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${total_spent:,.2f}</div>
+        <div style="display: flex; gap: 6px; margin: 8px 0; width:100%;">
+            <div style="flex:1; background:#FFFFFF; border:1px solid #E2E8F0; padding:8px 6px; border-radius:8px; text-align:center;">
+                <div style="font-size:10px; color:#64748B; font-weight:700; text-transform:uppercase;">Gasto Total</div>
+                <div style="font-size:15px; font-weight:700; color:#1E293B; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${total_spent:,.2f}</div>
             </div>
-            <div style="flex:1; background:#FFFFFF; border:1px solid #CBD5E1; padding:6px 4px; border-radius:6px; text-align:center;">
-                <div style="font-size:9px; color:#64748B; font-weight:700; text-transform:uppercase;">Por Persona</div>
-                <div style="font-size:14px; font-weight:700; color:#0284C7; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${per_person:,.2f}</div>
+            <div style="flex:1; background:#FFFFFF; border:1px solid #E2E8F0; padding:8px 6px; border-radius:8px; text-align:center;">
+                <div style="font-size:10px; color:#64748B; font-weight:700; text-transform:uppercase;">Por Persona</div>
+                <div style="font-size:15px; font-weight:700; color:#4F46E5; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${per_person:,.2f}</div>
             </div>
         </div>
     """,
@@ -746,7 +779,7 @@ if st.session_state.participants and st.session_state.expenses:
             labels = list(payer_totals.keys())
             sizes = list(payer_totals.values())
             colors = [
-                "#0284C7",
+                "#4F46E5",
                 "#10B981",
                 "#F59E0B",
                 "#EF4444",
@@ -825,7 +858,7 @@ if st.session_state.participants and st.session_state.expenses:
             line = f"• *{debtor}* ➔ *{creditor}*: ${amount:,.2f}"
             st.markdown(
                 f"""
-                <div style="background:#E0F2FE; border-left:4px solid #0284C7; padding:6px 8px; border-radius:6px; margin-bottom:4px; font-size:12px; color:#0F172A; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">
+                <div style="background:#F1F5F9; border-left:4px solid #6366F1; padding:6px 10px; border-radius:6px; margin-bottom:4px; font-size:13px; color:#1E293B; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">
                     💳 <b>{debtor}</b> ➔ <b>{creditor}</b>: <b>${amount:,.2f}</b>
                 </div>
             """,
