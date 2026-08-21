@@ -25,7 +25,7 @@ st.set_page_config(
     initial_sidebar_state="collapsed",
 )
 
-# --- ESTILOS CSS PERSONALIZADOS ---
+# --- ESTILOS CSS ULTRA COMPACTOS Y MODERNOS ---
 st.markdown(
     """
     <style>
@@ -35,7 +35,7 @@ st.markdown(
         font-family: 'Inter', sans-serif;
     }
     
-    /* Forzar fondo claro */
+    /* Forzar fondo y texto claro general */
     .stApp {
         background-color: #F8FAFC !important;
         color: #0F172A !important;
@@ -48,62 +48,138 @@ st.markdown(
     /* Banner de Título */
     .hero-container {
         background: linear-gradient(135deg, #0284C7 0%, #0D9488 100%);
-        padding: 12px 16px;
+        padding: 10px 14px;
         border-radius: 12px;
         color: white !important;
         text-align: center;
-        margin-bottom: 10px;
+        margin-bottom: 8px;
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
     }
     .hero-title {
-        font-size: 20px !important;
+        font-size: 18px !important;
         font-weight: 700 !important;
         margin: 0;
         color: #FFFFFF !important;
         letter-spacing: -0.3px;
     }
+
+    /* Reducir espacio entre columnas en móviles */
+    div[data-testid="stHorizontalBlock"] {
+        align-items: center !important;
+        gap: 4px !important;
+        margin-bottom: 2px !important;
+    }
+    div[data-testid="column"] {
+        padding: 0px 1px !important;
+        min-width: 0 !important;
+    }
     
-    /* Tarjetas Compactas */
+    /* FILA MICRO-COMPACTA PARA LISTAS */
+    .micro-item {
+        background-color: #FFFFFF !important;
+        border: 1px solid #E2E8F0 !important;
+        border-radius: 6px;
+        padding: 4px 8px !important;
+        margin-bottom: 4px !important;
+        font-size: 13px !important;
+        font-weight: 500;
+        color: #1E293B !important;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        transition: all 0.2s ease;
+    }
+    .micro-item:hover {
+        border-color: #CBD5E1 !important;
+        background-color: #F1F5F9 !important;
+    }
+
+    /* BOTONES DE ELIMINAR (✕) MINÚSCULOS Y REDONDOS */
+    div[data-testid="column"] button[key*="del_"] {
+        width: 20px !important;
+        height: 20px !important;
+        min-height: 20px !important;
+        max-height: 20px !important;
+        min-width: 20px !important;
+        max-width: 20px !important;
+        padding: 0 !important;
+        border-radius: 50% !important;
+        background-color: #FEE2E2 !important;
+        color: #EF4444 !important;
+        border: 1px solid #FCA5A5 !important;
+        font-size: 10px !important;
+        font-weight: 800 !important;
+        line-height: 18px !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        margin: 0 0 0 auto !important;
+        cursor: pointer;
+    }
+    div[data-testid="column"] button[key*="del_"]:hover {
+        background-color: #EF4444 !important;
+        color: #FFFFFF !important;
+        border-color: #DC2626 !important;
+    }
+
+    /* Botón Limpiar Todo Discreto */
+    button[key="clean_all_btn"] {
+        background-color: transparent !important;
+        border: 1px solid #CBD5E1 !important;
+        color: #64748B !important;
+        font-size: 12px !important;
+        padding: 4px 10px !important;
+        height: 30px !important;
+        min-height: 30px !important;
+        border-radius: 6px !important;
+        font-weight: 500 !important;
+    }
+    button[key="clean_all_btn"]:hover {
+        background-color: #F1F5F9 !important;
+        color: #0F172A !important;
+        border-color: #94A3B8 !important;
+    }
+
+    /* Tarjetas de Resultado */
     .flat-card {
         background-color: #FFFFFF !important;
         border: 1px solid #CBD5E1 !important;
-        border-radius: 10px;
-        padding: 10px 14px !important;
-        margin-bottom: 8px !important;
-        box-shadow: 0 1px 2px rgba(0,0,0,0.03);
-    }
-    
-    .flat-card, .flat-card b, .flat-card span, .flat-card small, .flat-card div {
+        border-radius: 8px;
+        padding: 8px 12px !important;
+        margin-bottom: 6px !important;
         color: #0F172A !important;
     }
-    
+    .flat-card b, .flat-card span, .flat-card small {
+        color: #0F172A !important;
+    }
+
     /* Badges de Estado */
     .badge-debtor {
         background-color: #FEF2F2 !important;
         color: #EF4444 !important;
         border: 1px solid #FCA5A5 !important;
-        padding: 3px 8px;
-        border-radius: 12px;
+        padding: 2px 6px;
+        border-radius: 10px;
         font-weight: 600;
-        font-size: 12px;
+        font-size: 11px;
     }
     .badge-creditor {
         background-color: #ECFDF5 !important;
         color: #10B981 !important;
         border: 1px solid #6EE7B7 !important;
-        padding: 3px 8px;
-        border-radius: 12px;
+        padding: 2px 6px;
+        border-radius: 10px;
         font-weight: 600;
-        font-size: 12px;
+        font-size: 11px;
     }
     .badge-neutral {
         background-color: #F1F5F9 !important;
         color: #64748B !important;
         border: 1px solid #CBD5E1 !important;
-        padding: 3px 8px;
-        border-radius: 12px;
+        padding: 2px 6px;
+        border-radius: 10px;
         font-weight: 600;
-        font-size: 12px;
+        font-size: 11px;
     }
     
     /* Botón Principal */
@@ -113,33 +189,14 @@ st.markdown(
         background-color: #0284C7 !important;
         color: #FFFFFF !important;
         border: none !important;
-        padding: 8px 14px !important;
+        padding: 8px 12px !important;
     }
     .stButton > button:hover {
         background-color: #0369A1 !important;
-        color: #FFFFFF !important;
     }
 
-    /* Estilo para los botones de eliminar (íconos chiquitos y discretos) */
-    div[data-testid="column"] div.stButton > button {
-        background-color: transparent !important;
-        border: 1px solid #E2E8F0 !important;
-        color: #EF4444 !important;
-        padding: 2px 6px !important;
-        min-height: 28px !important;
-        height: 28px !important;
-        font-size: 12px !important;
-        border-radius: 6px !important;
-        margin-top: 2px;
-    }
-    div[data-testid="column"] div.stButton > button:hover {
-        background-color: #FEF2F2 !important;
-        border-color: #FCA5A5 !important;
-    }
-
-    /* Campos de Entrada */
     input[type="text"], input[type="number"] {
-        border-radius: 8px !important;
+        border-radius: 6px !important;
     }
     </style>
 """,
@@ -253,6 +310,7 @@ def generate_pdf(
         if payer_totals and sum(payer_totals.values()) > 0:
             fig, ax = plt.subplots(figsize=(4.2, 2.0))
             fig.patch.set_facecolor("#FFFFFF")
+            ax.set_facecolor("#FFFFFF")
             labels = [clean_txt(k) for k in payer_totals.keys()]
             sizes = list(payer_totals.values())
             colors = [
@@ -289,7 +347,7 @@ def generate_pdf(
 
             img_buf = io.BytesIO()
             _ = plt.savefig(
-                img_buf, format="png", bbox_inches="tight", dpi=130, facecolor=fig.get_facecolor()
+                img_buf, format="png", bbox_inches="tight", dpi=130, facecolor="#FFFFFF"
             )
             _ = plt.close(fig)
             _ = img_buf.seek(0)
@@ -438,12 +496,12 @@ def generate_pdf(
     return bytes(pdf.output())
 
 
-# --- INTERFAZ DE USUARIO ---
+# --- INTERFAZ PRINCIPAL COMPACTA ---
 
 st.markdown(
     """
     <div class="hero-container">
-        <div class="hero-title">🎉 Cálculo de Gastos de Evento</div>
+        <div class="hero-title">🎉 Gastos de Evento</div>
     </div>
 """,
     unsafe_allow_html=True,
@@ -483,16 +541,16 @@ components.html(
         }
     }
     </script>
-    <div style="display: flex; gap: 8px; font-family: sans-serif;">
-        <button id="install-pwa-btn" onclick="installPWA()" style="display:none; flex: 1; background:#10B981; color:white; border:none; padding:8px; border-radius:8px; font-weight:bold; cursor:pointer; font-size:13px;">
+    <div style="display: flex; gap: 6px; font-family: sans-serif;">
+        <button id="install-pwa-btn" onclick="installPWA()" style="display:none; flex: 1; background:#10B981; color:white; border:none; padding:6px; border-radius:6px; font-weight:bold; cursor:pointer; font-size:12px;">
             📲 Instalar App
         </button>
-        <button id="share-app-btn" onclick="shareApp()" style="flex: 1; background:#0284C7; color:white; border:none; padding:8px; border-radius:8px; font-weight:bold; cursor:pointer; font-size:13px;">
+        <button id="share-app-btn" onclick="shareApp()" style="flex: 1; background:#0284C7; color:white; border:none; padding:6px; border-radius:6px; font-weight:bold; cursor:pointer; font-size:12px;">
             🔗 Compartir App
         </button>
     </div>
 """,
-    height=42,
+    height=38,
 )
 
 col_date, col_name = st.columns([1, 2])
@@ -502,7 +560,7 @@ with col_name:
     event_name = st.text_input(
         "Nombre del Evento:",
         value="Asado con Amigos",
-        placeholder="Ej: Topopeña, Cumple...",
+        placeholder="Ej: Topopeña...",
     )
 
 with st.form("smart_input_form", clear_on_submit=True):
@@ -552,70 +610,78 @@ with st.form("smart_input_form", clear_on_submit=True):
 with st.expander("❓ ¿Cómo cargar datos? (Ver ejemplos)"):
     st.markdown(
         """
-        - **Sumar participante sin gasto:** Escribí solo el nombre (`Nico`).
-        - **Gasto completo:** Nombre + Monto + Detalle (`Juan 18000 Carne`).
-        - **Gasto sin detalle:** Nombre + Monto (`Pedro 5000`).
+        - **Sumar persona sin gasto:** `Nico`
+        - **Gasto completo:** `Juan 18000 Carne`
+        - **Gasto simple:** `Pedro 5000`
     """
     )
 
-# SECCIÓN 3: LISTADO COMPACTO DE PERSONAS Y GASTOS
+# LISTAS MICRO-COMPACTAS EN 2 COLUMNAS
 col_p, col_g = st.columns(2)
 
 with col_p:
     st.markdown(
-        f"<b>👤 Personas ({len(st.session_state.participants)}):</b>",
+        f"<div style='font-size:13px; font-weight:700; margin-bottom:4px;'>👤 Personas ({len(st.session_state.participants)}):</div>",
         unsafe_allow_html=True,
     )
     if not st.session_state.participants:
-        st.caption("Sin participantes.")
+        st.caption("Sin personas.")
     for idx, name in enumerate(st.session_state.participants):
         c_txt, c_del = st.columns([5, 1])
-        c_txt.write(f"• {name}")
-        if c_del.button("✕", key=f"del_p_{idx}"):
-            st.session_state.participants.pop(idx)
-            st.session_state.expenses = [
-                e
-                for e in st.session_state.expenses
-                if e["payer"] != name
-            ]
-            st.rerun()
+        with c_txt:
+            st.markdown(f"<div class='micro-item'><span>• {name}</span></div>", unsafe_allow_html=True)
+        with c_del:
+            if st.button("✕", key=f"del_p_{idx}"):
+                st.session_state.participants.pop(idx)
+                st.session_state.expenses = [
+                    e
+                    for e in st.session_state.expenses
+                    if e["payer"] != name
+                ]
+                st.rerun()
 
 with col_g:
     st.markdown(
-        f"<b>🛒 Gastos ({len(st.session_state.expenses)}):</b>",
+        f"<div style='font-size:13px; font-weight:700; margin-bottom:4px;'>🛒 Gastos ({len(st.session_state.expenses)}):</div>",
         unsafe_allow_html=True,
     )
     if not st.session_state.expenses:
         st.caption("Sin gastos.")
     for idx, exp in enumerate(st.session_state.expenses):
         c_txt, c_del = st.columns([5, 1])
-        c_txt.write(f"• {exp['payer']}: ${exp['amount']:,.0f}")
-        if c_del.button("✕", key=f"del_e_{idx}"):
-            st.session_state.expenses.pop(idx)
-            st.rerun()
+        with c_txt:
+            st.markdown(
+                f"<div class='micro-item'><span>• {exp['payer']}: <b>${exp['amount']:,.0f}</b></span></div>",
+                unsafe_allow_html=True,
+            )
+        with c_del:
+            if st.button("✕", key=f"del_e_{idx}"):
+                st.session_state.expenses.pop(idx)
+                st.rerun()
 
 if st.session_state.participants or st.session_state.expenses:
-    st.markdown("<br>", unsafe_allow_html=True)
-    if st.button("🗑️ Limpiar Todo", key="clean_all_btn"):
-        st.session_state.participants = []
-        st.session_state.expenses = []
-        st.session_state.show_results = False
-        st.rerun()
+    col_clean, _ = st.columns([1, 1])
+    with col_clean:
+        if st.button("🗑️ Limpiar Todo", key="clean_all_btn"):
+            st.session_state.participants = []
+            st.session_state.expenses = []
+            st.session_state.show_results = False
+            st.rerun()
 
 st.write("---")
 
-# SECCIÓN 4: BOTÓN "CALCULAR CUENTAS"
+# BOTÓN PRINCIPAL
 if st.button("🚀 Calcular Cuentas / Ver Resultados", use_container_width=True):
     st.session_state.show_results = True
 
-# SECCIÓN 5: RESULTADOS
+# RESULTADOS
 if st.session_state.show_results:
     if not st.session_state.participants or not st.session_state.expenses:
         st.warning("⚠️ Cargá al menos una persona y un gasto para ver el cálculo.")
     else:
         date_str = event_date.strftime("%d/%m/%Y")
         st.markdown(
-            f"### 📊 Balances: {event_name} <small>({date_str})</small>",
+            f"<b>📊 Balances: {event_name}</b> <small>({date_str})</small>",
             unsafe_allow_html=True,
         )
 
@@ -635,7 +701,6 @@ if st.session_state.show_results:
         m1.metric("Gasto Total", f"${total_spent:,.2f}")
         m2.metric("Por Persona", f"${per_person:,.2f}")
 
-        # Gráfico visual en pantalla
         if HAS_MATPLOTLIB:
             payer_totals = {}
             for exp in st.session_state.expenses:
@@ -643,8 +708,9 @@ if st.session_state.show_results:
                 payer_totals[p] = payer_totals.get(p, 0.0) + exp["amount"]
 
             if payer_totals and sum(payer_totals.values()) > 0:
-                fig, ax = plt.subplots(figsize=(4.5, 2.0))
+                fig, ax = plt.subplots(figsize=(4.2, 1.8))
                 fig.patch.set_facecolor("#FFFFFF")
+                ax.set_facecolor("#FFFFFF")
                 labels = list(payer_totals.keys())
                 sizes = list(payer_totals.values())
                 colors = [
